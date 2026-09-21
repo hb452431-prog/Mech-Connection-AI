@@ -8,7 +8,7 @@ import L from 'leaflet';
 
 const userPin = L.divIcon({
   className: 'custom-user-marker',
-  html: `<div style="background-color:#DC2626; width:28px; height:28px; border-radius:50%; border:2px solid #FFFFFF; box-shadow:0 0 12px rgba(220,38,38,0.7); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:12px;">📍</div>`,
+  html: `<div style="background-color:#EA580C; width:28px; height:28px; border-radius:50%; border:2px solid #FFFFFF; box-shadow:0 0 12px rgba(234,88,12,0.7); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:12px;">📍</div>`,
   iconSize: [28, 28],
   iconAnchor: [14, 14]
 });
@@ -39,7 +39,7 @@ export const MechanicRequestsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F6F8FC] flex flex-col pb-24 md:pb-12">
       <MechanicNavbar />
 
       <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
@@ -56,7 +56,7 @@ export const MechanicRequestsPage = () => {
         <div className="space-y-4">
           {requests.length === 0 ? (
             <div className="clean-card p-12 text-center text-slate-500 space-y-2 border-slate-200">
-              <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
+              <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto" />
               <p className="text-sm font-bold text-slate-800">No pending requests right now.</p>
               <p className="text-xs text-slate-400">You're all caught up with your assistance queue.</p>
             </div>
@@ -69,7 +69,7 @@ export const MechanicRequestsPage = () => {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
                     <div className="flex items-center gap-2">
                       <span className="font-black text-slate-900 text-base flex items-center gap-1.5 font-heading">
-                        <User className="w-4 h-4 text-sky-600" />
+                        <User className="w-4 h-4 text-indigo-600" />
                         {req.userName}
                       </span>
                       {isAccepted && (
@@ -79,7 +79,7 @@ export const MechanicRequestsPage = () => {
                         </span>
                       )}
                     </div>
-                    <span className="text-xs font-mono font-bold text-sky-700 bg-sky-50 px-2.5 py-1 rounded-lg self-start sm:self-auto border border-sky-100">
+                    <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg self-start sm:self-auto border border-indigo-100">
                       Distance: {req.distance}
                     </span>
                   </div>
@@ -93,7 +93,7 @@ export const MechanicRequestsPage = () => {
                     <div className="p-3 bg-slate-50 rounded-xl space-y-1 border border-slate-100">
                       <p className="text-slate-400 font-bold uppercase font-mono text-[10px]">User Location</p>
                       <p className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-red-500 flex-shrink-0" />
+                        <MapPin className="w-3.5 h-3.5 text-orange-600 flex-shrink-0" />
                         {req.location}
                       </p>
                     </div>
@@ -132,7 +132,7 @@ export const MechanicRequestsPage = () => {
                         <button
                           type="button"
                           onClick={() => handleReject(req.id)}
-                          className="btn-secondary px-4 py-2.5 text-xs font-bold flex items-center gap-1 text-rose-600 hover:bg-rose-50 border-rose-100"
+                          className="btn-secondary px-4 py-2.5 text-xs font-bold flex items-center gap-1 text-orange-700 hover:bg-orange-50 border-orange-200"
                         >
                           <X className="w-3.5 h-3.5" />
                           Reject
@@ -162,7 +162,7 @@ export const MechanicRequestsPage = () => {
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div>
                   <h3 className="text-base font-black text-slate-900 font-heading flex items-center gap-1.5">
-                    <Navigation className="w-4 h-4 text-sky-600" />
+                    <Navigation className="w-4 h-4 text-indigo-600" />
                     Navigating to {navigatingReq.userName}
                   </h3>
                   <p className="text-xs text-slate-500">{navigatingReq.location} ({navigatingReq.distance})</p>
@@ -196,7 +196,7 @@ export const MechanicRequestsPage = () => {
                   href={`tel:${navigatingReq.userPhone || '+15550199'}`}
                   className="btn-secondary py-2.5 px-4 text-xs font-bold flex items-center gap-1.5"
                 >
-                  <Phone className="w-3.5 h-3.5 text-sky-600" />
+                  <Phone className="w-3.5 h-3.5 text-indigo-600" />
                   Call Driver
                 </a>
 

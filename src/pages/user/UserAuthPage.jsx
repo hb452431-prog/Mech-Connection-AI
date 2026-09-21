@@ -41,7 +41,7 @@ export const UserAuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center px-4 py-10">
+    <div className="min-h-screen bg-[#F6F8FC] flex flex-col justify-center items-center px-4 py-10">
       <div className="w-full max-w-md space-y-6">
         {/* Back Link */}
         <Link

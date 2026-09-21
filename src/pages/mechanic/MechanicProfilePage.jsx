@@ -38,7 +38,7 @@ export const MechanicProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F6F8FC] flex flex-col pb-24 md:pb-12">
       <MechanicNavbar />
 
       <main className="max-w-2xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
@@ -148,7 +148,7 @@ export const MechanicProfilePage = () => {
           ) : (
             <div className="space-y-6">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-5">
-                <div className="w-16 h-16 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-2xl flex-shrink-0 shadow-xs">
+                <div className="w-16 h-16 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-2xl flex-shrink-0 shadow-xs">
                   <Wrench className="w-8 h-8" />
                 </div>
                 <div>
@@ -156,7 +156,7 @@ export const MechanicProfilePage = () => {
                     <h2 className="text-xl font-black text-slate-900 font-heading">
                       {mechanic.garageName}
                     </h2>
-                    <ShieldCheck className="w-4 h-4 text-sky-600" />
+                    <ShieldCheck className="w-4 h-4 text-indigo-600" />
                   </div>
                   <p className="text-xs text-slate-500 font-medium">Technician: {mechanic.mechanicName}</p>
                 </div>
@@ -206,7 +206,7 @@ export const MechanicProfilePage = () => {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="btn-secondary py-3 px-4 text-xs font-bold text-rose-600 hover:bg-rose-50 flex-1 flex items-center justify-center gap-1.5"
+                  className="btn-secondary py-3 px-4 text-xs font-bold text-orange-700 hover:bg-orange-50 flex-1 flex items-center justify-center gap-1.5"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   Logout

@@ -51,7 +51,7 @@ export const AiHelpPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F6F8FC] flex flex-col pb-24 md:pb-12">
       <UserNavbar />
 
       <main className="max-w-2xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
@@ -65,7 +65,7 @@ export const AiHelpPage = () => {
             Back to Home
           </Link>
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center">
               <Sparkles className="w-5 h-5" />
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
@@ -107,7 +107,7 @@ export const AiHelpPage = () => {
                       key={idx}
                       type="button"
                       onClick={() => handleQuickChip(sample)}
-                      className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 border border-slate-200 transition-colors"
+                      className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 border border-slate-200 transition-colors"
                     >
                       "{sample}"
                     </button>
@@ -124,7 +124,7 @@ export const AiHelpPage = () => {
 
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                 <label className="btn-secondary px-4 py-2.5 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-2xs">
-                  <Upload className="w-4 h-4 text-sky-600" />
+                  <Upload className="w-4 h-4 text-indigo-600" />
                   <span>Upload Image</span>
                   <input
                     type="file"
@@ -171,7 +171,7 @@ export const AiHelpPage = () => {
 
         {/* AI ANALYSIS RESULTS DISPLAY */}
         {analysisResult && (
-          <div className="clean-card p-6 sm:p-7 space-y-6 border-l-4 border-l-sky-600 animate-in fade-in duration-200 shadow-md">
+          <div className="clean-card p-6 sm:p-7 space-y-6 border-l-4 border-l-indigo-600 animate-in fade-in duration-200 shadow-md">
             {/* Header with Problem & Category Badge */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -186,9 +186,9 @@ export const AiHelpPage = () => {
                     🟢 {analysisResult.badgeText}
                   </span>
                 ) : (
-                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1.5 shadow-2xs">
-                    <span className="w-2 h-2 rounded-full bg-rose-600 animate-pulse" />
-                    🔴 {analysisResult.badgeText}
+                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-800 border border-orange-200 flex items-center gap-1.5 shadow-2xs">
+                    <span className="w-2 h-2 rounded-full bg-orange-600 animate-pulse" />
+                    🟠 {analysisResult.badgeText}
                   </span>
                 )}
               </div>
@@ -207,14 +207,14 @@ export const AiHelpPage = () => {
             {/* 3-Step Solution */}
             <div className="space-y-3 pt-3 border-t border-slate-100">
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 font-mono flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-sky-600" />
+                <CheckCircle2 className="w-4 h-4 text-indigo-600" />
                 SOLUTION
               </h3>
 
               <div className="space-y-2.5">
                 {analysisResult.steps.map((step, idx) => (
                   <div key={idx} className="p-3.5 bg-slate-50 rounded-xl flex items-start gap-3 border border-slate-100">
-                    <span className="w-6 h-6 rounded-full bg-sky-600 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5 shadow-2xs">
+                    <span className="w-6 h-6 rounded-full bg-indigo-600 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5 shadow-2xs">
                       {idx + 1}
                     </span>
                     <div>

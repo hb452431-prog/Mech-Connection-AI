@@ -8,14 +8,14 @@ export const UserHomePage = () => {
   const user = authService.getUser();
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F6F8FC] flex flex-col pb-24 md:pb-12">
       <UserNavbar />
 
       <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-7">
         {/* Top Driver Status Card */}
-        <div className="clean-card p-5 sm:p-6 bg-gradient-to-r from-white via-sky-50/40 to-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-slate-200">
+        <div className="clean-card p-5 sm:p-6 bg-gradient-to-r from-white via-indigo-50/40 to-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-slate-200">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center flex-shrink-0 font-bold">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center flex-shrink-0 font-bold">
               <Car className="w-6 h-6" />
             </div>
             <div>
@@ -36,7 +36,7 @@ export const UserHomePage = () => {
 
           <Link
             to="/user/profile"
-            className="text-xs font-bold text-sky-700 hover:text-sky-800 flex items-center gap-1 self-start sm:self-auto bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-xs"
+            className="text-xs font-bold text-indigo-700 hover:text-indigo-800 flex items-center gap-1 self-start sm:self-auto bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-xs"
           >
             <span>Edit Vehicle</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -56,19 +56,19 @@ export const UserHomePage = () => {
         {/* TWO MAIN OPTIONS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {/* Option 1: FIND NEARBY GARAGE */}
-          <div className="clean-card p-6 sm:p-7 flex flex-col justify-between space-y-6 hover:border-sky-500 hover:shadow-md transition-all group">
+          <div className="clean-card p-6 sm:p-7 flex flex-col justify-between space-y-6 hover:border-indigo-500 hover:shadow-lg transition-all group">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="w-14 h-14 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center group-hover:bg-sky-600 group-hover:text-white transition-colors">
+                <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                   <Wrench className="w-7 h-7" />
                 </div>
-                <span className="text-[11px] font-bold font-mono text-sky-700 bg-sky-50 px-2.5 py-1 rounded-md">
+                <span className="text-[11px] font-bold font-mono text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-100">
                   📍 4 Garages Near You
                 </span>
               </div>
 
               <div>
-                <h2 className="text-xl font-black text-slate-900 font-heading group-hover:text-sky-600 transition-colors">
+                <h2 className="text-xl font-black text-slate-900 font-heading group-hover:text-indigo-600 transition-colors">
                   FIND NEARBY GARAGE
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 leading-relaxed mt-1">
@@ -88,19 +88,19 @@ export const UserHomePage = () => {
           </div>
 
           {/* Option 2: AI VEHICLE HELP */}
-          <div className="clean-card p-6 sm:p-7 flex flex-col justify-between space-y-6 hover:border-sky-500 hover:shadow-md transition-all group">
+          <div className="clean-card p-6 sm:p-7 flex flex-col justify-between space-y-6 hover:border-indigo-500 hover:shadow-lg transition-all group">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="w-14 h-14 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center group-hover:bg-sky-600 group-hover:text-white transition-colors">
+                <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                   <Sparkles className="w-7 h-7" />
                 </div>
-                <span className="text-[11px] font-bold font-mono text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">
+                <span className="text-[11px] font-bold font-mono text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
                   ⚡ Instant Diagnosis
                 </span>
               </div>
 
               <div>
-                <h2 className="text-xl font-black text-slate-900 font-heading group-hover:text-sky-600 transition-colors">
+                <h2 className="text-xl font-black text-slate-900 font-heading group-hover:text-indigo-600 transition-colors">
                   AI VEHICLE HELP
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 leading-relaxed mt-1">
@@ -121,13 +121,13 @@ export const UserHomePage = () => {
         </div>
 
         {/* CLEARLY VISIBLE EMERGENCY HELP SECTION */}
-        <div className="clean-card p-6 sm:p-7 border-2 border-red-200 bg-gradient-to-r from-red-50/80 via-white to-red-50/40 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+        <div className="clean-card p-6 sm:p-7 border-2 border-orange-200 bg-gradient-to-r from-orange-50/80 via-white to-orange-50/40 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="flex items-center gap-4 text-center sm:text-left">
-            <div className="w-14 h-14 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0 animate-pulse">
+            <div className="w-14 h-14 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center flex-shrink-0 animate-pulse">
               <AlertCircle className="w-8 h-8" />
             </div>
             <div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-red-700 font-mono">
+              <div className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-orange-700 font-mono">
                 🚨 Immediate Breakdown Rescue
               </div>
               <h3 className="text-xl font-black text-slate-900 font-heading mt-0.5">

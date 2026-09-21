@@ -25,14 +25,14 @@ import L from 'leaflet';
 
 const userPin = L.divIcon({
   className: 'custom-user-marker',
-  html: `<div style="background-color:#DC2626; width:28px; height:28px; border-radius:50%; border:3px solid #FFFFFF; box-shadow:0 0 14px rgba(220,38,38,0.7); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:12px;">📍</div>`,
+  html: `<div style="background-color:#EA580C; width:28px; height:28px; border-radius:50%; border:3px solid #FFFFFF; box-shadow:0 0 14px rgba(234,88,12,0.7); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:12px;">📍</div>`,
   iconSize: [28, 28],
   iconAnchor: [14, 14]
 });
 
 const mechanicPin = L.divIcon({
   className: 'custom-mechanic-marker',
-  html: `<div style="background-color:#0284C7; width:34px; height:34px; border-radius:50%; border:3px solid #38BDF8; box-shadow:0 0 16px rgba(2,132,199,0.7); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:15px;">🔧</div>`,
+  html: `<div style="background-color:#4F46E5; width:34px; height:34px; border-radius:50%; border:3px solid #818CF8; box-shadow:0 0 16px rgba(79,70,229,0.7); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:15px;">🔧</div>`,
   iconSize: [34, 34],
   iconAnchor: [17, 17]
 });
@@ -98,7 +98,7 @@ export const EmergencyPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F6F8FC] flex flex-col pb-24 md:pb-12">
       <UserNavbar />
 
       <main className="max-w-2xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
@@ -112,7 +112,7 @@ export const EmergencyPage = () => {
             Back to Home
           </Link>
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-red-100 text-red-600 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
               <AlertCircle className="w-5 h-5" />
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
@@ -145,15 +145,15 @@ export const EmergencyPage = () => {
                       onClick={() => setSelectedOption(opt.name)}
                       className={`p-3.5 rounded-xl border text-left transition-all flex items-start gap-3 ${
                         isSelected
-                          ? 'border-red-500 bg-red-50/60 text-red-900 ring-2 ring-red-100 shadow-xs'
+                          ? 'border-orange-500 bg-orange-50/60 text-orange-950 ring-2 ring-orange-100 shadow-xs'
                           : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                       }`}
                     >
-                      <Icon className={`w-5 h-5 flex-shrink-0 mt-0.5 ${isSelected ? 'text-red-600' : 'text-slate-400'}`} />
+                      <Icon className={`w-5 h-5 flex-shrink-0 mt-0.5 ${isSelected ? 'text-orange-600' : 'text-slate-400'}`} />
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <p className="font-bold text-xs sm:text-sm">{opt.name}</p>
-                          {isSelected && <CheckCircle2 className="w-4 h-4 text-red-600" />}
+                          {isSelected && <CheckCircle2 className="w-4 h-4 text-orange-600" />}
                         </div>
                         <p className="text-[11px] text-slate-500">{opt.desc}</p>
                       </div>
@@ -183,7 +183,7 @@ export const EmergencyPage = () => {
                 Current Location (GPS Locked)
               </span>
               <p className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-red-600 flex-shrink-0" />
+                <MapPin className="w-4 h-4 text-orange-600 flex-shrink-0" />
                 Market St & 7th St, Downtown, San Francisco, CA
               </p>
               <p className="text-[11px] text-slate-500">Auto-detected via high-precision device telemetry</p>
@@ -204,7 +204,7 @@ export const EmergencyPage = () => {
         {/* 2. SEARCHING STAGE */}
         {stage === 'SEARCHING' && (
           <div className="clean-card p-10 text-center space-y-6 border-slate-200 shadow-md animate-in fade-in duration-200">
-            <div className="w-20 h-20 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto animate-pulse-radar shadow-md">
+            <div className="w-20 h-20 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center mx-auto animate-pulse-radar shadow-md">
               <AlertCircle className="w-10 h-10" />
             </div>
 
@@ -218,7 +218,7 @@ export const EmergencyPage = () => {
             </div>
 
             <div className="p-3.5 bg-slate-50 rounded-xl inline-flex items-center gap-2 text-xs font-mono text-slate-700 border border-slate-200">
-              <span className="w-2 h-2 rounded-full bg-red-600 animate-ping" />
+              <span className="w-2 h-2 rounded-full bg-orange-600 animate-ping" />
               <span>Incident: <strong>{selectedOption}</strong></span>
             </div>
           </div>
@@ -242,17 +242,17 @@ export const EmergencyPage = () => {
                 </p>
               </div>
 
-              <div className="text-left sm:text-right bg-sky-50 px-3.5 py-2 rounded-xl border border-sky-100 self-start sm:self-auto">
+              <div className="text-left sm:text-right bg-indigo-50 px-3.5 py-2 rounded-xl border border-indigo-100 self-start sm:self-auto">
                 <span className="text-[10px] text-slate-500 font-mono uppercase block font-bold">Estimated Arrival</span>
-                <span className="text-xl font-black font-mono text-sky-700">{acceptedMechanic.eta}</span>
+                <span className="text-xl font-black font-mono text-indigo-700">{acceptedMechanic.eta}</span>
               </div>
             </div>
 
             {/* Ride Tracking Map */}
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs font-bold text-slate-600 px-1">
-                <span className="flex items-center gap-1">📍 You (Stranded Location)</span>
-                <span className="flex items-center gap-1 text-sky-700">🔧 Mechanic (En Route)</span>
+                <span className="flex items-center gap-1 text-orange-700">📍 You (Stranded Location)</span>
+                <span className="flex items-center gap-1 text-indigo-700">🔧 Mechanic (En Route)</span>
               </div>
 
               <div className="h-64 sm:h-72 rounded-2xl overflow-hidden border border-slate-200 shadow-xs relative">
@@ -268,21 +268,21 @@ export const EmergencyPage = () => {
                   <Marker position={mechanicCoords} icon={mechanicPin}>
                     <Popup><div className="text-xs font-bold">🔧 {acceptedMechanic.mechanicName}</div></Popup>
                   </Marker>
-                  <Polyline positions={routePoints} color="#0284C7" weight={5} dashArray="8, 8" />
+                  <Polyline positions={routePoints} color="#4F46E5" weight={5} dashArray="8, 8" />
                 </MapContainer>
 
                 <div className="absolute top-3 left-3 z-[1000] bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 shadow-sm flex items-center gap-2">
-                  <Navigation className="w-3.5 h-3.5 text-sky-600 animate-spin" />
+                  <Navigation className="w-3.5 h-3.5 text-indigo-600 animate-spin" />
                   <span>Live Dispatch Route Active</span>
                 </div>
               </div>
             </div>
 
             {/* Status & Driver Card */}
-            <div className="p-4 bg-sky-50/80 rounded-2xl border border-sky-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
+            <div className="p-4 bg-indigo-50/80 rounded-2xl border border-indigo-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
               <div>
-                <p className="text-sm font-black text-sky-900 flex items-center gap-1.5">
-                  <Navigation className="w-4 h-4 text-sky-600" />
+                <p className="text-sm font-black text-indigo-950 flex items-center gap-1.5">
+                  <Navigation className="w-4 h-4 text-indigo-600" />
                   Mechanic is on the way.
                 </p>
                 <p className="text-slate-600 mt-0.5">
@@ -305,7 +305,7 @@ export const EmergencyPage = () => {
         {showConfirmModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-150">
             <div className="clean-card p-6 sm:p-7 max-w-sm w-full space-y-4 shadow-2xl">
-              <div className="flex items-center gap-3 text-red-600">
+              <div className="flex items-center gap-3 text-orange-600">
                 <AlertCircle className="w-7 h-7 flex-shrink-0" />
                 <h3 className="text-lg font-black text-slate-900 font-heading">
                   Send Emergency Request?

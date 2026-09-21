@@ -4,19 +4,19 @@
   --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  --bg-app: #F8FAFC;
+  --bg-app: #F6F8FC;
   --bg-card: #FFFFFF;
   --text-main: #0F172A;
   --text-muted: #64748B;
   --border-color: #E2E8F0;
 
-  --primary: #0284C7;
-  --primary-hover: #0369A1;
-  --primary-light: #E0F2FE;
+  --primary: #4F46E5;
+  --primary-hover: #4338CA;
+  --primary-light: #EEF2FF;
 
-  --emergency: #DC2626;
-  --emergency-hover: #B91C1C;
-  --emergency-light: #FEE2E2;
+  --emergency: #EA580C;
+  --emergency-hover: #C2410C;
+  --emergency-light: #FFF7ED;
 
   --success: #16A34A;
   --success-light: #DCFCE7;
@@ -49,12 +49,12 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #FFFFFF;
   border: 1px solid #E2E8F0;
   border-radius: 1.25rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03), 0 2px 4px -2px rgba(15, 23, 42, 0.03);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .clean-card:hover {
-  box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 12px 24px -4px rgba(79, 70, 229, 0.08), 0 4px 8px -4px rgba(15, 23, 42, 0.04);
 }
 
 .clean-input {
@@ -67,25 +67,25 @@ h1, h2, h3, h4, h5, h6 {
 
 .clean-input:focus {
   outline: none;
-  border-color: #0284C7;
-  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+  border-color: #4F46E5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
 
 /* Interactive Action Buttons */
 .btn-primary {
-  background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
   color: #FFFFFF;
   font-weight: 700;
   border-radius: 0.875rem;
-  border: 1px solid rgba(2, 132, 199, 0.2);
-  box-shadow: 0 4px 12px -2px rgba(2, 132, 199, 0.3);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 12px -2px rgba(79, 70, 229, 0.35);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+  background: linear-gradient(135deg, #818CF8 0%, #6366F1 100%);
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px 0px rgba(2, 132, 199, 0.4);
+  box-shadow: 0 6px 18px 0px rgba(79, 70, 229, 0.45);
 }
 
 .btn-primary:active {
@@ -93,19 +93,19 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-emergency {
-  background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+  background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
   color: #FFFFFF;
   font-weight: 800;
   border-radius: 0.875rem;
-  border: 1px solid rgba(220, 38, 38, 0.3);
-  box-shadow: 0 4px 14px 0px rgba(220, 38, 38, 0.35);
+  border: 1px solid rgba(234, 88, 12, 0.3);
+  box-shadow: 0 4px 14px 0px rgba(234, 88, 12, 0.35);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-emergency:hover {
-  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  background: linear-gradient(135deg, #FB923C 0%, #F97316 100%);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px 2px rgba(220, 38, 38, 0.5);
+  box-shadow: 0 6px 20px 2px rgba(234, 88, 12, 0.45);
 }
 
 .btn-emergency:active {

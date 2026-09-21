@@ -24,8 +24,8 @@ export const BrandLogo = ({ size = 'md', clickable = true, className = '' }) => 
         >
           <defs>
             <linearGradient id="logoPrimary" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#0284C7" />
-              <stop offset="100%" stopColor="#0369A1" />
+              <stop offset="0%" stopColor="#6366F1" />
+              <stop offset="100%" stopColor="#4F46E5" />
             </linearGradient>
           </defs>
 
@@ -52,26 +52,26 @@ export const BrandLogo = ({ size = 'md', clickable = true, className = '' }) => 
           <path
             d="M26 62 C28 54, 34 46, 42 45 L58 45 C66 46, 72 54, 74 62 L76 66 C76 68, 74 70, 72 70 L28 70 C26 70, 24 68, 24 66 Z"
             fill="#1E293B"
-            stroke="#38BDF8"
+            stroke="#818CF8"
             strokeWidth="2.5"
           />
 
           {/* Windshield */}
           <path
             d="M36 45 L43 35 L57 35 L64 45 Z"
-            fill="#0284C7"
+            fill="#6366F1"
             fillOpacity="0.4"
-            stroke="#38BDF8"
+            stroke="#A5B4FC"
             strokeWidth="2"
           />
 
           {/* Wheels with Orange Core */}
-          <circle cx="34" cy="67" r="5.5" fill="#0F172A" stroke="#F59E0B" strokeWidth="2.5" />
-          <circle cx="66" cy="67" r="5.5" fill="#0F172A" stroke="#F59E0B" strokeWidth="2.5" />
+          <circle cx="34" cy="67" r="5.5" fill="#0F172A" stroke="#EA580C" strokeWidth="2.5" />
+          <circle cx="66" cy="67" r="5.5" fill="#0F172A" stroke="#EA580C" strokeWidth="2.5" />
 
           {/* AI Neural Chip / Wrench Spark Center */}
-          <circle cx="50" cy="48" r="5" fill="#38BDF8" />
-          <line x1="50" y1="35" x2="50" y2="43" stroke="#38BDF8" strokeWidth="2" strokeLinecap="round" />
+          <circle cx="50" cy="48" r="5" fill="#818CF8" />
+          <line x1="50" y1="35" x2="50" y2="43" stroke="#818CF8" strokeWidth="2" strokeLinecap="round" />
         </svg>
       </div>
 
@@ -79,9 +79,9 @@ export const BrandLogo = ({ size = 'md', clickable = true, className = '' }) => 
       <div className="flex flex-col text-left">
         <div className="flex items-center tracking-tight leading-none">
           <span className={`font-black ${currentSize.text} tracking-tight text-slate-900 font-heading`}>
-            MECH<span className="text-sky-600">CONNECT</span>
+            MECH<span className="text-indigo-600">CONNECT</span>
           </span>
-          <span className={`ml-1.5 px-1.5 py-0.5 ${currentSize.badge} font-mono font-bold uppercase tracking-wider bg-sky-100 text-sky-700 border border-sky-300 rounded`}>
+          <span className={`ml-1.5 px-1.5 py-0.5 ${currentSize.badge} font-mono font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-200 rounded`}>
             AI
           </span>
         </div>

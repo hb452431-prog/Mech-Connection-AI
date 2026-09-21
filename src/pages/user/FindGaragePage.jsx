@@ -8,14 +8,14 @@ import L from 'leaflet';
 
 const userLocationIcon = L.divIcon({
   className: 'custom-user-marker',
-  html: `<div style="background-color:#0284C7; width:28px; height:28px; border-radius:50%; border:3px solid #FFFFFF; box-shadow:0 0 12px rgba(2,132,199,0.6); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:12px;">📍</div>`,
+  html: `<div style="background-color:#4F46E5; width:28px; height:28px; border-radius:50%; border:3px solid #FFFFFF; box-shadow:0 0 12px rgba(79,70,229,0.6); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:12px;">📍</div>`,
   iconSize: [28, 28],
   iconAnchor: [14, 14]
 });
 
 const garageMarkerIcon = L.divIcon({
   className: 'custom-garage-marker',
-  html: `<div style="background-color:#0F172A; width:32px; height:32px; border-radius:50%; border:2px solid #38BDF8; box-shadow:0 0 12px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:14px;">🔧</div>`,
+  html: `<div style="background-color:#0F172A; width:32px; height:32px; border-radius:50%; border:2px solid #818CF8; box-shadow:0 0 12px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:14px;">🔧</div>`,
   iconSize: [32, 32],
   iconAnchor: [16, 16]
 });
@@ -44,7 +44,7 @@ export const FindGaragePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F6F8FC] flex flex-col pb-24 md:pb-12">
       <UserNavbar />
 
       <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
@@ -70,7 +70,7 @@ export const FindGaragePage = () => {
             <button
               onClick={() => setFilter('all')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
-                filter === 'all' ? 'bg-sky-600 text-white' : 'text-slate-600 hover:bg-slate-50'
+                filter === 'all' ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-50'
               }`}
             >
               All ({MOCK_GARAGES.length})
@@ -78,7 +78,7 @@ export const FindGaragePage = () => {
             <button
               onClick={() => setFilter('closest')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
-                filter === 'closest' ? 'bg-sky-600 text-white' : 'text-slate-600 hover:bg-slate-50'
+                filter === 'closest' ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-50'
               }`}
             >
               &lt; 2 km
@@ -86,7 +86,7 @@ export const FindGaragePage = () => {
             <button
               onClick={() => setFilter('247')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
-                filter === '247' ? 'bg-sky-600 text-white' : 'text-slate-600 hover:bg-slate-50'
+                filter === '247' ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-50'
               }`}
             >
               24/7 Roadside
@@ -153,7 +153,7 @@ export const FindGaragePage = () => {
               <div
                 key={garage.id}
                 className={`clean-card p-5 space-y-4 flex flex-col justify-between transition-all ${
-                  selectedGarage?.id === garage.id ? 'border-sky-500 ring-2 ring-sky-100 shadow-md' : ''
+                  selectedGarage?.id === garage.id ? 'border-indigo-500 ring-2 ring-indigo-100 shadow-lg' : ''
                 }`}
               >
                 <div className="space-y-2">
@@ -163,11 +163,11 @@ export const FindGaragePage = () => {
                         <h3 className="text-base font-bold text-slate-900 font-heading">
                           {garage.name}
                         </h3>
-                        <ShieldCheck className="w-4 h-4 text-sky-600 flex-shrink-0" />
+                        <ShieldCheck className="w-4 h-4 text-indigo-600 flex-shrink-0" />
                       </div>
                       <p className="text-xs text-slate-500">{garage.address}</p>
                     </div>
-                    <span className="text-xs font-bold font-mono text-sky-700 bg-sky-50 px-2.5 py-1 rounded-lg whitespace-nowrap border border-sky-100">
+                    <span className="text-xs font-bold font-mono text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg whitespace-nowrap border border-indigo-100">
                       {garage.distance}
                     </span>
                   </div>
@@ -215,7 +215,7 @@ export const FindGaragePage = () => {
             <div className="clean-card p-6 max-w-sm w-full space-y-4 shadow-2xl">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div className="flex items-center gap-2">
-                  <Wrench className="w-5 h-5 text-sky-600" />
+                  <Wrench className="w-5 h-5 text-indigo-600" />
                   <h3 className="text-base font-bold text-slate-900 font-heading">
                     {selectedGarage.name}
                   </h3>
@@ -243,7 +243,7 @@ export const FindGaragePage = () => {
                   href={`tel:${selectedGarage.phone}`}
                   className="btn-secondary py-2.5 text-xs font-bold flex items-center justify-center gap-1.5"
                 >
-                  <Phone className="w-3.5 h-3.5 text-sky-600" />
+                  <Phone className="w-3.5 h-3.5 text-indigo-600" />
                   Call Garage
                 </a>
                 <button

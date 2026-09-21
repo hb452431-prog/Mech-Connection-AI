@@ -11,7 +11,7 @@ export const MechanicCompletedPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F6F8FC] flex flex-col pb-24 md:pb-12">
       <MechanicNavbar />
 
       <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
@@ -40,7 +40,7 @@ export const MechanicCompletedPage = () => {
                 <div className="space-y-1.5">
                   <div className="flex items-center gap-2">
                     <span className="font-black text-slate-900 text-sm sm:text-base flex items-center gap-1.5 font-heading">
-                      <User className="w-4 h-4 text-sky-600" />
+                      <User className="w-4 h-4 text-indigo-600" />
                       {item.userName}
                     </span>
                     <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase font-mono bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">

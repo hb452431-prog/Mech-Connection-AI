@@ -28,7 +28,7 @@ export const UserNavbar = () => {
               className={({ isActive }) =>
                 `flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   isActive
-                    ? 'bg-sky-50 text-sky-700 shadow-xs border border-sky-100'
+                    ? 'bg-indigo-50 text-indigo-700 shadow-xs border border-indigo-100'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`
               }
@@ -42,12 +42,12 @@ export const UserNavbar = () => {
               className={({ isActive }) =>
                 `flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   isActive
-                    ? 'bg-sky-50 text-sky-700 shadow-xs border border-sky-100'
+                    ? 'bg-indigo-50 text-indigo-700 shadow-xs border border-indigo-100'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`
               }
             >
-              <Sparkles className="w-4 h-4 text-sky-600" />
+              <Sparkles className="w-4 h-4 text-indigo-600" />
               AI Help
             </NavLink>
 
@@ -56,7 +56,7 @@ export const UserNavbar = () => {
               className={({ isActive }) =>
                 `flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   isActive
-                    ? 'bg-sky-50 text-sky-700 shadow-xs border border-sky-100'
+                    ? 'bg-indigo-50 text-indigo-700 shadow-xs border border-indigo-100'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`
               }
@@ -94,7 +94,7 @@ export const UserNavbar = () => {
           end
           className={({ isActive }) =>
             `flex flex-col items-center gap-1 py-1 px-4 rounded-xl text-[11px] font-bold transition-all ${
-              isActive ? 'text-sky-600 bg-sky-50/80' : 'text-slate-500'
+              isActive ? 'text-indigo-600 bg-indigo-50/80' : 'text-slate-500'
             }`
           }
         >
@@ -106,11 +106,11 @@ export const UserNavbar = () => {
           to="/user/ai-help"
           className={({ isActive }) =>
             `flex flex-col items-center gap-1 py-1 px-4 rounded-xl text-[11px] font-bold transition-all ${
-              isActive ? 'text-sky-600 bg-sky-50/80' : 'text-slate-500'
+              isActive ? 'text-indigo-600 bg-indigo-50/80' : 'text-slate-500'
             }`
           }
         >
-          <Sparkles className="w-5 h-5 text-sky-600" />
+          <Sparkles className="w-5 h-5 text-indigo-600" />
           <span>AI Help</span>
         </NavLink>
 
@@ -118,7 +118,7 @@ export const UserNavbar = () => {
           to="/user/profile"
           className={({ isActive }) =>
             `flex flex-col items-center gap-1 py-1 px-4 rounded-xl text-[11px] font-bold transition-all ${
-              isActive ? 'text-sky-600 bg-sky-50/80' : 'text-slate-500'
+              isActive ? 'text-indigo-600 bg-indigo-50/80' : 'text-slate-500'
             }`
           }
         >

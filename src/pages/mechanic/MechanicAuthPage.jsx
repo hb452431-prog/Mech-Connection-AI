@@ -41,7 +41,7 @@ export const MechanicAuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center px-4 py-10">
+    <div className="min-h-screen bg-[#F6F8FC] flex flex-col justify-center items-center px-4 py-10">
       <div className="w-full max-w-md space-y-6">
         {/* Back Link */}
         <Link
@@ -57,7 +57,7 @@ export const MechanicAuthPage = () => {
           <div className="flex justify-center mb-1">
             <BrandLogo size="md" clickable={false} />
           </div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-sky-50 text-sky-700 text-xs font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider border border-indigo-100">
             <Wrench className="w-3.5 h-3.5" />
             Mechanic Portal
           </div>

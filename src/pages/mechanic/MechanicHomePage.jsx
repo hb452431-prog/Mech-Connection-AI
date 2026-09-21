@@ -23,12 +23,12 @@ export const MechanicHomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F6F8FC] flex flex-col pb-24 md:pb-12">
       <MechanicNavbar />
 
       <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         {/* Top Greeting & Status Toggle */}
-        <div className="clean-card p-6 sm:p-7 border-l-4 border-l-sky-600 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-slate-200 shadow-sm">
+        <div className="clean-card p-6 sm:p-7 border-l-4 border-l-indigo-600 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-slate-200 shadow-sm">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-black text-slate-900 font-heading">
@@ -64,14 +64,14 @@ export const MechanicHomePage = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center">
                 <AlertCircle className="w-4 h-4" />
               </div>
               <h2 className="text-lg sm:text-xl font-black text-slate-900 font-heading">
                 Nearby Assistance Requests
               </h2>
             </div>
-            <span className="text-xs font-bold font-mono px-3 py-1 bg-sky-50 text-sky-700 rounded-full border border-sky-100">
+            <span className="text-xs font-bold font-mono px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-100">
               {requests.length} Available
             </span>
           </div>
@@ -85,14 +85,14 @@ export const MechanicHomePage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {requests.map((req) => (
-                <div key={req.id} className="clean-card p-5 space-y-4 flex flex-col justify-between border-slate-200 hover:border-sky-400 hover:shadow-md transition-all">
+                <div key={req.id} className="clean-card p-5 space-y-4 flex flex-col justify-between border-slate-200 hover:border-indigo-400 hover:shadow-lg transition-all">
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-black text-slate-900 flex items-center gap-1.5 font-heading">
-                        <User className="w-4 h-4 text-sky-600" />
+                        <User className="w-4 h-4 text-indigo-600" />
                         {req.userName}
                       </span>
-                      <span className="text-xs font-black font-mono text-sky-700 bg-sky-50 px-2.5 py-0.5 rounded-lg border border-sky-100">
+                      <span className="text-xs font-black font-mono text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-100">
                         {req.distance} away
                       </span>
                     </div>
@@ -105,7 +105,7 @@ export const MechanicHomePage = () => {
 
                       <div className="flex items-center justify-between pt-1 text-slate-500">
                         <span className="flex items-center gap-1">
-                          <MapPin className="w-3.5 h-3.5 text-red-500 flex-shrink-0" />
+                          <MapPin className="w-3.5 h-3.5 text-orange-600 flex-shrink-0" />
                           {req.location}
                         </span>
                         <span className="flex items-center gap-1 text-[11px] font-mono">
