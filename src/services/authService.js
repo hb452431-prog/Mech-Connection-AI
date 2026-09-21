@@ -1,101 +1,112 @@
-// Auth Service (Firebase-ready interface)
+// Simple Auth Service for MECH CONNECT AI
 
-const STORAGE_KEY = 'mech_connect_user_session';
+const USER_STORAGE_KEY = 'mech_connect_user_data';
+const MECHANIC_STORAGE_KEY = 'mech_connect_mechanic_data';
 
-const DEFAULT_DRIVER_USER = {
-  uid: 'usr_driver_772',
-  email: 'alex.turner@example.com',
-  displayName: 'Alex Turner',
-  role: 'driver', // 'driver' | 'mechanic'
-  phone: '+1 (415) 883-9912',
-  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-  membership: 'MechConnect+ Gold',
-  joinedDate: 'Jan 2024',
-  emergencyContact: {
-    name: 'Emma Turner',
-    relation: 'Spouse',
-    phone: '+1 (415) 883-9913'
-  }
+// Default Demo User
+const DEFAULT_USER = {
+  id: 'usr_1',
+  name: 'John Doe',
+  phone: '+1 555-0199',
+  email: 'john.doe@example.com',
+  vehicleBrand: 'Honda',
+  vehicleModel: 'Civic',
+  vehicleNumber: 'CA-8XYZ92'
 };
 
-const DEFAULT_MECHANIC_USER = {
-  uid: 'usr_mech_881',
-  email: 'dave.miller@rapidrescue.com',
-  displayName: 'Dave Miller',
-  role: 'mechanic',
-  businessName: 'RapidRescue 24/7 Mobile Mechanics',
-  phone: '+1 (415) 555-0199',
-  avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80',
-  rating: 4.88,
-  certifications: ['ASE Master L1', 'AAA Certified Mobile Specialist'],
-  isOnlineForSos: true,
-  currentLocation: { lat: 37.7833, lng: -122.4167, address: 'Downtown Metro Sector 4' },
-  todayEarnings: 420.00,
-  completedJobsToday: 4
+// Default Demo Mechanic
+const DEFAULT_MECHANIC = {
+  id: 'mech_1',
+  garageName: 'Apex Auto Care & Diagnostics',
+  mechanicName: 'David Miller',
+  phone: '+1 555-4321',
+  email: 'david@apexauto.com',
+  garageAddress: '142 Market Street, Downtown',
+  services: 'Engine Repair, Battery, Brakes, Oil Change, 24/7 Roadside'
 };
 
 export const authService = {
-  getCurrentUser: () => {
+  // USER METHODS
+  getUser: () => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        return JSON.parse(stored);
-      }
+      const data = localStorage.getItem(USER_STORAGE_KEY);
+      return data ? JSON.parse(data) : DEFAULT_USER;
     } catch (e) {
-      console.error('Error reading user session:', e);
+      return DEFAULT_USER;
     }
-    return DEFAULT_DRIVER_USER;
   },
 
-  setCurrentUser: (user) => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-    } catch (e) {
-      console.error('Error saving user session:', e);
-    }
+  saveUser: (user) => {
+    localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
     return user;
   },
 
-  loginWithGoogle: async (role = 'driver') => {
-    // Simulates Google OAuth popup and token resolution
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    const user = role === 'mechanic' ? { ...DEFAULT_MECHANIC_USER } : { ...DEFAULT_DRIVER_USER };
-    authService.setCurrentUser(user);
+  userLogin: async (email, password) => {
+    await new Promise((r) => setTimeout(r, 400));
+    const user = authService.getUser();
+    user.email = email || user.email;
+    authService.saveUser(user);
     return user;
   },
 
-  loginWithEmail: async (email, password, role = 'driver') => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    const user = role === 'mechanic' ? { ...DEFAULT_MECHANIC_USER, email } : { ...DEFAULT_DRIVER_USER, email };
-    authService.setCurrentUser(user);
-    return user;
-  },
-
-  register: async ({ email, name, role = 'driver', phone }) => {
-    await new Promise((resolve) => setTimeout(resolve, 600));
+  userRegister: async (formData) => {
+    await new Promise((r) => setTimeout(r, 400));
     const newUser = {
-      uid: 'usr_' + Math.random().toString(36).substring(2, 9),
-      email,
-      displayName: name,
-      role,
-      phone: phone || '+1 (555) 000-0000',
-      avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${name}`,
-      membership: 'Free Driver Tier',
-      joinedDate: 'Today'
+      id: 'usr_' + Date.now(),
+      name: formData.name || 'New Driver',
+      phone: formData.phone || '',
+      email: formData.email || '',
+      vehicleBrand: formData.vehicleBrand || '',
+      vehicleModel: formData.vehicleModel || '',
+      vehicleNumber: formData.vehicleNumber || ''
     };
-    authService.setCurrentUser(newUser);
+    authService.saveUser(newUser);
     return newUser;
   },
 
-  switchRole: (newRole) => {
-    const user = newRole === 'mechanic' ? { ...DEFAULT_MECHANIC_USER } : { ...DEFAULT_DRIVER_USER };
-    authService.setCurrentUser(user);
-    return user;
+  userLogout: () => {
+    localStorage.removeItem(USER_STORAGE_KEY);
   },
 
-  logout: async () => {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    localStorage.removeItem(STORAGE_KEY);
-    return null;
+  // MECHANIC METHODS
+  getMechanic: () => {
+    try {
+      const data = localStorage.getItem(MECHANIC_STORAGE_KEY);
+      return data ? JSON.parse(data) : DEFAULT_MECHANIC;
+    } catch (e) {
+      return DEFAULT_MECHANIC;
+    }
+  },
+
+  saveMechanic: (mechanic) => {
+    localStorage.setItem(MECHANIC_STORAGE_KEY, JSON.stringify(mechanic));
+    return mechanic;
+  },
+
+  mechanicLogin: async (email, password) => {
+    await new Promise((r) => setTimeout(r, 400));
+    const mech = authService.getMechanic();
+    mech.email = email || mech.email;
+    authService.saveMechanic(mech);
+    return mech;
+  },
+
+  mechanicRegister: async (formData) => {
+    await new Promise((r) => setTimeout(r, 400));
+    const newMech = {
+      id: 'mech_' + Date.now(),
+      garageName: formData.garageName || 'My Garage',
+      mechanicName: formData.mechanicName || 'Mechanic',
+      phone: formData.phone || '',
+      email: formData.email || '',
+      garageAddress: formData.garageAddress || '',
+      services: formData.services || 'General Auto Repair'
+    };
+    authService.saveMechanic(newMech);
+    return newMech;
+  },
+
+  mechanicLogout: () => {
+    localStorage.removeItem(MECHANIC_STORAGE_KEY);
   }
 };

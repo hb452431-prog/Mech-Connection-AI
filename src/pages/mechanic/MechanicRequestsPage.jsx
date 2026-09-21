@@ -1,0 +1,218 @@
+import React, { useState, useEffect } from 'react';
+import MechanicNavbar from '../../components/common/MechanicNavbar';
+import { emergencyService } from '../../services/emergencyService';
+import { authService } from '../../services/authService';
+import { MapPin, Check, X, Navigation, CheckCircle2, User, Phone } from 'lucide-react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
+
+const userPin = L.divIcon({
+  className: 'custom-user-marker',
+  html: `<div style="background-color:#DC2626; width:26px; height:26px; border-radius:50%; border:2px solid #FFFFFF; display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:12px;">📍</div>`,
+  iconSize: [26, 26],
+  iconAnchor: [13, 13]
+});
+
+export const MechanicRequestsPage = () => {
+  const mechanic = authService.getMechanic();
+  const [requests, setRequests] = useState([]);
+  const [navigatingReq, setNavigatingReq] = useState(null);
+
+  useEffect(() => {
+    setRequests(emergencyService.getActiveRequests());
+  }, []);
+
+  const handleAccept = (reqId) => {
+    const updated = emergencyService.acceptRequest(reqId, mechanic);
+    setRequests(emergencyService.getActiveRequests());
+  };
+
+  const handleReject = (reqId) => {
+    emergencyService.rejectRequest(reqId);
+    setRequests(emergencyService.getActiveRequests());
+  };
+
+  const handleComplete = (reqId) => {
+    emergencyService.completeRequest(reqId);
+    setRequests(emergencyService.getActiveRequests());
+    setNavigatingReq(null);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 flex flex-col pb-20 md:pb-10">
+      <MechanicNavbar />
+
+      <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 space-y-6">
+        <div>
+          <h1 className="text-2xl font-black text-slate-900 font-heading">
+            Assistance Requests
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+            Active roadside and vehicle repair requests received from users.
+          </p>
+        </div>
+
+        {/* Requests List */}
+        <div className="space-y-4">
+          {requests.length === 0 ? (
+            <div className="clean-card p-10 text-center text-slate-500 space-y-2">
+              <p className="text-sm font-semibold">No active requests at the moment.</p>
+              <p className="text-xs">You're all caught up!</p>
+            </div>
+          ) : (
+            requests.map((req) => {
+              const isAccepted = req.status === 'ACCEPTED';
+
+              return (
+                <div key={req.id} className="clean-card p-5 sm:p-6 space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-slate-900 text-base flex items-center gap-1.5">
+                        <User className="w-4 h-4 text-slate-400" />
+                        {req.userName}
+                      </span>
+                      {isAccepted && (
+                        <span className="px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 flex items-center gap-1">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          Request Accepted
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-xs font-mono font-semibold text-sky-700 bg-sky-50 px-2.5 py-1 rounded-md self-start sm:self-auto">
+                      Distance: {req.distance}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-700">
+                    <div className="p-3 bg-slate-50 rounded-xl space-y-1">
+                      <p className="text-slate-500 font-semibold uppercase font-mono text-[10px]">Problem</p>
+                      <p className="text-sm font-bold text-slate-900">{req.problem}</p>
+                    </div>
+
+                    <div className="p-3 bg-slate-50 rounded-xl space-y-1">
+                      <p className="text-slate-500 font-semibold uppercase font-mono text-[10px]">User Location</p>
+                      <p className="text-sm font-bold text-slate-900 flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-rose-500 flex-shrink-0" />
+                        {req.location}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
+                    {isAccepted ? (
+                      <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200">
+                        <div className="text-xs text-emerald-900">
+                          <p className="font-bold">You accepted this request.</p>
+                          <p className="text-slate-600">User is waiting at: {req.location}</p>
+                        </div>
+
+                        <div className="flex items-center gap-2 w-full sm:w-auto">
+                          <button
+                            type="button"
+                            onClick={() => setNavigatingReq(req)}
+                            className="btn-primary px-4 py-2 text-xs font-bold flex items-center justify-center gap-1.5 flex-1 sm:flex-none"
+                          >
+                            <Navigation className="w-3.5 h-3.5" />
+                            Navigate to User
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleComplete(req.id)}
+                            className="px-4 py-2 text-xs font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white flex-1 sm:flex-none"
+                          >
+                            Mark Completed
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-3 w-full sm:w-auto ml-auto">
+                        <button
+                          type="button"
+                          onClick={() => handleReject(req.id)}
+                          className="btn-secondary px-4 py-2 text-xs font-semibold flex items-center gap-1 text-rose-600 hover:bg-rose-50"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                          Reject
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleAccept(req.id)}
+                          className="btn-primary px-5 py-2 text-xs font-bold flex items-center gap-1.5"
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                          Accept Request
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* Simple Navigation Modal */}
+        {navigatingReq && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
+            <div className="clean-card p-6 max-w-lg w-full space-y-4 shadow-xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 font-heading flex items-center gap-1.5">
+                    <Navigation className="w-4 h-4 text-sky-600" />
+                    Navigating to {navigatingReq.userName}
+                  </h3>
+                  <p className="text-xs text-slate-500">{navigatingReq.location} ({navigatingReq.distance})</p>
+                </div>
+                <button
+                  onClick={() => setNavigatingReq(null)}
+                  className="p-1 text-slate-400 hover:text-slate-600"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Simple Leaflet Map */}
+              <div className="h-64 rounded-xl overflow-hidden border border-slate-200">
+                <MapContainer
+                  center={[navigatingReq.lat || 37.7749, navigatingReq.lng || -122.4194]}
+                  zoom={14}
+                  scrollWheelZoom={false}
+                >
+                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <Marker position={[navigatingReq.lat || 37.7749, navigatingReq.lng || -122.4194]} icon={userPin}>
+                    <Popup>
+                      <div className="text-xs font-bold">{navigatingReq.userName}'s Location</div>
+                    </Popup>
+                  </Marker>
+                </MapContainer>
+              </div>
+
+              <div className="flex items-center justify-between pt-2">
+                <a
+                  href={`tel:${navigatingReq.userPhone || '+15550199'}`}
+                  className="btn-secondary px-4 py-2 text-xs font-semibold flex items-center gap-1.5"
+                >
+                  <Phone className="w-3.5 h-3.5 text-sky-600" />
+                  Call Customer
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => handleComplete(navigatingReq.id)}
+                  className="btn-primary px-5 py-2 text-xs font-bold"
+                >
+                  Mark as Completed
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+};
+
+export default MechanicRequestsPage;

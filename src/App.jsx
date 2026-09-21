@@ -1,54 +1,47 @@
 import React from 'react';
-import { Routes, Route, Outlet, useLocation } from 'react-router-dom';
-import Navbar from './components/common/Navbar';
-import Footer from './components/common/Footer';
-import ToastContainer from './components/common/ToastContainer';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
+// Landing Page
 import LandingPage from './pages/LandingPage';
-import DiagnosticsPage from './pages/DiagnosticsPage';
-import SosPage from './pages/SosPage';
-import MechanicsPage from './pages/MechanicsPage';
-import DashboardPage from './pages/DashboardPage';
-import PartnerPortalPage from './pages/PartnerPortalPage';
-import CostEstimatorPage from './pages/CostEstimatorPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
 
-const Layout = () => {
-  const location = useLocation();
+// Mechanic Portal Pages
+import MechanicAuthPage from './pages/mechanic/MechanicAuthPage';
+import MechanicHomePage from './pages/mechanic/MechanicHomePage';
+import MechanicRequestsPage from './pages/mechanic/MechanicRequestsPage';
+import MechanicCompletedPage from './pages/mechanic/MechanicCompletedPage';
+import MechanicProfilePage from './pages/mechanic/MechanicProfilePage';
 
-  // Scroll to top on route change
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location.pathname]);
-
-  return (
-    <div className="flex flex-col min-h-screen bg-navy-950 text-slate-100 font-sans">
-      <Navbar />
-      <main className="flex-grow">
-        <Outlet />
-      </main>
-      <Footer />
-      <ToastContainer />
-    </div>
-  );
-};
+// User / Driver Portal Pages
+import UserAuthPage from './pages/user/UserAuthPage';
+import UserHomePage from './pages/user/UserHomePage';
+import FindGaragePage from './pages/user/FindGaragePage';
+import AiHelpPage from './pages/user/AiHelpPage';
+import EmergencyPage from './pages/user/EmergencyPage';
+import UserProfilePage from './pages/user/UserProfilePage';
 
 export const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<LandingPage />} />
-        <Route path="diagnose" element={<DiagnosticsPage />} />
-        <Route path="sos" element={<SosPage />} />
-        <Route path="mechanics" element={<MechanicsPage />} />
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="partner-portal" element={<PartnerPortalPage />} />
-        <Route path="cost-estimator" element={<CostEstimatorPage />} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} />
-        <Route path="*" element={<LandingPage />} />
-      </Route>
+      {/* 1. Main Landing Page */}
+      <Route path="/" element={<LandingPage />} />
+
+      {/* 2. Mechanic Portal Routes */}
+      <Route path="/mechanic/auth" element={<MechanicAuthPage />} />
+      <Route path="/mechanic" element={<MechanicHomePage />} />
+      <Route path="/mechanic/requests" element={<MechanicRequestsPage />} />
+      <Route path="/mechanic/completed" element={<MechanicCompletedPage />} />
+      <Route path="/mechanic/profile" element={<MechanicProfilePage />} />
+
+      {/* 3. User / Driver Portal Routes */}
+      <Route path="/user/auth" element={<UserAuthPage />} />
+      <Route path="/user" element={<UserHomePage />} />
+      <Route path="/user/garages" element={<FindGaragePage />} />
+      <Route path="/user/ai-help" element={<AiHelpPage />} />
+      <Route path="/user/emergency" element={<EmergencyPage />} />
+      <Route path="/user/profile" element={<UserProfilePage />} />
+
+      {/* Catch-all fallback */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };
