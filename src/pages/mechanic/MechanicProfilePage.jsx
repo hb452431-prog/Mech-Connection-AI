@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import MechanicNavbar from '../../components/common/MechanicNavbar';
 import { authService } from '../../services/authService';
-import { Wrench, Phone, Mail, MapPin, User, Edit3, LogOut, Check } from 'lucide-react';
+import { Wrench, Phone, Mail, MapPin, User, Edit3, LogOut, Check, ArrowLeft, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export const MechanicProfilePage = () => {
   const navigate = useNavigate();
@@ -38,21 +38,28 @@ export const MechanicProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col pb-20 md:pb-10">
+    <div className="min-h-screen bg-slate-50 flex flex-col pb-24 md:pb-12">
       <MechanicNavbar />
 
-      <main className="max-w-2xl mx-auto w-full px-4 sm:px-6 py-8 space-y-6">
+      <main className="max-w-2xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 font-heading">
-            Mechanic Profile
+          <Link
+            to="/mechanic"
+            className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-800 mb-1"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Back to Mechanic Home
+          </Link>
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
+            Garage Profile
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Manage your garage credentials and contact details.
+            Manage your registered workshop and technician contact information.
           </p>
         </div>
 
         {/* Profile Details Card */}
-        <div className="clean-card p-6 sm:p-8 space-y-6">
+        <div className="clean-card p-6 sm:p-8 space-y-6 border-slate-200 shadow-sm">
           {isEditing ? (
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div>
@@ -121,17 +128,17 @@ export const MechanicProfilePage = () => {
                 />
               </div>
 
-              <div className="flex gap-3 pt-2">
+              <div className="flex gap-3 pt-3">
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="btn-secondary py-2.5 px-4 text-xs flex-1"
+                  className="btn-secondary py-3 px-4 text-xs font-bold flex-1"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="btn-primary py-2.5 px-4 text-xs font-bold flex-1 flex items-center justify-center gap-1.5"
+                  className="btn-primary py-3 px-4 text-xs font-bold flex-1 flex items-center justify-center gap-1.5 shadow-xs"
                 >
                   <Check className="w-4 h-4" />
                   Save Changes
@@ -141,36 +148,48 @@ export const MechanicProfilePage = () => {
           ) : (
             <div className="space-y-6">
               <div className="flex items-center gap-4 border-b border-slate-100 pb-5">
-                <div className="w-16 h-16 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center font-bold text-2xl">
+                <div className="w-16 h-16 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-2xl flex-shrink-0 shadow-xs">
                   <Wrench className="w-8 h-8" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 font-heading">
-                    {mechanic.garageName}
-                  </h2>
-                  <p className="text-xs text-slate-500">{mechanic.mechanicName}</p>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-xl font-black text-slate-900 font-heading">
+                      {mechanic.garageName}
+                    </h2>
+                    <ShieldCheck className="w-4 h-4 text-sky-600" />
+                  </div>
+                  <p className="text-xs text-slate-500 font-medium">Technician: {mechanic.mechanicName}</p>
                 </div>
               </div>
 
-              <div className="space-y-3 text-xs text-slate-700">
-                <div className="p-3 bg-slate-50 rounded-xl flex items-center justify-between">
-                  <span className="text-slate-500">Phone:</span>
+              <div className="space-y-2.5 text-xs text-slate-700">
+                <div className="p-3 bg-slate-50 rounded-xl flex items-center justify-between border border-slate-100">
+                  <span className="text-slate-500 flex items-center gap-1.5 font-medium">
+                    <Phone className="w-3.5 h-3.5 text-slate-400" />
+                    Phone:
+                  </span>
                   <strong className="text-slate-900">{mechanic.phone}</strong>
                 </div>
 
-                <div className="p-3 bg-slate-50 rounded-xl flex items-center justify-between">
-                  <span className="text-slate-500">Email:</span>
+                <div className="p-3 bg-slate-50 rounded-xl flex items-center justify-between border border-slate-100">
+                  <span className="text-slate-500 flex items-center gap-1.5 font-medium">
+                    <Mail className="w-3.5 h-3.5 text-slate-400" />
+                    Email:
+                  </span>
                   <strong className="text-slate-900">{mechanic.email}</strong>
                 </div>
 
-                <div className="p-3 bg-slate-50 rounded-xl flex items-center justify-between">
-                  <span className="text-slate-500">Garage Address:</span>
+                <div className="p-3 bg-slate-50 rounded-xl flex items-center justify-between border border-slate-100">
+                  <span className="text-slate-500 flex items-center gap-1.5 font-medium">
+                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                    Garage Address:
+                  </span>
                   <strong className="text-slate-900 text-right">{mechanic.garageAddress}</strong>
                 </div>
 
-                <div className="p-3 bg-slate-50 rounded-xl space-y-1">
-                  <span className="text-slate-500 block">Services:</span>
-                  <strong className="text-slate-900 block">{mechanic.services}</strong>
+                <div className="p-3.5 bg-slate-50 rounded-xl space-y-1 border border-slate-100">
+                  <span className="text-slate-500 block font-medium">Services Offered:</span>
+                  <strong className="text-slate-900 block leading-relaxed">{mechanic.services}</strong>
                 </div>
               </div>
 
@@ -178,7 +197,7 @@ export const MechanicProfilePage = () => {
                 <button
                   type="button"
                   onClick={() => setIsEditing(true)}
-                  className="btn-primary py-2.5 px-4 text-xs font-bold flex-1 flex items-center justify-center gap-1.5"
+                  className="btn-primary py-3 px-4 text-xs font-bold flex-1 flex items-center justify-center gap-1.5 shadow-xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   Edit Profile
@@ -187,7 +206,7 @@ export const MechanicProfilePage = () => {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="btn-secondary py-2.5 px-4 text-xs font-semibold text-rose-600 hover:bg-rose-50 flex-1 flex items-center justify-center gap-1.5"
+                  className="btn-secondary py-3 px-4 text-xs font-bold text-rose-600 hover:bg-rose-50 flex-1 flex items-center justify-center gap-1.5"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   Logout

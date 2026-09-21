@@ -6,6 +6,7 @@ import { authService } from '../../services/authService';
 
 export const MechanicNavbar = () => {
   const navigate = useNavigate();
+  const mechanic = authService.getMechanic();
 
   const handleLogout = () => {
     authService.mechanicLogout();
@@ -14,25 +15,26 @@ export const MechanicNavbar = () => {
 
   return (
     <>
-      {/* Top Desktop Navbar */}
-      <header className="sticky top-0 z-40 w-full bg-white border-b border-slate-200 shadow-xs">
+      {/* Top Desktop & Tablet Navbar */}
+      <header className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <BrandLogo size="md" />
-            <span className="hidden sm:inline-block px-2.5 py-1 text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200 rounded-md">
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200 rounded-lg">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               Mechanic Portal
             </span>
           </div>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-2">
+          <nav className="hidden md:flex items-center gap-1.5">
             <NavLink
               to="/mechanic"
               end
               className={({ isActive }) =>
-                `flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+                `flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   isActive
-                    ? 'bg-sky-50 text-sky-700'
+                    ? 'bg-sky-50 text-sky-700 shadow-xs border border-sky-100'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`
               }
@@ -44,9 +46,9 @@ export const MechanicNavbar = () => {
             <NavLink
               to="/mechanic/requests"
               className={({ isActive }) =>
-                `flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+                `flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   isActive
-                    ? 'bg-sky-50 text-sky-700'
+                    ? 'bg-sky-50 text-sky-700 shadow-xs border border-sky-100'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`
               }
@@ -58,9 +60,9 @@ export const MechanicNavbar = () => {
             <NavLink
               to="/mechanic/completed"
               className={({ isActive }) =>
-                `flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+                `flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   isActive
-                    ? 'bg-sky-50 text-sky-700'
+                    ? 'bg-sky-50 text-sky-700 shadow-xs border border-sky-100'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`
               }
@@ -72,9 +74,9 @@ export const MechanicNavbar = () => {
             <NavLink
               to="/mechanic/profile"
               className={({ isActive }) =>
-                `flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+                `flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   isActive
-                    ? 'bg-sky-50 text-sky-700'
+                    ? 'bg-sky-50 text-sky-700 shadow-xs border border-sky-100'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`
               }
@@ -88,7 +90,7 @@ export const MechanicNavbar = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl border border-rose-100 transition-colors"
             >
               <LogOut className="w-4 h-4" />
               <span className="hidden sm:inline">Logout</span>
@@ -98,13 +100,13 @@ export const MechanicNavbar = () => {
       </header>
 
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 px-3 py-2 flex items-center justify-around shadow-lg">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-3 py-2 flex items-center justify-around shadow-lg">
         <NavLink
           to="/mechanic"
           end
           className={({ isActive }) =>
-            `flex flex-col items-center gap-1 py-1 px-2 text-xs font-semibold ${
-              isActive ? 'text-sky-600' : 'text-slate-500'
+            `flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-[11px] font-bold transition-all ${
+              isActive ? 'text-sky-600 bg-sky-50/80' : 'text-slate-500'
             }`
           }
         >
@@ -115,8 +117,8 @@ export const MechanicNavbar = () => {
         <NavLink
           to="/mechanic/requests"
           className={({ isActive }) =>
-            `flex flex-col items-center gap-1 py-1 px-2 text-xs font-semibold ${
-              isActive ? 'text-sky-600' : 'text-slate-500'
+            `flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-[11px] font-bold transition-all ${
+              isActive ? 'text-sky-600 bg-sky-50/80' : 'text-slate-500'
             }`
           }
         >
@@ -127,8 +129,8 @@ export const MechanicNavbar = () => {
         <NavLink
           to="/mechanic/completed"
           className={({ isActive }) =>
-            `flex flex-col items-center gap-1 py-1 px-2 text-xs font-semibold ${
-              isActive ? 'text-sky-600' : 'text-slate-500'
+            `flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-[11px] font-bold transition-all ${
+              isActive ? 'text-sky-600 bg-sky-50/80' : 'text-slate-500'
             }`
           }
         >
@@ -139,8 +141,8 @@ export const MechanicNavbar = () => {
         <NavLink
           to="/mechanic/profile"
           className={({ isActive }) =>
-            `flex flex-col items-center gap-1 py-1 px-2 text-xs font-semibold ${
-              isActive ? 'text-sky-600' : 'text-slate-500'
+            `flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-[11px] font-bold transition-all ${
+              isActive ? 'text-sky-600 bg-sky-50/80' : 'text-slate-500'
             }`
           }
         >

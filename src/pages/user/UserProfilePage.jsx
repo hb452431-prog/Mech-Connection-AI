@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import UserNavbar from '../../components/common/UserNavbar';
 import { authService } from '../../services/authService';
-import { User, Phone, Mail, Car, Edit3, LogOut, Check } from 'lucide-react';
+import { User, Phone, Mail, Car, Edit3, LogOut, Check, ArrowLeft, ShieldCheck, Key } from 'lucide-react';
 
 export const UserProfilePage = () => {
   const navigate = useNavigate();
@@ -38,21 +38,28 @@ export const UserProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col pb-20 md:pb-10">
+    <div className="min-h-screen bg-slate-50 flex flex-col pb-24 md:pb-12">
       <UserNavbar />
 
-      <main className="max-w-xl mx-auto w-full px-4 sm:px-6 py-8 space-y-6">
+      <main className="max-w-xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 font-heading">
+          <Link
+            to="/user"
+            className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-800 mb-1"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Back to Home
+          </Link>
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
             Driver Profile
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Manage your personal profile and registered vehicle details.
+            Manage your personal profile and registered vehicle information.
           </p>
         </div>
 
         {/* Profile Card */}
-        <div className="clean-card p-6 sm:p-8 space-y-6">
+        <div className="clean-card p-6 sm:p-8 space-y-6 border-slate-200 shadow-sm">
           {isEditing ? (
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div>
@@ -93,7 +100,7 @@ export const UserProfilePage = () => {
                   Vehicle Information
                 </p>
 
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2.5">
                   <div>
                     <label className="block text-slate-700 mb-1 font-semibold">Brand</label>
                     <input
@@ -101,7 +108,7 @@ export const UserProfilePage = () => {
                       value={vehicleBrand}
                       onChange={(e) => setVehicleBrand(e.target.value)}
                       placeholder="e.g. Honda"
-                      className="w-full clean-input px-3 py-2 text-xs"
+                      className="w-full clean-input px-3 py-2 text-xs sm:text-sm"
                     />
                   </div>
                   <div>
@@ -111,37 +118,37 @@ export const UserProfilePage = () => {
                       value={vehicleModel}
                       onChange={(e) => setVehicleModel(e.target.value)}
                       placeholder="e.g. Civic"
-                      className="w-full clean-input px-3 py-2 text-xs"
+                      className="w-full clean-input px-3 py-2 text-xs sm:text-sm"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 mb-1 font-semibold">Vehicle Number</label>
+                  <label className="block text-slate-700 mb-1 font-semibold">Vehicle License Number</label>
                   <input
                     type="text"
                     value={vehicleNumber}
                     onChange={(e) => setVehicleNumber(e.target.value)}
                     placeholder="e.g. CA-8XYZ92"
-                    className="w-full clean-input px-3 py-2 text-xs font-mono"
+                    className="w-full clean-input px-3 py-2 text-xs sm:text-sm font-mono"
                   />
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-2">
+              <div className="flex gap-3 pt-3">
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="btn-secondary py-2.5 px-4 text-xs flex-1"
+                  className="btn-secondary py-3 px-4 text-xs font-bold flex-1"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="btn-primary py-2.5 px-4 text-xs font-bold flex-1 flex items-center justify-center gap-1.5"
+                  className="btn-primary py-3 px-4 text-xs font-bold flex-1 flex items-center justify-center gap-1.5 shadow-xs"
                 >
                   <Check className="w-4 h-4" />
-                  Save Changes
+                  Save Profile
                 </button>
               </div>
             </form>
@@ -149,47 +156,59 @@ export const UserProfilePage = () => {
             <div className="space-y-6">
               {/* Personal details */}
               <div className="flex items-center gap-4 border-b border-slate-100 pb-5">
-                <div className="w-16 h-16 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center font-bold text-2xl">
+                <div className="w-16 h-16 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-2xl flex-shrink-0 shadow-xs">
                   <User className="w-8 h-8" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 font-heading">
-                    {user.name}
-                  </h2>
-                  <p className="text-xs text-slate-500">Registered Driver</p>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-xl font-black text-slate-900 font-heading">
+                      {user.name}
+                    </h2>
+                    <ShieldCheck className="w-4 h-4 text-sky-600" />
+                  </div>
+                  <p className="text-xs text-slate-500 font-medium">Registered User Account</p>
                 </div>
               </div>
 
-              <div className="space-y-3 text-xs text-slate-700">
-                <div className="p-3 bg-slate-50 rounded-xl flex items-center justify-between">
-                  <span className="text-slate-500">Phone:</span>
+              <div className="space-y-2.5 text-xs text-slate-700">
+                <div className="p-3 bg-slate-50 rounded-xl flex items-center justify-between border border-slate-100">
+                  <span className="text-slate-500 flex items-center gap-1.5 font-medium">
+                    <Phone className="w-3.5 h-3.5 text-slate-400" />
+                    Phone:
+                  </span>
                   <strong className="text-slate-900">{user.phone}</strong>
                 </div>
 
-                <div className="p-3 bg-slate-50 rounded-xl flex items-center justify-between">
-                  <span className="text-slate-500">Email:</span>
+                <div className="p-3 bg-slate-50 rounded-xl flex items-center justify-between border border-slate-100">
+                  <span className="text-slate-500 flex items-center gap-1.5 font-medium">
+                    <Mail className="w-3.5 h-3.5 text-slate-400" />
+                    Email:
+                  </span>
                   <strong className="text-slate-900">{user.email}</strong>
                 </div>
               </div>
 
               {/* Vehicle details */}
               <div className="space-y-3 pt-2 border-t border-slate-100">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">
-                  Vehicle
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 font-mono flex items-center gap-1.5">
+                  <Car className="w-4 h-4 text-sky-600" />
+                  Registered Vehicle
                 </h3>
 
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2 text-xs">
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span className="text-slate-500">Brand:</span>
-                    <strong className="text-slate-900">{user.vehicleBrand || 'Not specified'}</strong>
+                    <strong className="text-slate-900 font-bold">{user.vehicleBrand || 'Not specified'}</strong>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span className="text-slate-500">Model:</span>
-                    <strong className="text-slate-900">{user.vehicleModel || 'Not specified'}</strong>
+                    <strong className="text-slate-900 font-bold">{user.vehicleModel || 'Not specified'}</strong>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span className="text-slate-500">Vehicle Number:</span>
-                    <strong className="text-slate-900 font-mono">{user.vehicleNumber || 'Not specified'}</strong>
+                    <strong className="text-slate-900 font-mono font-bold bg-white px-2 py-0.5 rounded border border-slate-200">
+                      {user.vehicleNumber || 'Not specified'}
+                    </strong>
                   </div>
                 </div>
               </div>
@@ -199,7 +218,7 @@ export const UserProfilePage = () => {
                 <button
                   type="button"
                   onClick={() => setIsEditing(true)}
-                  className="btn-primary py-2.5 px-4 text-xs font-bold flex-1 flex items-center justify-center gap-1.5"
+                  className="btn-primary py-3 px-4 text-xs font-bold flex-1 flex items-center justify-center gap-1.5 shadow-xs"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   Edit Profile
@@ -208,7 +227,7 @@ export const UserProfilePage = () => {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="btn-secondary py-2.5 px-4 text-xs font-semibold text-rose-600 hover:bg-rose-50 flex-1 flex items-center justify-center gap-1.5"
+                  className="btn-secondary py-3 px-4 text-xs font-bold text-rose-600 hover:bg-rose-50 flex-1 flex items-center justify-center gap-1.5"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   Logout
