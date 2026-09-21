@@ -1,78 +1,41 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import brandLogoImg from '../../assets/brand_logo.png';
 
-export const BrandLogo = ({ size = 'md', clickable = true, className = '' }) => {
+export const BrandLogo = ({ size = 'md', clickable = true, className = '', showSubtitle = true, variant = 'full' }) => {
   const sizeMap = {
-    sm: { icon: 28, text: 'text-lg', badge: 'text-[9px]' },
-    md: { icon: 36, text: 'text-xl', badge: 'text-[10px]' },
-    lg: { icon: 52, text: 'text-3xl', badge: 'text-xs' },
-    xl: { icon: 68, text: 'text-4xl', badge: 'text-xs' }
+    sm: { img: 'h-9 w-9', text: 'text-base', badge: 'text-[9px]' },
+    md: { img: 'h-11 w-11', text: 'text-lg sm:text-xl', badge: 'text-[10px]' },
+    lg: { img: 'h-32 w-32 sm:h-36 sm:w-36', text: 'text-2xl sm:text-3xl', badge: 'text-xs' },
+    xl: { img: 'h-44 w-44', text: 'text-3xl sm:text-4xl', badge: 'text-sm' }
   };
 
   const currentSize = sizeMap[size] || sizeMap.md;
+  const isLarge = size === 'lg' || size === 'xl';
 
-  const content = (
+  const content = isLarge ? (
+    <div className={`flex flex-col items-center text-center select-none ${className}`}>
+      {/* Official Emblem Banner with Soft Glow */}
+      <div className="relative group">
+        <div className="absolute -inset-2 bg-gradient-to-r from-indigo-500/20 via-sky-500/20 to-orange-500/20 rounded-3xl blur-md opacity-75 group-hover:opacity-100 transition-opacity" />
+        <div className="relative bg-white p-2.5 rounded-2xl border border-slate-200 shadow-md">
+          <img
+            src={brandLogoImg}
+            alt="MECH CONNECT AI Official Logo"
+            className={`${currentSize.img} object-contain rounded-xl`}
+          />
+        </div>
+      </div>
+    </div>
+  ) : (
     <div className={`flex items-center gap-3 select-none ${className}`}>
-      {/* High-Tech Vector Logo Icon */}
-      <div className="relative flex-shrink-0">
-        <svg
-          width={currentSize.icon}
-          height={currentSize.icon}
-          viewBox="0 0 100 100"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <linearGradient id="logoPrimary" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#6366F1" />
-              <stop offset="100%" stopColor="#4F46E5" />
-            </linearGradient>
-          </defs>
-
-          {/* Shield Frame */}
-          <polygon
-            points="50,6 88,26 88,74 50,94 12,74 12,26"
-            fill="#0F172A"
-            stroke="url(#logoPrimary)"
-            strokeWidth="4"
-            strokeLinejoin="round"
-          />
-
-          {/* Outer Gear Teeth Outline */}
-          <circle
-            cx="50"
-            cy="50"
-            r="32"
-            stroke="#334155"
-            strokeWidth="3"
-            strokeDasharray="6 8"
-          />
-
-          {/* Car Body Contour */}
-          <path
-            d="M26 62 C28 54, 34 46, 42 45 L58 45 C66 46, 72 54, 74 62 L76 66 C76 68, 74 70, 72 70 L28 70 C26 70, 24 68, 24 66 Z"
-            fill="#1E293B"
-            stroke="#818CF8"
-            strokeWidth="2.5"
-          />
-
-          {/* Windshield */}
-          <path
-            d="M36 45 L43 35 L57 35 L64 45 Z"
-            fill="#6366F1"
-            fillOpacity="0.4"
-            stroke="#A5B4FC"
-            strokeWidth="2"
-          />
-
-          {/* Wheels with Orange Core */}
-          <circle cx="34" cy="67" r="5.5" fill="#0F172A" stroke="#EA580C" strokeWidth="2.5" />
-          <circle cx="66" cy="67" r="5.5" fill="#0F172A" stroke="#EA580C" strokeWidth="2.5" />
-
-          {/* AI Neural Chip / Wrench Spark Center */}
-          <circle cx="50" cy="48" r="5" fill="#818CF8" />
-          <line x1="50" y1="35" x2="50" y2="43" stroke="#818CF8" strokeWidth="2" strokeLinecap="round" />
-        </svg>
+      {/* Official Circular Emblem */}
+      <div className="relative flex-shrink-0 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
+        <img
+          src={brandLogoImg}
+          alt="MECH CONNECT AI Logo"
+          className={`${currentSize.img} object-contain rounded-lg`}
+        />
       </div>
 
       {/* Typography Brand Name */}
@@ -85,9 +48,11 @@ export const BrandLogo = ({ size = 'md', clickable = true, className = '' }) => 
             AI
           </span>
         </div>
-        <span className="text-[11px] text-slate-500 font-medium">
-          Vehicle & Mechanic Platform
-        </span>
+        {showSubtitle && (
+          <span className="text-[11px] text-slate-500 font-medium">
+            Vehicle & Mechanic Platform
+          </span>
+        )}
       </div>
     </div>
   );
