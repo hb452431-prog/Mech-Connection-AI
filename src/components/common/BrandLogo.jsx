@@ -178,34 +178,34 @@ export const BrandLogo = ({ size = 'md', clickable = true, className = '', showS
     </svg>
   );
 
-  // Stylized Typography: MECH (with wrench in M) CONNECT AI (with circuit dots)
+  // Stylized Typography: MECH CONNECT AI with crisp spacing and high-tech circuit node
   const LogoTypography = () => (
-    <div className={`flex flex-col ${isLarge ? 'items-center mt-2' : 'text-left'}`}>
-      <div className="flex items-center tracking-tight leading-none">
-        {/* "MECH" with mechanical styling */}
-        <span className={`font-black ${currentSize.text} tracking-tight text-slate-900 font-heading flex items-center`}>
-          M<span className="text-slate-800">ECH</span>
+    <div className={`flex flex-col ${isLarge ? 'items-center mt-3 text-center' : 'text-left'}`}>
+      <div className="flex items-center gap-1.5 sm:gap-2 tracking-normal leading-none select-none">
+        {/* "MECH" in bold titanium slate */}
+        <span className={`font-black ${currentSize.text} text-slate-900 font-heading tracking-wide`}>
+          MECH
         </span>
-        {/* "CONNECT" in electric blue */}
-        <span className={`font-black ${currentSize.text} tracking-tight text-[#0077B6] font-heading ml-1.5`}>
+        {/* "CONNECT" in signature electric blue */}
+        <span className={`font-black ${currentSize.text} text-[#0077B6] font-heading tracking-wide`}>
           CONNECT
         </span>
-        {/* "AI" with high-tech circuit node */}
-        <div className="inline-flex items-center ml-1.5">
-          <span className={`font-black ${currentSize.text} font-heading text-[#00B4D8]`}>
+        {/* "AI" with micro-circuit connection */}
+        <div className="inline-flex items-center">
+          <span className={`font-black ${currentSize.text} text-[#00B4D8] font-heading tracking-wide`}>
             AI
           </span>
-          <svg width="18" height="12" viewBox="0 0 18 12" fill="none" className="ml-0.5 text-[#00B4D8]">
-            <line x1="0" y1="6" x2="10" y2="6" stroke="currentColor" strokeWidth="1.5" />
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none" className="ml-1 text-[#00B4D8] flex-shrink-0">
+            <line x1="0" y1="6" x2="10" y2="6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
             <circle cx="13" cy="6" r="2.5" fill="currentColor" />
-            <line x1="0" y1="2" x2="6" y2="2" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="0" y1="2" x2="6" y2="2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
             <circle cx="8" cy="2" r="1.5" fill="currentColor" />
           </svg>
         </div>
       </div>
 
       {showSubtitle && (
-        <span className={`${currentSize.subText} text-slate-500 font-semibold tracking-wide uppercase font-mono mt-0.5`}>
+        <span className={`${currentSize.subText} text-slate-500 font-bold tracking-widest uppercase font-mono mt-1.5`}>
           Vehicle & Mechanic Platform
         </span>
       )}

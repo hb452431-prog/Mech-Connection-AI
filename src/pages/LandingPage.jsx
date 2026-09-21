@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { BrandLogo } from '../components/common/BrandLogo';
-import { Wrench, Car, ArrowRight, ShieldCheck, Zap, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { AboutWebsiteVideo } from '../components/landing/AboutWebsiteVideo';
+import { Wrench, Car, ArrowRight, ShieldCheck, Zap, AlertCircle } from 'lucide-react';
 
 export const LandingPage = () => {
   return (
@@ -104,8 +105,11 @@ export const LandingPage = () => {
         </div>
       </div>
 
+      {/* About Website: Animated Interactive Video Player & Feature Showcase */}
+      <AboutWebsiteVideo />
+
       {/* Trust Highlights & Footer */}
-      <div className="w-full max-w-md text-center space-y-3 pt-2">
+      <div className="w-full max-w-lg text-center space-y-3 pt-6 border-t border-slate-200">
         <div className="flex items-center justify-center gap-4 text-xs text-slate-500 font-medium">
           <span className="flex items-center gap-1">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
