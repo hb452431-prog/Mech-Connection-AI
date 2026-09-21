@@ -108,5 +108,14 @@ export const authService = {
 
   mechanicLogout: () => {
     localStorage.removeItem(MECHANIC_STORAGE_KEY);
+  },
+
+  // Backwards compatibility methods
+  getCurrentUser: () => {
+    return authService.getUser();
+  },
+  logout: () => {
+    authService.userLogout();
+    authService.mechanicLogout();
   }
 };
