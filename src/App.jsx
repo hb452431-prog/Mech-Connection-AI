@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import SplashScreen from './components/common/SplashScreen';
 
 // Landing Page
 import LandingPage from './pages/LandingPage';
@@ -20,29 +21,37 @@ import EmergencyPage from './pages/user/EmergencyPage';
 import UserProfilePage from './pages/user/UserProfilePage';
 
 export const App = () => {
+  const [showSplash, setShowSplash] = useState(true);
+
   return (
-    <Routes>
-      {/* 1. Main Landing Page */}
-      <Route path="/" element={<LandingPage />} />
+    <>
+      {showSplash && (
+        <SplashScreen onFinish={() => setShowSplash(false)} />
+      )}
 
-      {/* 2. Mechanic Portal Routes */}
-      <Route path="/mechanic/auth" element={<MechanicAuthPage />} />
-      <Route path="/mechanic" element={<MechanicHomePage />} />
-      <Route path="/mechanic/requests" element={<MechanicRequestsPage />} />
-      <Route path="/mechanic/completed" element={<MechanicCompletedPage />} />
-      <Route path="/mechanic/profile" element={<MechanicProfilePage />} />
+      <Routes>
+        {/* 1. Main Landing Page */}
+        <Route path="/" element={<LandingPage />} />
 
-      {/* 3. User / Driver Portal Routes */}
-      <Route path="/user/auth" element={<UserAuthPage />} />
-      <Route path="/user" element={<UserHomePage />} />
-      <Route path="/user/garages" element={<FindGaragePage />} />
-      <Route path="/user/ai-help" element={<AiHelpPage />} />
-      <Route path="/user/emergency" element={<EmergencyPage />} />
-      <Route path="/user/profile" element={<UserProfilePage />} />
+        {/* 2. Mechanic Portal Routes */}
+        <Route path="/mechanic/auth" element={<MechanicAuthPage />} />
+        <Route path="/mechanic" element={<MechanicHomePage />} />
+        <Route path="/mechanic/requests" element={<MechanicRequestsPage />} />
+        <Route path="/mechanic/completed" element={<MechanicCompletedPage />} />
+        <Route path="/mechanic/profile" element={<MechanicProfilePage />} />
 
-      {/* Catch-all fallback */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        {/* 3. User / Driver Portal Routes */}
+        <Route path="/user/auth" element={<UserAuthPage />} />
+        <Route path="/user" element={<UserHomePage />} />
+        <Route path="/user/garages" element={<FindGaragePage />} />
+        <Route path="/user/ai-help" element={<AiHelpPage />} />
+        <Route path="/user/emergency" element={<EmergencyPage />} />
+        <Route path="/user/profile" element={<UserProfilePage />} />
+
+        {/* Catch-all fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   );
 };
 
