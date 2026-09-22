@@ -1,29 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import MechanicNavbar from '../../components/common/MechanicNavbar';
+import MechMap from '../../components/map/MechMap';
 import { emergencyService } from '../../services/emergencyService';
 import { authService } from '../../services/authService';
-import { MapPin, Check, X, Navigation, CheckCircle2, User, Phone, Wrench, Clock } from 'lucide-react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-
-const userPin = L.divIcon({
-  className: 'custom-user-marker',
-  html: `<div style="background-color:#EA580C; width:28px; height:28px; border-radius:50%; border:2px solid #FFFFFF; box-shadow:0 0 12px rgba(234,88,12,0.7); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:12px;">📍</div>`,
-  iconSize: [28, 28],
-  iconAnchor: [14, 14]
-});
+import { routingService } from '../../services/routingService';
+import { calculateDistanceKm, formatDistance, calculateETA } from '../../utils/distance';
+import { MapPin, Check, X, Navigation, CheckCircle2, User, Phone, Wrench, Clock, AlertTriangle } from 'lucide-react';
+import { SirenLight } from '../../components/common/SirenLight';
 
 export const MechanicRequestsPage = () => {
-  const mechanic = authService.getMechanic();
+  const mechanic = authService.getMechanic() || {};
   const [requests, setRequests] = useState([]);
   const [navigatingReq, setNavigatingReq] = useState(null);
+  const [routeCoordinates, setRouteCoordinates] = useState(null);
+  const [routeInfo, setRouteInfo] = useState(null);
+
+  // Mechanic base location (~San Francisco default or garage location)
+  const mechanicBaseLocation = {
+    lat: 37.7850,
+    lng: -122.4100
+  };
 
   useEffect(() => {
     setRequests(emergencyService.getActiveRequests());
   }, []);
 
   const handleAccept = (reqId) => {
-    const updated = emergencyService.acceptRequest(reqId, mechanic);
+    emergencyService.acceptRequest(reqId, mechanic);
     setRequests(emergencyService.getActiveRequests());
   };
 
@@ -36,6 +39,38 @@ export const MechanicRequestsPage = () => {
     emergencyService.completeRequest(reqId);
     setRequests(emergencyService.getActiveRequests());
     setNavigatingReq(null);
+    setRouteCoordinates(null);
+  };
+
+  const handleStartNavigation = async (req) => {
+    setNavigatingReq(req);
+    const userLat = req.lat || 37.7749;
+    const userLng = req.lng || -122.4194;
+
+    const routeData = await routingService.getRoute(
+      mechanicBaseLocation.lat,
+      mechanicBaseLocation.lng,
+      userLat,
+      userLng
+    );
+
+    if (routeData) {
+      setRouteCoordinates(routeData.coordinates);
+      setRouteInfo({
+        distance: routeData.distanceFormatted,
+        eta: routeData.durationFormatted
+      });
+    } else {
+      const dist = calculateDistanceKm(mechanicBaseLocation.lat, mechanicBaseLocation.lng, userLat, userLng);
+      setRouteCoordinates([
+        [mechanicBaseLocation.lat, mechanicBaseLocation.lng],
+        [userLat, userLng]
+      ]);
+      setRouteInfo({
+        distance: formatDistance(dist),
+        eta: calculateETA(dist)
+      });
+    }
   };
 
   return (
@@ -43,13 +78,19 @@ export const MechanicRequestsPage = () => {
       <MechanicNavbar />
 
       <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
-            Active Requests
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Active roadside breakdown and emergency assistance requests received from drivers.
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
+              Active Assistance Requests
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+              Live roadside breakdown alerts received from nearby vehicle drivers.
+            </p>
+          </div>
+
+          <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200 self-start sm:self-auto">
+            {requests.length} Requests in Queue
+          </span>
         </div>
 
         {/* Requests List */}
@@ -111,11 +152,11 @@ export const MechanicRequestsPage = () => {
                         <div className="flex items-center gap-2 w-full sm:w-auto">
                           <button
                             type="button"
-                            onClick={() => setNavigatingReq(req)}
+                            onClick={() => handleStartNavigation(req)}
                             className="btn-primary py-2.5 px-4 text-xs font-bold flex items-center justify-center gap-1.5 flex-1 sm:flex-none shadow-xs"
                           >
                             <Navigation className="w-3.5 h-3.5" />
-                            Navigate to User
+                            Start Navigation
                           </button>
 
                           <button
@@ -155,41 +196,41 @@ export const MechanicRequestsPage = () => {
           )}
         </div>
 
-        {/* Navigation Modal */}
+        {/* Live Navigation Modal with Interactive MechMap */}
         {navigatingReq && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-150">
-            <div className="clean-card p-6 max-w-lg w-full space-y-4 shadow-2xl">
+            <div className="clean-card p-6 max-w-2xl w-full space-y-4 shadow-2xl">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div>
                   <h3 className="text-base font-black text-slate-900 font-heading flex items-center gap-1.5">
                     <Navigation className="w-4 h-4 text-indigo-600" />
                     Navigating to {navigatingReq.userName}
                   </h3>
-                  <p className="text-xs text-slate-500">{navigatingReq.location} ({navigatingReq.distance})</p>
+                  <p className="text-xs text-slate-500">
+                    Location: {navigatingReq.location} • Problem: <strong>{navigatingReq.problem}</strong>
+                  </p>
                 </div>
                 <button
                   onClick={() => setNavigatingReq(null)}
-                  className="p-1 text-slate-400 hover:text-slate-600 rounded-lg"
+                  className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Simple Leaflet Map */}
-              <div className="h-64 rounded-xl overflow-hidden border border-slate-200">
-                <MapContainer
-                  center={[navigatingReq.lat || 37.7749, navigatingReq.lng || -122.4194]}
-                  zoom={14}
-                  scrollWheelZoom={false}
-                >
-                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                  <Marker position={[navigatingReq.lat || 37.7749, navigatingReq.lng || -122.4194]} icon={userPin}>
-                    <Popup>
-                      <div className="text-xs font-bold">{navigatingReq.userName}'s Location</div>
-                    </Popup>
-                  </Marker>
-                </MapContainer>
-              </div>
+              {/* Interactive Master Map */}
+              <MechMap
+                userLocation={{
+                  lat: navigatingReq.lat || 37.7749,
+                  lng: navigatingReq.lng || -122.4194
+                }}
+                mechanicLocation={mechanicBaseLocation}
+                mechanicInfo={mechanic}
+                routeCoordinates={routeCoordinates}
+                showRoute={true}
+                activeRouteInfo={routeInfo}
+                height="320px"
+              />
 
               <div className="flex items-center justify-between pt-2">
                 <a
@@ -197,13 +238,13 @@ export const MechanicRequestsPage = () => {
                   className="btn-secondary py-2.5 px-4 text-xs font-bold flex items-center gap-1.5"
                 >
                   <Phone className="w-3.5 h-3.5 text-indigo-600" />
-                  Call Driver
+                  Call Driver ({navigatingReq.userName.split(' ')[0]})
                 </a>
 
                 <button
                   type="button"
                   onClick={() => handleComplete(navigatingReq.id)}
-                  className="btn-primary py-2.5 px-5 text-xs font-bold shadow-xs"
+                  className="py-2.5 px-5 text-xs font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs"
                 >
                   Mark as Completed
                 </button>

@@ -1,37 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import UserNavbar from '../../components/common/UserNavbar';
-import { garageService, MOCK_GARAGES } from '../../services/garageService';
-import { MapPin, Star, Phone, ArrowLeft, Eye, Wrench, X, Check, ShieldCheck, Clock } from 'lucide-react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-
-const userLocationIcon = L.divIcon({
-  className: 'custom-user-marker',
-  html: `<div style="background-color:#4F46E5; width:28px; height:28px; border-radius:50%; border:3px solid #FFFFFF; box-shadow:0 0 12px rgba(79,70,229,0.6); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:12px;">📍</div>`,
-  iconSize: [28, 28],
-  iconAnchor: [14, 14]
-});
-
-const garageMarkerIcon = L.divIcon({
-  className: 'custom-garage-marker',
-  html: `<div style="background-color:#0F172A; width:32px; height:32px; border-radius:50%; border:2px solid #818CF8; box-shadow:0 0 12px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:14px;">🔧</div>`,
-  iconSize: [32, 32],
-  iconAnchor: [16, 16]
-});
+import MechMap from '../../components/map/MechMap';
+import { useUserLocation } from '../../hooks/useUserLocation';
+import { getGaragesWithDistance, generateGaragesNearLocation, BASE_DEMO_GARAGES } from '../../data/demoGarages';
+import { 
+  MapPin, 
+  Star, 
+  Phone, 
+  ArrowLeft, 
+  Eye, 
+  Wrench, 
+  X, 
+  ShieldCheck, 
+  Clock, 
+  Navigation,
+  Compass,
+  AlertCircle,
+  Radio,
+  CheckCircle2,
+  Sparkles
+} from 'lucide-react';
+import { SirenBadge, SirenLight } from '../../components/common/SirenLight';
 
 export const FindGaragePage = () => {
   const navigate = useNavigate();
+  const {
+    location: userLocation,
+    loading: isLocating,
+    error: locationError,
+    requestLocation,
+    setManualLocation
+  } = useUserLocation(false);
+
   const [filter, setFilter] = useState('all'); // 'all' | 'closest' | '247'
   const [selectedGarage, setSelectedGarage] = useState(null);
   const [requestHelpModal, setRequestHelpModal] = useState(null);
-  const [problemDescription, setProblemDescription] = useState('Vehicle needs inspection and repair');
+  const [problemType, setProblemType] = useState('Battery Problem');
+  const [problemNotes, setProblemNotes] = useState('');
+  const [garages, setGarages] = useState(BASE_DEMO_GARAGES);
 
-  const garages = garageService.getNearbyGarages().filter((g) => {
-    if (filter === 'closest') return parseFloat(g.distance) <= 2.0;
-    if (filter === '247') return g.services.toLowerCase().includes('24/7');
+  // When user location is available or manual coordinates change, generate nearby garages
+  useEffect(() => {
+    if (userLocation && userLocation.lat && userLocation.lng) {
+      const nearby = generateGaragesNearLocation(userLocation.lat, userLocation.lng, 8);
+      setGarages(nearby);
+    } else {
+      setGarages(BASE_DEMO_GARAGES);
+    }
+  }, [userLocation]);
+
+  // Filter garages
+  const filteredGarages = garages.filter((g) => {
+    if (filter === 'closest') {
+      const dist = g.distanceKm || parseFloat(g.distance) || 3.0;
+      return dist <= 3.0;
+    }
+    if (filter === '247') {
+      const text = Array.isArray(g.services) ? g.services.join(' ') : (g.services || '');
+      return text.toLowerCase().includes('24/7') || text.toLowerCase().includes('emergency');
+    }
     return true;
   });
+
+  const handleSelectGarage = (garage) => {
+    setSelectedGarage(garage);
+  };
 
   const handleRequestHelp = (garage) => {
     setRequestHelpModal(garage);
@@ -39,15 +73,24 @@ export const FindGaragePage = () => {
 
   const handleSendHelpRequest = (e) => {
     e.preventDefault();
+    const targetGarage = requestHelpModal;
     setRequestHelpModal(null);
-    navigate(`/user/emergency?garage=${encodeURIComponent(requestHelpModal.name)}&notes=${encodeURIComponent(problemDescription)}`);
+    navigate(
+      `/user/emergency?garage=${encodeURIComponent(targetGarage.name)}&notes=${encodeURIComponent(
+        problemNotes || problemType
+      )}&type=${encodeURIComponent(problemType)}`
+    );
+  };
+
+  const handleLocationSearchSelect = (lat, lng, name) => {
+    setManualLocation(lat, lng, name);
   };
 
   return (
     <div className="min-h-screen bg-[#F6F8FC] flex flex-col pb-24 md:pb-12">
       <UserNavbar />
 
-      <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+      <main className="max-w-6xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
@@ -58,35 +101,41 @@ export const FindGaragePage = () => {
               <ArrowLeft className="w-3.5 h-3.5" />
               Back to Home
             </Link>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
-              Find Nearby Garage
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Verified auto mechanics and repair centers near your current GPS location.
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
+                Find Nearby Garage
+              </h1>
+              <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                WORLD MAP DEMO
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+              Live interactive map to locate certified mechanics and workshops near you or anywhere in the world.
             </p>
           </div>
 
+          {/* Filter Pills */}
           <div className="flex items-center gap-1.5 self-start sm:self-auto bg-white p-1 rounded-xl border border-slate-200 shadow-xs text-xs font-bold">
             <button
               onClick={() => setFilter('all')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
-                filter === 'all' ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-50'
+                filter === 'all' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-50'
               }`}
             >
-              All ({MOCK_GARAGES.length})
+              All ({garages.length})
             </button>
             <button
               onClick={() => setFilter('closest')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
-                filter === 'closest' ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-50'
+                filter === 'closest' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-50'
               }`}
             >
-              &lt; 2 km
+              &lt; 3 km
             </button>
             <button
               onClick={() => setFilter('247')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
-                filter === '247' ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-50'
+                filter === '247' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-50'
               }`}
             >
               24/7 Roadside
@@ -94,147 +143,181 @@ export const FindGaragePage = () => {
           </div>
         </div>
 
-        {/* Interactive Map */}
-        <div className="clean-card overflow-hidden h-72 sm:h-80 border border-slate-200 relative shadow-sm">
-          <MapContainer
-            center={[37.7749, -122.4194]}
-            zoom={13}
-            scrollWheelZoom={false}
-          >
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        {/* Master Interactive Map Container */}
+        <div className="space-y-2">
+          <MechMap
+            userLocation={userLocation}
+            garages={filteredGarages}
+            selectedGarage={selectedGarage}
+            onSelectGarage={handleSelectGarage}
+            onLocate={requestLocation}
+            isLocating={isLocating}
+            locationError={locationError}
+            onSelectLocation={handleLocationSearchSelect}
+            onRequestHelp={handleRequestHelp}
+            height="440px"
+          />
 
-            {/* User Marker */}
-            <Marker position={[37.7749, -122.4194]} icon={userLocationIcon}>
-              <Popup>
-                <div className="text-xs font-bold text-slate-900">
-                  📍 Your Location (Current)
-                </div>
-              </Popup>
-            </Marker>
-
-            {/* Garage Markers */}
-            {garages.map((g) => (
-              <Marker
-                key={g.id}
-                position={[g.lat, g.lng]}
-                icon={garageMarkerIcon}
-                eventHandlers={{
-                  click: () => setSelectedGarage(g)
-                }}
-              >
-                <Popup>
-                  <div className="text-xs text-slate-900">
-                    <strong className="block font-bold">{g.name}</strong>
-                    <p className="text-slate-600">{g.distance} • ★ {g.rating}</p>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
-
-          {/* Floating Map HUD */}
-          <div className="absolute top-3 left-3 z-[1000] bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 shadow-md flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>GPS: Market St • {garages.length} Workshops Online</span>
+          {/* Quick Helper Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-2 px-1 text-xs text-slate-500 font-medium">
+            <div className="flex items-center gap-3">
+              <span className="flex items-center gap-1">
+                <span className="w-2.5 h-2.5 rounded-full bg-indigo-600" />
+                <span>📍 You (GPS)</span>
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="w-2.5 h-2.5 rounded-full bg-slate-900" />
+                <span>🔧 Certified Garage</span>
+              </span>
+            </div>
+            <span className="text-[11px] font-mono text-slate-400">
+              💡 Tip: Click any garage marker on the map to view instant service details or dispatch aid.
+            </span>
           </div>
         </div>
 
-        {/* Garages List */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base sm:text-lg font-black text-slate-900 font-heading">
-              Available Mechanics ({garages.length})
-            </h2>
-            <span className="text-xs text-slate-500 font-medium">Click a garage to view or request help</span>
+        {/* Garages List Section */}
+        <div className="space-y-4 pt-2">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+            <div>
+              <h2 className="text-base sm:text-lg font-black text-slate-900 font-heading">
+                Available Mechanics & Garages ({filteredGarages.length})
+              </h2>
+              <p className="text-xs text-slate-500">
+                {userLocation
+                  ? 'Showing verified workshops sorted by proximity to your detected GPS location.'
+                  : 'Showing global demo network. Click "Use My Location" (⌖) on the map to find workshops near you.'}
+              </p>
+            </div>
+            <span className="text-xs font-bold font-mono text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+              Live Online
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {garages.map((garage) => (
-              <div
-                key={garage.id}
-                className={`clean-card p-5 space-y-4 flex flex-col justify-between transition-all ${
-                  selectedGarage?.id === garage.id ? 'border-indigo-500 ring-2 ring-indigo-100 shadow-lg' : ''
-                }`}
-              >
-                <div className="space-y-2">
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <h3 className="text-base font-bold text-slate-900 font-heading">
-                          {garage.name}
-                        </h3>
-                        <ShieldCheck className="w-4 h-4 text-indigo-600 flex-shrink-0" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredGarages.map((garage) => {
+              const isSelected = selectedGarage?.id === garage.id;
+
+              return (
+                <div
+                  key={garage.id}
+                  className={`clean-card p-5 space-y-3 flex flex-col justify-between transition-all cursor-pointer ${
+                    isSelected
+                      ? 'border-indigo-500 ring-2 ring-indigo-100 shadow-lg bg-indigo-50/20'
+                      : 'hover:border-indigo-300 hover:shadow-md'
+                  }`}
+                  onClick={() => setSelectedGarage(garage)}
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <h3 className="text-sm sm:text-base font-bold text-slate-900 font-heading line-clamp-1">
+                            {garage.name}
+                          </h3>
+                          <ShieldCheck className="w-4 h-4 text-indigo-600 flex-shrink-0" />
+                        </div>
+                        <p className="text-xs text-slate-500 line-clamp-1">{garage.address}</p>
                       </div>
-                      <p className="text-xs text-slate-500">{garage.address}</p>
+
+                      <span className="text-xs font-bold font-mono text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-lg whitespace-nowrap border border-indigo-100 flex-shrink-0">
+                        {garage.distance || `${garage.distanceKm || 2.4} km`}
+                      </span>
                     </div>
-                    <span className="text-xs font-bold font-mono text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg whitespace-nowrap border border-indigo-100">
-                      {garage.distance}
-                    </span>
+
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="flex items-center gap-1 font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 font-mono text-[11px]">
+                        <Star className="w-3 h-3 fill-current" />
+                        {garage.rating || 4.8}
+                        <span className="text-slate-400 font-normal">({garage.reviewsCount || 120})</span>
+                      </span>
+                      <span className="text-[11px] text-slate-500 font-medium">
+                        Lead Tech: <strong>{garage.mechanicName || 'Master Tech'}</strong>
+                      </span>
+                    </div>
+
+                    <div className="text-[11px] text-slate-700 bg-slate-50 p-2 rounded-xl border border-slate-100">
+                      <span className="text-[9px] font-mono uppercase font-bold text-slate-400 block mb-0.5">Specialty:</span>
+                      <p className="font-medium text-slate-800 line-clamp-1">
+                        {garage.specialty || (Array.isArray(garage.services) ? garage.services.join(' • ') : garage.services)}
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-3 text-xs">
-                    <span className="flex items-center gap-1 font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
-                      <Star className="w-3.5 h-3.5 fill-current" />
-                      {garage.rating}
-                    </span>
-                    <span className="text-slate-400">({garage.reviewsCount} reviews)</span>
+                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedGarage(garage);
+                      }}
+                      className="btn-secondary py-2 text-xs font-bold flex items-center justify-center gap-1"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      View
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRequestHelp(garage);
+                      }}
+                      className="btn-primary py-2 text-xs font-bold flex items-center justify-center gap-1 shadow-xs"
+                    >
+                      <Wrench className="w-3.5 h-3.5" />
+                      Request Help
+                    </button>
                   </div>
-
-                  <p className="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-100 font-medium">
-                    {garage.services}
-                  </p>
                 </div>
-
-                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedGarage(garage)}
-                    className="btn-secondary py-2.5 text-xs font-bold flex items-center justify-center gap-1.5"
-                  >
-                    <Eye className="w-3.5 h-3.5" />
-                    View Details
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleRequestHelp(garage)}
-                    className="btn-primary py-2.5 text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs"
-                  >
-                    <Wrench className="w-3.5 h-3.5" />
-                    Request Help
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
         {/* View Garage Details Modal */}
         {selectedGarage && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-150">
-            <div className="clean-card p-6 max-w-sm w-full space-y-4 shadow-2xl">
+            <div className="clean-card p-6 sm:p-7 max-w-md w-full space-y-4 shadow-2xl">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div className="flex items-center gap-2">
-                  <Wrench className="w-5 h-5 text-indigo-600" />
-                  <h3 className="text-base font-bold text-slate-900 font-heading">
-                    {selectedGarage.name}
-                  </h3>
+                  <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+                    🔧
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 font-heading">
+                      {selectedGarage.name}
+                    </h3>
+                    <p className="text-[11px] text-slate-500">{selectedGarage.address}</p>
+                  </div>
                 </div>
                 <button
                   onClick={() => setSelectedGarage(null)}
-                  className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+                  className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="space-y-2 text-xs text-slate-700">
-                <div className="p-2.5 bg-slate-50 rounded-xl space-y-1">
-                  <p><strong>Master Mechanic:</strong> {selectedGarage.mechanicName}</p>
-                  <p><strong>Distance from you:</strong> {selectedGarage.distance}</p>
-                  <p><strong>Customer Rating:</strong> ★ {selectedGarage.rating} ({selectedGarage.reviewsCount} verified reviews)</p>
-                  <p><strong>Address:</strong> {selectedGarage.address}</p>
-                  <p><strong>Services:</strong> {selectedGarage.services}</p>
+              <div className="space-y-2.5 text-xs text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <div className="flex items-center justify-between border-b border-slate-200/60 pb-2">
+                  <span><strong>Master Mechanic:</strong></span>
+                  <span className="font-bold text-slate-900">{selectedGarage.mechanicName}</span>
+                </div>
+                <div className="flex items-center justify-between border-b border-slate-200/60 pb-2">
+                  <span><strong>Estimated Distance:</strong></span>
+                  <span className="font-bold font-mono text-indigo-700">{selectedGarage.distance || `${selectedGarage.distanceKm || 2.1} km`}</span>
+                </div>
+                <div className="flex items-center justify-between border-b border-slate-200/60 pb-2">
+                  <span><strong>Customer Rating:</strong></span>
+                  <span className="font-bold text-amber-600">★ {selectedGarage.rating} ({selectedGarage.reviewsCount || 140} reviews)</span>
+                </div>
+                <div>
+                  <span className="block font-bold text-slate-700 mb-1">Services Offered:</span>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    {Array.isArray(selectedGarage.services) ? selectedGarage.services.join(' • ') : selectedGarage.services}
+                  </p>
                 </div>
               </div>
 
@@ -253,9 +336,10 @@ export const FindGaragePage = () => {
                     setSelectedGarage(null);
                     handleRequestHelp(g);
                   }}
-                  className="btn-primary py-2.5 text-xs font-bold"
+                  className="btn-emergency py-2.5 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm"
                 >
-                  Request Help
+                  <SirenLight size="xs" variant="sticker" animated={true} />
+                  <span>Request Help</span>
                 </button>
               </div>
             </div>
@@ -265,11 +349,17 @@ export const FindGaragePage = () => {
         {/* Request Help Modal */}
         {requestHelpModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-150">
-            <div className="clean-card p-6 max-w-sm w-full space-y-4 shadow-2xl">
+            <div className="clean-card p-6 sm:p-7 max-w-md w-full space-y-4 shadow-2xl">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h3 className="text-base font-bold text-slate-900 font-heading">
-                  Request Help from {requestHelpModal.name}
-                </h3>
+                <div className="flex items-center gap-2">
+                  <SirenLight size="sm" variant="sticker" animated={true} />
+                  <div>
+                    <h3 className="text-base font-black text-slate-900 font-heading">
+                      Request Help from {requestHelpModal.name}
+                    </h3>
+                    <p className="text-[11px] text-slate-500">Tech: {requestHelpModal.mechanicName}</p>
+                  </div>
+                </div>
                 <button
                   onClick={() => setRequestHelpModal(null)}
                   className="p-1 text-slate-400 hover:text-slate-600 rounded-lg"
@@ -278,19 +368,48 @@ export const FindGaragePage = () => {
                 </button>
               </div>
 
-              <p className="text-xs text-slate-500">
-                Send your current location and problem description directly to this workshop.
+              <p className="text-xs text-slate-600">
+                Send your live coordinates and problem details to dispatch this mobile technician immediately.
               </p>
 
-              <form onSubmit={handleSendHelpRequest} className="space-y-3 text-xs">
-                <div>
-                  <label className="block font-bold text-slate-700 mb-1">Problem Description</label>
+              <form onSubmit={handleSendHelpRequest} className="space-y-3.5 text-xs">
+                {/* Problem selector */}
+                <div className="space-y-1.5">
+                  <label className="block font-bold text-slate-700">Select Vehicle Problem:</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      'Battery Problem',
+                      'Flat Tyre',
+                      'Engine Problem',
+                      'Vehicle Not Starting',
+                      'Lockout / Keys',
+                      'Other Issue'
+                    ].map((type) => (
+                      <button
+                        key={type}
+                        type="button"
+                        onClick={() => setProblemType(type)}
+                        className={`p-2 rounded-xl border text-left transition-all font-medium text-xs ${
+                          problemType === type
+                            ? 'border-orange-500 bg-orange-50 text-orange-950 font-bold ring-1 ring-orange-200'
+                            : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        {type}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Additional Notes */}
+                <div className="space-y-1">
+                  <label className="block font-bold text-slate-700">Additional Notes (Optional):</label>
                   <input
                     type="text"
-                    required
-                    value={problemDescription}
-                    onChange={(e) => setProblemDescription(e.target.value)}
-                    className="w-full clean-input px-3.5 py-2.5 text-xs sm:text-sm"
+                    value={problemNotes}
+                    onChange={(e) => setProblemNotes(e.target.value)}
+                    placeholder="e.g., Car is parked next to gas station..."
+                    className="w-full clean-input px-3 py-2 text-xs"
                   />
                 </div>
 
@@ -304,9 +423,10 @@ export const FindGaragePage = () => {
                   </button>
                   <button
                     type="submit"
-                    className="btn-primary py-2.5 text-xs font-bold"
+                    className="btn-emergency py-2.5 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm"
                   >
-                    Send Request
+                    <SirenLight size="xs" variant="sticker" animated={false} />
+                    <span>Send Request</span>
                   </button>
                 </div>
               </form>

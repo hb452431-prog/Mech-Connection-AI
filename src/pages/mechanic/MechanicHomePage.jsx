@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MechanicNavbar from '../../components/common/MechanicNavbar';
+import MechMap from '../../components/map/MechMap';
 import { authService } from '../../services/authService';
 import { emergencyService } from '../../services/emergencyService';
-import { MapPin, Clock, AlertCircle, Check, Eye, ArrowRight, User, Wrench, Radio, Phone } from 'lucide-react';
+import { MapPin, Clock, AlertCircle, Check, Eye, ArrowRight, User, Wrench, Radio, Phone, Navigation } from 'lucide-react';
 
 export const MechanicHomePage = () => {
   const navigate = useNavigate();
-  const mechanic = authService.getMechanic();
+  const mechanic = authService.getMechanic() || {};
   const [requests, setRequests] = useState([]);
   const [viewRequestModal, setViewRequestModal] = useState(null);
   const [isOnline, setIsOnline] = useState(true);
+
+  const mechanicBaseLocation = {
+    lat: 37.7850,
+    lng: -122.4100
+  };
 
   useEffect(() => {
     const list = emergencyService.getActiveRequests();
@@ -21,6 +27,19 @@ export const MechanicHomePage = () => {
     emergencyService.acceptRequest(req.id, mechanic);
     navigate('/mechanic/requests');
   };
+
+  // Convert requests to pseudo garage/incident markers for map display
+  const requestPins = requests.map((r) => ({
+    id: r.id,
+    name: `${r.userName} - ${r.problem}`,
+    mechanicName: r.problemType || 'Emergency Breakdown',
+    distance: r.distance,
+    lat: r.lat || 37.7749,
+    lng: r.lng || -122.4194,
+    rating: 5.0,
+    services: [r.problem, r.location],
+    available: true
+  }));
 
   return (
     <div className="min-h-screen bg-[#F6F8FC] flex flex-col pb-24 md:pb-12">
@@ -38,11 +57,11 @@ export const MechanicHomePage = () => {
                 isOnline ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
               }`}>
                 <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-emerald-600 animate-pulse' : 'bg-slate-400'}`} />
-                {isOnline ? 'Online' : 'Offline'}
+                {isOnline ? 'Online & Ready' : 'Offline'}
               </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-500 font-medium">
-              {mechanic.garageName || 'Apex Auto Care & Diagnostics'} • Ready for roadside dispatch.
+              {mechanic.garageName || 'Apex Auto Care & Diagnostics'} • Live GPS dispatch network active.
             </p>
           </div>
 
@@ -58,6 +77,30 @@ export const MechanicHomePage = () => {
             <Radio className="w-3.5 h-3.5" />
             <span>{isOnline ? 'Switch to Offline' : 'Go Online'}</span>
           </button>
+        </div>
+
+        {/* Live Dispatch Radar Map */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between px-1">
+            <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wider font-mono flex items-center gap-1.5">
+              <Navigation className="w-4 h-4 text-indigo-600" />
+              <span>Live Area Radar Map</span>
+            </h2>
+            <span className="text-[11px] font-mono text-slate-400">
+              Showing your garage & {requests.length} driver incident signals
+            </span>
+          </div>
+
+          <MechMap
+            mechanicLocation={mechanicBaseLocation}
+            mechanicInfo={mechanic}
+            garages={requestPins}
+            onSelectGarage={(g) => {
+              const target = requests.find((r) => r.id === g.id);
+              if (target) setViewRequestModal(target);
+            }}
+            height="260px"
+          />
         </div>
 
         {/* Nearby Assistance Requests Section */}

@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import UserNavbar from '../../components/common/UserNavbar';
+import MechMap from '../../components/map/MechMap';
 import { emergencyService } from '../../services/emergencyService';
 import { authService } from '../../services/authService';
+import { routingService } from '../../services/routingService';
+import { useUserLocation } from '../../hooks/useUserLocation';
+import { calculateDistanceKm, calculateETA, formatDistance } from '../../utils/distance';
 import { SirenLight, SirenBadge } from '../../components/common/SirenLight';
 import { 
   AlertCircle, 
@@ -20,37 +24,49 @@ import {
   BatteryCharging,
   Flame,
   HelpCircle,
-  Radio
+  Play,
+  RotateCcw
 } from 'lucide-react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
-import L from 'leaflet';
-
-const userPin = L.divIcon({
-  className: 'custom-user-marker',
-  html: `<div style="background-color:#EA580C; width:28px; height:28px; border-radius:50%; border:3px solid #FFFFFF; box-shadow:0 0 14px rgba(234,88,12,0.7); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:12px;">📍</div>`,
-  iconSize: [28, 28],
-  iconAnchor: [14, 14]
-});
-
-const mechanicPin = L.divIcon({
-  className: 'custom-mechanic-marker',
-  html: `<div style="background-color:#4F46E5; width:34px; height:34px; border-radius:50%; border:3px solid #818CF8; box-shadow:0 0 16px rgba(79,70,229,0.7); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:15px;">🔧</div>`,
-  iconSize: [34, 34],
-  iconAnchor: [17, 17]
-});
 
 export const EmergencyPage = () => {
   const [searchParams] = useSearchParams();
   const initialNotes = searchParams.get('notes') || '';
   const initialGarage = searchParams.get('garage') || '';
-  const user = authService.getUser();
+  const initialType = searchParams.get('type') || 'Vehicle Breakdown';
+  const user = authService.getUser() || {};
+
+  const {
+    location: detectedLocation,
+    loading: isLocating,
+    error: locationError,
+    requestLocation
+  } = useUserLocation(true);
 
   // Screen stages: 'FORM' | 'SEARCHING' | 'ACCEPTED'
   const [stage, setStage] = useState('FORM');
-  const [selectedOption, setSelectedOption] = useState('Vehicle Breakdown');
-  const [customNotes, setCustomNotes] = useState(initialNotes ? `${initialGarage ? `Request for ${initialGarage}: ` : ''}${initialNotes}` : '');
+  const [selectedOption, setSelectedOption] = useState(initialType);
+  const [customNotes, setCustomNotes] = useState(
+    initialNotes ? `${initialGarage ? `Request for ${initialGarage}: ` : ''}${initialNotes}` : ''
+  );
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [acceptedMechanic, setAcceptedMechanic] = useState(null);
+
+  // Route and live mechanic movement state
+  const [routeCoordinates, setRouteCoordinates] = useState(null);
+  const [mechanicCurrentPos, setMechanicCurrentPos] = useState(null);
+  const [routeIndex, setRouteIndex] = useState(0);
+  const [liveDistance, setLiveDistance] = useState('1.8 km');
+  const [liveETA, setLiveETA] = useState('6 mins');
+  const [isSimulatingMovement, setIsSimulatingMovement] = useState(false);
+
+  const simulationIntervalRef = useRef(null);
+
+  // Fallback default coordinates if GPS not allowed yet
+  const userCoords = detectedLocation || {
+    lat: 37.7749,
+    lng: -122.4194,
+    address: 'Market St & 7th St, Downtown, San Francisco, CA'
+  };
 
   const emergencyOptions = [
     { name: 'Vehicle Breakdown', icon: Car, desc: 'Car stalled or won\'t move' },
@@ -60,50 +76,142 @@ export const EmergencyPage = () => {
     { name: 'Other', icon: HelpCircle, desc: 'Lockout, fuel, or general aid' }
   ];
 
-  const userCoords = [37.7749, -122.4194];
-  const mechanicCoords = [37.7850, -122.4100];
-  const routePoints = [
-    userCoords,
-    [37.7810, -122.4145],
-    mechanicCoords
-  ];
-
+  // Confirm and send emergency request
   const handleConfirmSend = async () => {
     setShowConfirmModal(false);
     setStage('SEARCHING');
 
-    // Create request in service
+    // Create request in local service
     await emergencyService.createRequest({
       problemType: selectedOption,
       notes: customNotes,
-      userName: user.name,
-      userPhone: user.phone,
+      userName: user.name || 'John Doe',
+      userPhone: user.phone || '+1 555-0199',
       userLocation: {
-        address: 'Market St & 7th St, Downtown, San Francisco, CA',
-        lat: 37.7749,
-        lng: -122.4194
+        address: userCoords.address || 'Detected GPS Location',
+        lat: userCoords.lat,
+        lng: userCoords.lng
       }
     });
 
-    // Simulate mechanic response after 3.2 seconds
+    // Mechanic initial starting coordinates (~2 km north-east of user)
+    const mechanicOrigin = {
+      lat: userCoords.lat + 0.018,
+      lng: userCoords.lng + 0.014
+    };
+
+    // Calculate initial route using OSRM
+    const routeData = await routingService.getRoute(
+      mechanicOrigin.lat,
+      mechanicOrigin.lng,
+      userCoords.lat,
+      userCoords.lng
+    );
+
+    // Simulate mechanic response after 2.8 seconds
     setTimeout(() => {
+      const coords = routeData?.coordinates || [
+        [mechanicOrigin.lat, mechanicOrigin.lng],
+        [userCoords.lat + 0.009, userCoords.lng + 0.007],
+        [userCoords.lat, userCoords.lng]
+      ];
+
+      const initialDist = routeData?.distanceFormatted || '1.8 km';
+      const initialEta = routeData?.durationFormatted || '6 mins';
+
+      setRouteCoordinates(coords);
+      setMechanicCurrentPos(mechanicOrigin);
+      setRouteIndex(0);
+      setLiveDistance(initialDist);
+      setLiveETA(initialEta);
+
       setAcceptedMechanic({
         garageName: initialGarage || 'Apex Auto Care & Diagnostics',
         mechanicName: 'David Miller',
-        distance: '1.2 km',
+        distance: initialDist,
         phone: '+1 555-4321',
         vehicle: 'Ford Transit Mobile Unit #12',
-        eta: '8 mins'
+        eta: initialEta,
+        origin: mechanicOrigin
       });
+
       setStage('ACCEPTED');
-    }, 3200);
+      setIsSimulatingMovement(true);
+    }, 2800);
+  };
+
+  // Demo Live Movement Simulation Effect
+  useEffect(() => {
+    if (stage !== 'ACCEPTED' || !isSimulatingMovement || !routeCoordinates || routeCoordinates.length === 0) {
+      if (simulationIntervalRef.current) {
+        clearInterval(simulationIntervalRef.current);
+      }
+      return;
+    }
+
+    simulationIntervalRef.current = setInterval(() => {
+      setRouteIndex((prevIndex) => {
+        const nextIndex = prevIndex + 1;
+        if (nextIndex >= routeCoordinates.length) {
+          // Reached destination!
+          setMechanicCurrentPos({
+            lat: userCoords.lat,
+            lng: userCoords.lng
+          });
+          setLiveDistance('Arrived (0 m)');
+          setLiveETA('Arrived!');
+          setIsSimulatingMovement(false);
+          return prevIndex;
+        }
+
+        const nextPoint = routeCoordinates[nextIndex];
+        setMechanicCurrentPos({
+          lat: nextPoint[0],
+          lng: nextPoint[1]
+        });
+
+        // Compute remaining distance & ETA to user
+        const remainingKm = calculateDistanceKm(
+          nextPoint[0],
+          nextPoint[1],
+          userCoords.lat,
+          userCoords.lng
+        );
+        setLiveDistance(formatDistance(remainingKm));
+        setLiveETA(calculateETA(remainingKm));
+
+        return nextIndex;
+      });
+    }, 1600);
+
+    return () => {
+      if (simulationIntervalRef.current) {
+        clearInterval(simulationIntervalRef.current);
+      }
+    };
+  }, [stage, isSimulatingMovement, routeCoordinates, userCoords]);
+
+  // Restart movement simulation
+  const handleRestartSimulation = () => {
+    if (!acceptedMechanic || !routeCoordinates || routeCoordinates.length === 0) return;
+    setRouteIndex(0);
+    setMechanicCurrentPos(acceptedMechanic.origin);
+    const totalDist = calculateDistanceKm(
+      acceptedMechanic.origin.lat,
+      acceptedMechanic.origin.lng,
+      userCoords.lat,
+      userCoords.lng
+    );
+    setLiveDistance(formatDistance(totalDist));
+    setLiveETA(calculateETA(totalDist));
+    setIsSimulatingMovement(true);
   };
 
   return (
     <div className="min-h-screen bg-[#F6F8FC] flex flex-col pb-24 md:pb-12">
       <UserNavbar />
 
-      <main className="max-w-2xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+      <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         {/* Header */}
         <div>
           <Link
@@ -184,16 +292,23 @@ export const EmergencyPage = () => {
               />
             </div>
 
-            {/* Current Location Display */}
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
-              <span className="text-[11px] font-bold text-slate-400 uppercase font-mono">
-                Current Location (GPS Locked)
-              </span>
+            {/* Current Location Display with Mini Map preview */}
+            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-slate-400 uppercase font-mono">
+                  Current Location (GPS Locked)
+                </span>
+                <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded">
+                  ● Telemetry Ready
+                </span>
+              </div>
               <p className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
                 <MapPin className="w-4 h-4 text-orange-600 flex-shrink-0" />
-                Market St & 7th St, Downtown, San Francisco, CA
+                {userCoords.address || 'Market St & 7th St, Downtown, San Francisco, CA'}
               </p>
-              <p className="text-[11px] text-slate-500">Auto-detected via high-precision device telemetry</p>
+              <p className="text-[11px] text-slate-500">
+                Coordinates: {userCoords.lat.toFixed(4)}, {userCoords.lng.toFixed(4)}
+              </p>
             </div>
 
             {/* Big Send Emergency Button */}
@@ -233,7 +348,7 @@ export const EmergencyPage = () => {
           </div>
         )}
 
-        {/* 3. ACCEPTED STAGE (Live Ride-tracking screen) */}
+        {/* 3. ACCEPTED STAGE (Live Ride-tracking screen with interactive Map & Movement) */}
         {stage === 'ACCEPTED' && acceptedMechanic && (
           <div className="clean-card p-6 sm:p-7 space-y-6 border-l-4 border-l-emerald-600 animate-in fade-in duration-200 shadow-md rounded-2xl">
             {/* Acceptance Banner */}
@@ -247,43 +362,64 @@ export const EmergencyPage = () => {
                   {acceptedMechanic.garageName}
                 </h2>
                 <p className="text-xs text-slate-500 font-medium">
-                  Assigned Master Tech: <strong>{acceptedMechanic.mechanicName}</strong>
+                  Assigned Master Tech: <strong>{acceptedMechanic.mechanicName}</strong> ({acceptedMechanic.vehicle})
                 </p>
               </div>
 
-              <div className="text-left sm:text-right bg-indigo-50 px-3.5 py-2 rounded-xl border border-indigo-100 self-start sm:self-auto">
+              {/* Dynamic Live Arrival Badge */}
+              <div className="text-left sm:text-right bg-gradient-to-br from-indigo-50 to-orange-50 px-4 py-2.5 rounded-2xl border border-indigo-100 self-start sm:self-auto shadow-xs">
                 <span className="text-[10px] text-slate-500 font-mono uppercase block font-bold">Estimated Arrival</span>
-                <span className="text-xl font-black font-mono text-indigo-700">{acceptedMechanic.eta}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-black font-mono text-indigo-700">{liveETA}</span>
+                  <span className="text-xs font-mono font-bold text-orange-600 bg-white px-2 py-0.5 rounded-md border border-orange-200">
+                    {liveDistance}
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Ride Tracking Map */}
+            {/* Ride Tracking Map (Leaflet MechMap) */}
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs font-bold text-slate-600 px-1">
-                <span className="flex items-center gap-1 text-orange-700">📍 You (Stranded Location)</span>
-                <span className="flex items-center gap-1 text-indigo-700">🔧 Mechanic (En Route)</span>
+                <span className="flex items-center gap-1.5 text-indigo-700">
+                  <span className="w-2.5 h-2.5 rounded-full bg-indigo-600" />
+                  📍 You (Stranded Location)
+                </span>
+                <span className="flex items-center gap-1.5 text-orange-700">
+                  <span className="w-2.5 h-2.5 rounded-full bg-orange-600 animate-ping" />
+                  🚚 Mechanic (Live Moving Unit)
+                </span>
               </div>
 
-              <div className="h-64 sm:h-72 rounded-2xl overflow-hidden border border-slate-200 shadow-xs relative">
-                <MapContainer
-                  center={[37.7800, -122.4150]}
-                  zoom={14}
-                  scrollWheelZoom={false}
-                >
-                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                  <Marker position={userCoords} icon={userPin}>
-                    <Popup><div className="text-xs font-bold">📍 Your Vehicle Location</div></Popup>
-                  </Marker>
-                  <Marker position={mechanicCoords} icon={mechanicPin}>
-                    <Popup><div className="text-xs font-bold">🔧 {acceptedMechanic.mechanicName}</div></Popup>
-                  </Marker>
-                  <Polyline positions={routePoints} color="#4F46E5" weight={5} dashArray="8, 8" />
-                </MapContainer>
+              {/* Master Leaflet Interactive Map */}
+              <MechMap
+                userLocation={userCoords}
+                mechanicLocation={mechanicCurrentPos}
+                mechanicInfo={acceptedMechanic}
+                routeCoordinates={routeCoordinates}
+                showRoute={true}
+                activeRouteInfo={{
+                  distance: liveDistance,
+                  eta: liveETA
+                }}
+                height="380px"
+              />
 
-                <div className="absolute top-3 left-3 z-[1000] bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 shadow-sm flex items-center gap-2">
-                  <Navigation className="w-3.5 h-3.5 text-indigo-600 animate-spin" />
-                  <span>Live Dispatch Route Active</span>
-                </div>
+              {/* Simulation Controls Toolbar */}
+              <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+                <span className="text-slate-600 font-medium flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>Demo simulation: Mechanic is driving towards your vehicle coordinates.</span>
+                </span>
+
+                <button
+                  type="button"
+                  onClick={handleRestartSimulation}
+                  className="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 rounded-lg font-bold border border-slate-300 shadow-2xs flex items-center gap-1 transition-all"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>Restart Tracking Demo</span>
+                </button>
               </div>
             </div>
 
@@ -292,10 +428,10 @@ export const EmergencyPage = () => {
               <div>
                 <p className="text-sm font-black text-indigo-950 flex items-center gap-1.5">
                   <Navigation className="w-4 h-4 text-indigo-600" />
-                  Mechanic is on the way.
+                  Mechanic is en route.
                 </p>
                 <p className="text-slate-600 mt-0.5">
-                  Distance: <strong>{acceptedMechanic.distance}</strong> • Please turn on vehicle hazard lights.
+                  Remaining distance: <strong>{liveDistance}</strong> • Please turn on vehicle hazard lights.
                 </p>
               </div>
 
@@ -349,5 +485,5 @@ export const EmergencyPage = () => {
     </div>
   );
 };
-export default EmergencyPage;
 
+export default EmergencyPage;
