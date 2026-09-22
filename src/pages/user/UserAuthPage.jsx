@@ -42,7 +42,7 @@ export const UserAuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] dark:bg-slate-950 flex flex-col justify-center items-center px-4 py-8 relative transition-colors">
+    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col justify-center items-center px-4 py-8 relative transition-colors duration-200">
       {/* Top right Theme Toggle */}
       <div className="absolute top-4 right-4 z-20">
         <ThemeToggle />

@@ -160,14 +160,14 @@ export const AboutWebsiteVideo = () => {
     <section className="w-full max-w-4xl mx-auto my-8 px-2 sm:px-4" id="about-website-video">
       {/* Section Header */}
       <div className="text-center space-y-2 mb-5">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold font-mono tracking-wider shadow-2xs">
-          <Sparkles className="w-3.5 h-3.5 text-indigo-600 animate-pulse" />
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold font-mono tracking-wider shadow-2xs">
+          <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 animate-pulse" />
           OFFICIAL PLATFORM DEMO
         </div>
-        <h2 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
           How MECH CONNECT AI Works
         </h2>
-        <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto font-medium">
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto font-medium">
           Watch how our AI connects stranded vehicle owners with certified mechanics and provides instant emergency rescue.
         </p>
       </div>

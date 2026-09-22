@@ -74,7 +74,7 @@ export const MechanicRequestsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] dark:bg-slate-950 flex flex-col pb-24 md:pb-12 transition-colors">
+    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-24 md:pb-12 transition-colors duration-200">
       <MechanicNavbar />
 
       <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
