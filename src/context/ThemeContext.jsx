@@ -3,16 +3,12 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  // Initialize theme from localStorage or default to 'light'
+  // Initialize theme from localStorage, default to 'light'
   const [theme, setTheme] = useState(() => {
     try {
       const saved = localStorage.getItem('mech_theme');
       if (saved === 'dark' || saved === 'light') {
         return saved;
-      }
-      // Check system preference
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        return 'dark';
       }
     } catch (e) {
       // Fallback
