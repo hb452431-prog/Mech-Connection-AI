@@ -4,6 +4,9 @@ import MechMap from '../../components/map/MechMap';
 import { emergencyService } from '../../services/emergencyService';
 import { authService } from '../../services/authService';
 import { routingService } from '../../services/routingService';
+import { useLocation } from '../../hooks/useLocation';
+import LocationStatusBar from '../../components/common/LocationStatusBar';
+import LocationPermissionModal from '../../components/common/LocationPermissionModal';
 import { calculateDistanceKm, formatDistance, calculateETA } from '../../utils/distance';
 import { MapPin, Check, X, Navigation, CheckCircle2, User, Phone, Wrench, Clock, AlertTriangle } from 'lucide-react';
 import { SirenLight } from '../../components/common/SirenLight';
@@ -14,9 +17,24 @@ export const MechanicRequestsPage = () => {
   const [navigatingReq, setNavigatingReq] = useState(null);
   const [routeCoordinates, setRouteCoordinates] = useState(null);
   const [routeInfo, setRouteInfo] = useState(null);
+  const [showPermissionModal, setShowPermissionModal] = useState(false);
 
-  // Mechanic base location (~San Francisco default or garage location)
-  const mechanicBaseLocation = {
+  const {
+    location: mechanicLocation,
+    accuracy,
+    loading: isLocating,
+    error: locationError,
+    permission,
+    supported,
+    tracking,
+    isManual,
+    deviceInfo,
+    requestLocation,
+    setManualLocation,
+    useFallbackLocation
+  } = useLocation({ autoRequest: true, enableHighAccuracy: true, watch: true });
+
+  const mechanicBaseLocation = mechanicLocation || {
     lat: 37.7850,
     lng: -122.4100
   };
@@ -26,7 +44,11 @@ export const MechanicRequestsPage = () => {
   }, []);
 
   const handleAccept = (reqId) => {
-    emergencyService.acceptRequest(reqId, mechanic);
+    emergencyService.acceptRequest(reqId, {
+      ...mechanic,
+      lat: mechanicLocation.lat,
+      lng: mechanicLocation.lng
+    });
     setRequests(emergencyService.getActiveRequests());
   };
 
@@ -48,8 +70,8 @@ export const MechanicRequestsPage = () => {
     const userLng = req.lng || -122.4194;
 
     const routeData = await routingService.getRoute(
-      mechanicBaseLocation.lat,
-      mechanicBaseLocation.lng,
+      mechanicLocation.lat,
+      mechanicLocation.lng,
       userLat,
       userLng
     );
@@ -61,9 +83,9 @@ export const MechanicRequestsPage = () => {
         eta: routeData.durationFormatted
       });
     } else {
-      const dist = calculateDistanceKm(mechanicBaseLocation.lat, mechanicBaseLocation.lng, userLat, userLng);
+      const dist = calculateDistanceKm(mechanicLocation.lat, mechanicLocation.lng, userLat, userLng);
       setRouteCoordinates([
-        [mechanicBaseLocation.lat, mechanicBaseLocation.lng],
+        [mechanicLocation.lat, mechanicLocation.lng],
         [userLat, userLng]
       ]);
       setRouteInfo({
@@ -92,6 +114,20 @@ export const MechanicRequestsPage = () => {
             {requests.length} Requests in Queue
           </span>
         </div>
+
+        {/* Live Location Telemetry Status Bar for Mechanic Unit */}
+        <LocationStatusBar
+          location={mechanicLocation}
+          accuracy={accuracy}
+          loading={isLocating}
+          error={locationError}
+          permission={permission}
+          tracking={tracking}
+          isManual={isManual}
+          onRefreshLocation={() => requestLocation({ forceFresh: true })}
+          onRequestPermission={() => setShowPermissionModal(true)}
+          onOpenHubModal={() => setShowPermissionModal(true)}
+        />
 
         {/* Requests List */}
         <div className="space-y-4">
@@ -224,12 +260,13 @@ export const MechanicRequestsPage = () => {
                   lat: navigatingReq.lat || 37.7749,
                   lng: navigatingReq.lng || -122.4194
                 }}
-                mechanicLocation={mechanicBaseLocation}
+                mechanicLocation={mechanicLocation}
                 mechanicInfo={mechanic}
                 routeCoordinates={routeCoordinates}
                 showRoute={true}
                 activeRouteInfo={routeInfo}
                 height="320px"
+                className="rounded-xl overflow-hidden"
               />
 
               <div className="flex items-center justify-between pt-2">
@@ -251,6 +288,29 @@ export const MechanicRequestsPage = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Automotive Location Permission & Fallback Modal */}
+        {showPermissionModal && (
+          <LocationPermissionModal
+            isOpen={showPermissionModal}
+            onClose={() => setShowPermissionModal(false)}
+            onGrant={() => {
+              setShowPermissionModal(false);
+              requestLocation({ forceFresh: true });
+            }}
+            permission={permission}
+            error={locationError}
+            deviceInfo={deviceInfo}
+            onSelectManualLocation={(loc) => {
+              setManualLocation(loc);
+              setShowPermissionModal(false);
+            }}
+            onUseFallback={() => {
+              useFallbackLocation();
+              setShowPermissionModal(false);
+            }}
+          />
         )}
       </main>
     </div>

@@ -5,7 +5,9 @@ import MechMap from '../../components/map/MechMap';
 import { emergencyService } from '../../services/emergencyService';
 import { authService } from '../../services/authService';
 import { routingService } from '../../services/routingService';
-import { useUserLocation } from '../../hooks/useUserLocation';
+import { useLocation } from '../../hooks/useLocation';
+import LocationStatusBar from '../../components/common/LocationStatusBar';
+import LocationPermissionModal from '../../components/common/LocationPermissionModal';
 import { calculateDistanceKm, calculateETA, formatDistance } from '../../utils/distance';
 import { SirenLight, SirenBadge } from '../../components/common/SirenLight';
 import { 
@@ -36,11 +38,21 @@ export const EmergencyPage = () => {
   const user = authService.getUser() || {};
 
   const {
-    location: detectedLocation,
+    location: userCoords,
+    accuracy,
     loading: isLocating,
     error: locationError,
-    requestLocation
-  } = useUserLocation(true);
+    permission,
+    supported,
+    tracking,
+    isManual,
+    deviceInfo,
+    requestLocation,
+    setManualLocation,
+    useFallbackLocation
+  } = useLocation({ autoRequest: true, enableHighAccuracy: true, watch: true });
+
+  const [showPermissionModal, setShowPermissionModal] = useState(false);
 
   // Screen stages: 'FORM' | 'SEARCHING' | 'ACCEPTED'
   const [stage, setStage] = useState('FORM');
@@ -61,13 +73,6 @@ export const EmergencyPage = () => {
 
   const simulationIntervalRef = useRef(null);
 
-  // Fallback default coordinates if GPS not allowed yet
-  const userCoords = detectedLocation || {
-    lat: 37.7749,
-    lng: -122.4194,
-    address: 'Market St & 7th St, Downtown, San Francisco, CA'
-  };
-
   const emergencyOptions = [
     { name: 'Vehicle Breakdown', icon: Car, desc: 'Car stalled or won\'t move' },
     { name: 'Flat Tyre', icon: Disc, desc: 'Puncture or wheel damage' },
@@ -75,6 +80,13 @@ export const EmergencyPage = () => {
     { name: 'Engine Problem', icon: Flame, desc: 'Smoke, overheating, or noise' },
     { name: 'Other', icon: HelpCircle, desc: 'Lockout, fuel, or general aid' }
   ];
+
+  // Auto-prompt permission dialog if location is unknown/prompt and not yet granted on emergency page
+  useEffect(() => {
+    if (permission === 'prompt' || permission === 'denied' || permission === 'blocked' || permission === 'disabled') {
+      // Don't auto-open repeatedly if dismissed, but make it available
+    }
+  }, [permission]);
 
   // Confirm and send emergency request
   const handleConfirmSend = async () => {
@@ -235,6 +247,20 @@ export const EmergencyPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Real-time Production Location Status & Telemetry Bar */}
+        <LocationStatusBar
+          location={userCoords}
+          accuracy={accuracy}
+          loading={isLocating}
+          error={locationError}
+          permission={permission}
+          tracking={tracking}
+          isManual={isManual}
+          onRefreshLocation={() => requestLocation({ forceFresh: true })}
+          onRequestPermission={() => setShowPermissionModal(true)}
+          onOpenHubModal={() => setShowPermissionModal(true)}
+        />
 
         {/* 1. FORM STAGE */}
         {stage === 'FORM' && (
@@ -480,6 +506,29 @@ export const EmergencyPage = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Automotive Location Permission & Fallback Modal */}
+        {showPermissionModal && (
+          <LocationPermissionModal
+            isOpen={showPermissionModal}
+            onClose={() => setShowPermissionModal(false)}
+            onGrant={() => {
+              setShowPermissionModal(false);
+              requestLocation({ forceFresh: true });
+            }}
+            permission={permission}
+            error={locationError}
+            deviceInfo={deviceInfo}
+            onSelectManualLocation={(loc) => {
+              setManualLocation(loc);
+              setShowPermissionModal(false);
+            }}
+            onUseFallback={() => {
+              useFallbackLocation();
+              setShowPermissionModal(false);
+            }}
+          />
         )}
       </main>
     </div>

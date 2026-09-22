@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MechanicNavbar from '../../components/common/MechanicNavbar';
 import MechMap from '../../components/map/MechMap';
 import { authService } from '../../services/authService';
 import { emergencyService } from '../../services/emergencyService';
+import { useLocation } from '../../hooks/useLocation';
+import LocationStatusBar from '../../components/common/LocationStatusBar';
+import LocationPermissionModal from '../../components/common/LocationPermissionModal';
+import { calculateDistanceKm, formatDistance } from '../../utils/distance';
 import { MapPin, Clock, AlertCircle, Check, Eye, ArrowRight, User, Wrench, Radio, Phone, Navigation } from 'lucide-react';
 
 export const MechanicHomePage = () => {
@@ -12,11 +16,22 @@ export const MechanicHomePage = () => {
   const [requests, setRequests] = useState([]);
   const [viewRequestModal, setViewRequestModal] = useState(null);
   const [isOnline, setIsOnline] = useState(true);
+  const [showPermissionModal, setShowPermissionModal] = useState(false);
 
-  const mechanicBaseLocation = {
-    lat: 37.7850,
-    lng: -122.4100
-  };
+  const {
+    location: mechanicLocation,
+    accuracy,
+    loading: isLocating,
+    error: locationError,
+    permission,
+    supported,
+    tracking,
+    isManual,
+    deviceInfo,
+    requestLocation,
+    setManualLocation,
+    useFallbackLocation
+  } = useLocation({ autoRequest: true, enableHighAccuracy: true, watch: true });
 
   useEffect(() => {
     const list = emergencyService.getActiveRequests();
@@ -24,22 +39,35 @@ export const MechanicHomePage = () => {
   }, []);
 
   const handleAccept = (req) => {
-    emergencyService.acceptRequest(req.id, mechanic);
+    emergencyService.acceptRequest(req.id, {
+      ...mechanic,
+      lat: mechanicLocation.lat,
+      lng: mechanicLocation.lng
+    });
     navigate('/mechanic/requests');
   };
 
-  // Convert requests to pseudo garage/incident markers for map display
-  const requestPins = requests.map((r) => ({
-    id: r.id,
-    name: `${r.userName} - ${r.problem}`,
-    mechanicName: r.problemType || 'Emergency Breakdown',
-    distance: r.distance,
-    lat: r.lat || 37.7749,
-    lng: r.lng || -122.4194,
-    rating: 5.0,
-    services: [r.problem, r.location],
-    available: true
-  }));
+  // Convert requests to pseudo garage/incident markers for map display with real calculated distances
+  const requestPins = useMemo(() => {
+    return requests.map((r) => {
+      const userLat = r.lat || 37.7749;
+      const userLng = r.lng || -122.4194;
+      const distKm = calculateDistanceKm(mechanicLocation.lat, mechanicLocation.lng, userLat, userLng);
+      const computedDistance = formatDistance(distKm);
+
+      return {
+        id: r.id,
+        name: `${r.userName} - ${r.problem}`,
+        mechanicName: r.problemType || 'Emergency Breakdown',
+        distance: computedDistance,
+        lat: userLat,
+        lng: userLng,
+        rating: 5.0,
+        services: [r.problem, r.location],
+        available: true
+      };
+    });
+  }, [requests, mechanicLocation]);
 
   return (
     <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-24 md:pb-12 transition-colors duration-200">
@@ -81,6 +109,20 @@ export const MechanicHomePage = () => {
           </button>
         </div>
 
+        {/* Garage / Mobile Mechanic Unit Telemetry Status Bar */}
+        <LocationStatusBar
+          location={mechanicLocation}
+          accuracy={accuracy}
+          loading={isLocating}
+          error={locationError}
+          permission={permission}
+          tracking={tracking}
+          isManual={isManual}
+          onRefreshLocation={() => requestLocation({ forceFresh: true })}
+          onRequestPermission={() => setShowPermissionModal(true)}
+          onOpenHubModal={() => setShowPermissionModal(true)}
+        />
+
         {/* Live Dispatch Radar Map */}
         <div className="space-y-2">
           <div className="flex items-center justify-between px-1">
@@ -94,7 +136,7 @@ export const MechanicHomePage = () => {
           </div>
 
           <MechMap
-            mechanicLocation={mechanicBaseLocation}
+            mechanicLocation={mechanicLocation}
             mechanicInfo={mechanic}
             garages={requestPins}
             onSelectGarage={(g) => {
@@ -224,6 +266,29 @@ export const MechanicHomePage = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Automotive Location Permission & Fallback Modal */}
+        {showPermissionModal && (
+          <LocationPermissionModal
+            isOpen={showPermissionModal}
+            onClose={() => setShowPermissionModal(false)}
+            onGrant={() => {
+              setShowPermissionModal(false);
+              requestLocation({ forceFresh: true });
+            }}
+            permission={permission}
+            error={locationError}
+            deviceInfo={deviceInfo}
+            onSelectManualLocation={(loc) => {
+              setManualLocation(loc);
+              setShowPermissionModal(false);
+            }}
+            onUseFallback={() => {
+              useFallbackLocation();
+              setShowPermissionModal(false);
+            }}
+          />
         )}
       </main>
     </div>

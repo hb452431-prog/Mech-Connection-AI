@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import UserNavbar from '../../components/common/UserNavbar';
 import MechMap from '../../components/map/MechMap';
-import { useUserLocation } from '../../hooks/useUserLocation';
+import { useLocation } from '../../hooks/useLocation';
+import { LocationPermissionModal } from '../../components/common/LocationPermissionModal';
+import { LocationStatusBar } from '../../components/common/LocationStatusBar';
 import { getGaragesWithDistance, generateGaragesNearLocation, BASE_DEMO_GARAGES } from '../../data/demoGarages';
 import { 
   MapPin, 
@@ -27,12 +29,18 @@ export const FindGaragePage = () => {
   const navigate = useNavigate();
   const {
     location: userLocation,
+    accuracy,
     loading: isLocating,
     error: locationError,
+    permission,
+    deviceInfo,
     requestLocation,
-    setManualLocation
-  } = useUserLocation(false);
+    setManualLocation,
+    retry: retryLocation,
+    clearError
+  } = useLocation({ autoRequest: false });
 
+  const [showPermissionModal, setShowPermissionModal] = useState(false);
   const [filter, setFilter] = useState('all'); // 'all' | 'closest' | '247'
   const [selectedGarage, setSelectedGarage] = useState(null);
   const [requestHelpModal, setRequestHelpModal] = useState(null);
@@ -40,7 +48,7 @@ export const FindGaragePage = () => {
   const [problemNotes, setProblemNotes] = useState('');
   const [garages, setGarages] = useState(BASE_DEMO_GARAGES);
 
-  // When user location is available or manual coordinates change, generate nearby garages
+  // When user location is available or manual coordinates change, generate nearby garages dynamically
   useEffect(() => {
     if (userLocation && userLocation.lat && userLocation.lng) {
       const nearby = generateGaragesNearLocation(userLocation.lat, userLocation.lng, 8);
@@ -49,6 +57,20 @@ export const FindGaragePage = () => {
       setGarages(BASE_DEMO_GARAGES);
     }
   }, [userLocation]);
+
+  // Handle location request button
+  const handleTriggerLocate = async () => {
+    if (permission === 'denied' || locationError) {
+      setShowPermissionModal(true);
+      return;
+    }
+
+    try {
+      await requestLocation();
+    } catch (err) {
+      setShowPermissionModal(true);
+    }
+  };
 
   // Filter garages
   const filteredGarages = garages.filter((g) => {
@@ -106,11 +128,11 @@ export const FindGaragePage = () => {
                 Find Nearby Garage
               </h1>
               <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
-                WORLD MAP DEMO
+                GPS NETWORK
               </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-              Live interactive map to locate certified mechanics and workshops near you or anywhere in the world.
+              Live interactive map to locate certified mechanics and workshops near your exact location.
             </p>
           </div>
 
@@ -143,6 +165,17 @@ export const FindGaragePage = () => {
           </div>
         </div>
 
+        {/* Real-time Location Status Bar */}
+        <LocationStatusBar
+          location={userLocation}
+          accuracy={accuracy}
+          loading={isLocating}
+          error={locationError}
+          permission={permission}
+          onRequestPermission={handleTriggerLocate}
+          onOpenManualModal={() => setShowPermissionModal(true)}
+        />
+
         {/* Master Interactive Map Container */}
         <div className="space-y-2">
           <MechMap
@@ -150,9 +183,9 @@ export const FindGaragePage = () => {
             garages={filteredGarages}
             selectedGarage={selectedGarage}
             onSelectGarage={handleSelectGarage}
-            onLocate={requestLocation}
+            onLocate={handleTriggerLocate}
             isLocating={isLocating}
-            locationError={locationError}
+            locationError={locationError?.message}
             onSelectLocation={handleLocationSearchSelect}
             onRequestHelp={handleRequestHelp}
             height="440px"
@@ -186,7 +219,7 @@ export const FindGaragePage = () => {
               <p className="text-xs text-slate-500 dark:text-slate-400">
                 {userLocation
                   ? 'Showing verified workshops sorted by proximity to your detected GPS location.'
-                  : 'Showing global demo network. Click "Use My Location" (⌖) on the map to find workshops near you.'}
+                  : 'Showing global demo network. Click "Enable Real GPS" to find workshops near you.'}
               </p>
             </div>
             <span className="text-xs font-bold font-mono text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
@@ -228,20 +261,25 @@ export const FindGaragePage = () => {
 
                     <div className="flex items-center justify-between text-xs">
                       <span className="flex items-center gap-1 font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded-md border border-amber-200 dark:border-amber-800 font-mono text-[11px]">
-                        <Star className="w-3 h-3 fill-current" />
-                        {garage.rating || 4.8}
-                        <span className="text-slate-400 dark:text-slate-500 font-normal">({garage.reviewsCount || 120})</span>
+                        <Star className="w-3 h-3 fill-current text-amber-500" />
+                        {garage.rating} ({garage.reviews || 48})
                       </span>
-                      <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                        Lead Tech: <strong className="text-slate-800 dark:text-slate-200">{garage.mechanicName || 'Master Tech'}</strong>
+
+                      <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        Open Now • 24/7
                       </span>
                     </div>
 
-                    <div className="text-[11px] text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/70 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
-                      <span className="text-[9px] font-mono uppercase font-bold text-slate-400 dark:text-slate-500 block mb-0.5">Specialty:</span>
-                      <p className="font-medium text-slate-800 dark:text-slate-200 line-clamp-1">
-                        {garage.specialty || (Array.isArray(garage.services) ? garage.services.join(' • ') : garage.services)}
-                      </p>
+                    <div className="flex flex-wrap gap-1 pt-1">
+                      {(garage.services || ['General Repair', 'Diagnostics']).slice(0, 3).map((s, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-[10px] text-slate-600 dark:text-slate-300 font-mono"
+                        >
+                          {s}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
@@ -255,7 +293,7 @@ export const FindGaragePage = () => {
                       className="btn-secondary py-2 text-xs font-bold flex items-center justify-center gap-1"
                     >
                       <Eye className="w-3.5 h-3.5" />
-                      View
+                      View on Map
                     </button>
 
                     <button
@@ -267,7 +305,7 @@ export const FindGaragePage = () => {
                       className="btn-primary py-2 text-xs font-bold flex items-center justify-center gap-1 shadow-xs"
                     >
                       <Wrench className="w-3.5 h-3.5" />
-                      Request Help
+                      Request Aid
                     </button>
                   </div>
                 </div>
@@ -276,163 +314,114 @@ export const FindGaragePage = () => {
           </div>
         </div>
 
-        {/* View Garage Details Modal */}
-        {selectedGarage && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
-            <div className="clean-card p-6 sm:p-7 max-w-md w-full space-y-4 shadow-2xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
-                    🔧
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white font-heading">
-                      {selectedGarage.name}
-                    </h3>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">{selectedGarage.address}</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setSelectedGarage(null)}
-                  className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              <div className="space-y-2.5 text-xs text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/70 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
-                <div className="flex items-center justify-between border-b border-slate-200/60 dark:border-slate-700/60 pb-2">
-                  <span><strong>Master Mechanic:</strong></span>
-                  <span className="font-bold text-slate-900 dark:text-white">{selectedGarage.mechanicName}</span>
-                </div>
-                <div className="flex items-center justify-between border-b border-slate-200/60 dark:border-slate-700/60 pb-2">
-                  <span><strong>Estimated Distance:</strong></span>
-                  <span className="font-bold font-mono text-indigo-700 dark:text-indigo-300">{selectedGarage.distance || `${selectedGarage.distanceKm || 2.1} km`}</span>
-                </div>
-                <div className="flex items-center justify-between border-b border-slate-200/60 dark:border-slate-700/60 pb-2">
-                  <span><strong>Customer Rating:</strong></span>
-                  <span className="font-bold text-amber-600 dark:text-amber-400">★ {selectedGarage.rating} ({selectedGarage.reviewsCount || 140} reviews)</span>
-                </div>
-                <div>
-                  <span className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Services Offered:</span>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                    {Array.isArray(selectedGarage.services) ? selectedGarage.services.join(' • ') : selectedGarage.services}
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 pt-2">
-                <a
-                  href={`tel:${selectedGarage.phone}`}
-                  className="btn-secondary py-2.5 text-xs font-bold flex items-center justify-center gap-1.5"
-                >
-                  <Phone className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                  Call Garage
-                </a>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const g = selectedGarage;
-                    setSelectedGarage(null);
-                    handleRequestHelp(g);
-                  }}
-                  className="btn-emergency py-2.5 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm"
-                >
-                  <SirenLight size="xs" variant="sticker" animated={true} />
-                  <span>Request Help</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Request Help Modal */}
         {requestHelpModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
-            <div className="clean-card p-6 sm:p-7 max-w-md w-full space-y-4 shadow-2xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
+            <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-6 sm:p-7 max-w-md w-full space-y-4 shadow-2xl">
               <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <div className="flex items-center gap-2">
-                  <SirenLight size="sm" variant="sticker" animated={true} />
+                  <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-400 flex items-center justify-center">
+                    <Wrench className="w-4 h-4" />
+                  </div>
                   <div>
                     <h3 className="text-base font-black text-slate-900 dark:text-white font-heading">
-                      Request Help from {requestHelpModal.name}
+                      Request Aid from {requestHelpModal.name}
                     </h3>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">Tech: {requestHelpModal.mechanicName}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Distance: {requestHelpModal.distance || '2.4 km'} • Rating: {requestHelpModal.rating}★
+                    </p>
                   </div>
                 </div>
                 <button
                   onClick={() => setRequestHelpModal(null)}
-                  className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg"
+                  className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <p className="text-xs text-slate-600 dark:text-slate-300">
-                Send your live coordinates and problem details to dispatch this mobile technician immediately.
-              </p>
-
-              <form onSubmit={handleSendHelpRequest} className="space-y-3.5 text-xs">
-                {/* Problem selector */}
-                <div className="space-y-1.5">
-                  <label className="block font-bold text-slate-700 dark:text-slate-300">Select Vehicle Problem:</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      'Battery Problem',
-                      'Flat Tyre',
-                      'Engine Problem',
-                      'Vehicle Not Starting',
-                      'Lockout / Keys',
-                      'Other Issue'
-                    ].map((type) => (
-                      <button
-                        key={type}
-                        type="button"
-                        onClick={() => setProblemType(type)}
-                        className={`p-2 rounded-xl border text-left transition-all font-medium text-xs ${
-                          problemType === type
-                            ? 'border-orange-500 bg-orange-50 dark:bg-orange-950/60 text-orange-950 dark:text-orange-200 font-bold ring-1 ring-orange-200 dark:ring-orange-800'
-                            : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-750'
-                        }`}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
+              <form onSubmit={handleSendHelpRequest} className="space-y-4 text-xs">
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Problem Category</label>
+                  <select
+                    value={problemType}
+                    onChange={(e) => setProblemType(e.target.value)}
+                    className="w-full clean-input px-3.5 py-2.5 text-sm"
+                  >
+                    <option value="Battery Problem">Dead Battery / Won't Start</option>
+                    <option value="Flat Tyre">Flat Tyre / Puncture</option>
+                    <option value="Engine Overheat">Engine Smoke / Overheating</option>
+                    <option value="Brake Issue">Brake Failure / Noise</option>
+                    <option value="Fuel / Electrical">Out of Fuel / Electrical Issue</option>
+                    <option value="General Breakdown">General Mechanical Breakdown</option>
+                  </select>
                 </div>
 
-                {/* Additional Notes */}
-                <div className="space-y-1">
-                  <label className="block font-bold text-slate-700 dark:text-slate-300">Additional Notes (Optional):</label>
-                  <input
-                    type="text"
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Additional Details (Optional)</label>
+                  <textarea
+                    rows={3}
                     value={problemNotes}
                     onChange={(e) => setProblemNotes(e.target.value)}
-                    placeholder="e.g., Car is parked next to gas station..."
-                    className="w-full clean-input px-3 py-2 text-xs"
+                    placeholder="Describe specific symptoms or vehicle location landmarks..."
+                    className="w-full clean-input px-3.5 py-2.5 text-xs"
                   />
+                </div>
+
+                <div className="p-3 bg-indigo-50 dark:bg-indigo-950/50 rounded-xl text-indigo-900 dark:text-indigo-300 space-y-1 border border-indigo-100 dark:border-indigo-800/60">
+                  <p className="font-bold flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                    <span>GPS Roadside Dispatch Guarantee</span>
+                  </p>
+                  <p className="text-[11px] text-indigo-700/80 dark:text-indigo-400 leading-relaxed">
+                    Your exact coordinates will be sent directly to {requestHelpModal.name} with real-time ETA tracking.
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 pt-2">
                   <button
                     type="button"
                     onClick={() => setRequestHelpModal(null)}
-                    className="btn-secondary py-2.5 text-xs font-semibold"
+                    className="btn-secondary py-2.5 text-xs font-bold"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="btn-emergency py-2.5 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm"
+                    className="btn-primary py-2.5 text-xs font-bold shadow-xs"
                   >
-                    <SirenLight size="xs" variant="sticker" animated={false} />
-                    <span>Send Request</span>
+                    Send Request
                   </button>
                 </div>
               </form>
             </div>
           </div>
         )}
+
+        {/* Reusable Location Permission Modal */}
+        <LocationPermissionModal
+          isOpen={showPermissionModal}
+          onClose={() => {
+            setShowPermissionModal(false);
+            clearError();
+          }}
+          onEnable={async () => {
+            try {
+              await requestLocation();
+              setShowPermissionModal(false);
+            } catch (e) {
+              // Stays open with helpful error instructions
+            }
+          }}
+          onManualSelect={(lat, lng, name) => {
+            setManualLocation(lat, lng, name);
+            setShowPermissionModal(false);
+          }}
+          error={locationError}
+          permission={permission}
+          loading={isLocating}
+          deviceInfo={deviceInfo}
+        />
       </main>
     </div>
   );
