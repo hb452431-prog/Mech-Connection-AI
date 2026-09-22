@@ -30,9 +30,11 @@ export const MechanicRequestsPage = () => {
     isManual,
     deviceInfo,
     requestLocation,
+    fetchIPLocation,
+    turnOnLocation,
     setManualLocation,
     useFallbackLocation
-  } = useLocation({ autoRequest: true, enableHighAccuracy: true, watch: true });
+  } = useLocation({ autoRequest: true, enableHighAccuracy: true, watch: true, allowIPFallback: true });
 
   const mechanicBaseLocation = mechanicLocation || {
     lat: 37.7850,
@@ -46,8 +48,8 @@ export const MechanicRequestsPage = () => {
   const handleAccept = (reqId) => {
     emergencyService.acceptRequest(reqId, {
       ...mechanic,
-      lat: mechanicLocation.lat,
-      lng: mechanicLocation.lng
+      lat: mechanicBaseLocation.lat,
+      lng: mechanicBaseLocation.lng
     });
     setRequests(emergencyService.getActiveRequests());
   };
@@ -70,8 +72,8 @@ export const MechanicRequestsPage = () => {
     const userLng = req.lng || -122.4194;
 
     const routeData = await routingService.getRoute(
-      mechanicLocation.lat,
-      mechanicLocation.lng,
+      mechanicBaseLocation.lat,
+      mechanicBaseLocation.lng,
       userLat,
       userLng
     );
@@ -83,9 +85,9 @@ export const MechanicRequestsPage = () => {
         eta: routeData.durationFormatted
       });
     } else {
-      const dist = calculateDistanceKm(mechanicLocation.lat, mechanicLocation.lng, userLat, userLng);
+      const dist = calculateDistanceKm(mechanicBaseLocation.lat, mechanicBaseLocation.lng, userLat, userLng);
       setRouteCoordinates([
-        [mechanicLocation.lat, mechanicLocation.lng],
+        [mechanicBaseLocation.lat, mechanicBaseLocation.lng],
         [userLat, userLng]
       ]);
       setRouteInfo({
@@ -124,7 +126,7 @@ export const MechanicRequestsPage = () => {
           permission={permission}
           tracking={tracking}
           isManual={isManual}
-          onRefreshLocation={() => requestLocation({ forceFresh: true })}
+          onRefreshLocation={() => turnOnLocation()}
           onRequestPermission={() => setShowPermissionModal(true)}
           onOpenHubModal={() => setShowPermissionModal(true)}
         />
@@ -297,11 +299,15 @@ export const MechanicRequestsPage = () => {
             onClose={() => setShowPermissionModal(false)}
             onEnable={async () => {
               try {
-                await requestLocation();
+                await turnOnLocation();
                 setShowPermissionModal(false);
               } catch (e) {
                 // Stays open showing error recovery guidance
               }
+            }}
+            onUseIPLocation={async () => {
+              await fetchIPLocation();
+              setShowPermissionModal(false);
             }}
             permission={permission}
             error={locationError}

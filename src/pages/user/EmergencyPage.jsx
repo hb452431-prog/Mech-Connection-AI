@@ -48,9 +48,11 @@ export const EmergencyPage = () => {
     isManual,
     deviceInfo,
     requestLocation,
+    fetchIPLocation,
+    turnOnLocation,
     setManualLocation,
     useFallbackLocation
-  } = useLocation({ autoRequest: true, enableHighAccuracy: true, watch: true });
+  } = useLocation({ autoRequest: true, enableHighAccuracy: true, watch: true, allowIPFallback: true });
 
   const [showPermissionModal, setShowPermissionModal] = useState(false);
 
@@ -257,7 +259,7 @@ export const EmergencyPage = () => {
           permission={permission}
           tracking={tracking}
           isManual={isManual}
-          onRefreshLocation={() => requestLocation({ forceFresh: true })}
+          onRefreshLocation={() => turnOnLocation()}
           onRequestPermission={() => setShowPermissionModal(true)}
           onOpenHubModal={() => setShowPermissionModal(true)}
         />
@@ -515,11 +517,15 @@ export const EmergencyPage = () => {
             onClose={() => setShowPermissionModal(false)}
             onEnable={async () => {
               try {
-                await requestLocation();
+                await turnOnLocation();
                 setShowPermissionModal(false);
               } catch (e) {
                 // Stays open showing error recovery guidance
               }
+            }}
+            onUseIPLocation={async () => {
+              await fetchIPLocation();
+              setShowPermissionModal(false);
             }}
             permission={permission}
             error={locationError}

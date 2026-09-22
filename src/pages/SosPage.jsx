@@ -27,6 +27,8 @@ import L from 'leaflet';
 import { sosDispatchService, SOS_STATUSES } from '../services/sosDispatchService';
 import { MOCK_EMERGENCY_SERVICES } from '../services/mockData';
 import { useToast } from '../context/ToastContext';
+import { useLocation } from '../hooks/useLocation';
+import LocationPermissionModal from '../components/common/LocationPermissionModal';
 
 // Custom Leaflet Icons using SVG
 const userPinIcon = L.divIcon({
@@ -52,6 +54,17 @@ export const SosPage = () => {
   const preSelectedService = searchParams.get('service') || 'sos-jumpstart';
   const { showToast } = useToast();
 
+  const {
+    location: detectedLoc,
+    loading: isLocHookLoading,
+    error: locError,
+    permission: locPermission,
+    deviceInfo,
+    turnOnLocation,
+    fetchIPLocation,
+    setManualLocation
+  } = useLocation({ autoRequest: true, enableHighAccuracy: true, allowIPFallback: true });
+
   const [activeRequest, setActiveRequest] = useState(null);
   const [selectedServiceId, setSelectedServiceId] = useState(preSelectedService);
   const [vehicleNotes, setVehicleNotes] = useState('Car disabled near sidewalk. Hazards turned on.');
@@ -60,8 +73,19 @@ export const SosPage = () => {
     lng: -122.4194,
     address: 'Market St & 7th St, San Francisco, CA'
   });
+  const [showLocationModal, setShowLocationModal] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
-  const [isLocating, setIsLocating] = useState(false);
+
+  // Sync detected location to userLocation state
+  useEffect(() => {
+    if (detectedLoc && typeof detectedLoc.lat === 'number' && typeof detectedLoc.lng === 'number') {
+      setUserLocation({
+        lat: detectedLoc.lat,
+        lng: detectedLoc.lng,
+        address: detectedLoc.address || `GPS Location (${detectedLoc.lat.toFixed(4)}, ${detectedLoc.lng.toFixed(4)})`
+      });
+    }
+  }, [detectedLoc]);
 
   // Load existing SOS on mount
   useEffect(() => {
@@ -131,17 +155,17 @@ export const SosPage = () => {
     setChatMessage('');
   };
 
-  const handleGetLiveLocation = () => {
-    setIsLocating(true);
-    setTimeout(() => {
-      setUserLocation({
-        lat: 37.7749 + (Math.random() - 0.5) * 0.005,
-        lng: -122.4194 + (Math.random() - 0.5) * 0.005,
-        address: 'Live High-Precision GPS Lock (San Francisco Metro)'
-      });
-      setIsLocating(false);
-      showToast('High-Precision GPS coordinates acquired', 'success');
-    }, 800);
+  const handleGetLiveLocation = async () => {
+    try {
+      const pos = await turnOnLocation();
+      if (pos && pos.coords) {
+        showToast('Live GPS coordinates locked', 'success');
+      } else if (detectedLoc) {
+        showToast(`Located in ${detectedLoc.name || 'your city'}`, 'success');
+      }
+    } catch (e) {
+      setShowLocationModal(true);
+    }
   };
 
   return (
@@ -561,6 +585,33 @@ export const SosPage = () => {
           </div>
         )}
       </div>
+
+      {/* Location Setup & Permissions Modal */}
+      {showLocationModal && (
+        <LocationPermissionModal
+          isOpen={showLocationModal}
+          onClose={() => setShowLocationModal(false)}
+          onEnable={async () => {
+            try {
+              await turnOnLocation();
+              setShowLocationModal(false);
+            } catch (e) {}
+          }}
+          onUseIPLocation={async () => {
+            await fetchIPLocation();
+            setShowLocationModal(false);
+          }}
+          onManualSelect={(lat, lng, name) => {
+            setManualLocation(lat, lng, name);
+            setUserLocation({ lat, lng, address: name });
+            setShowLocationModal(false);
+          }}
+          error={locError}
+          permission={locPermission}
+          deviceInfo={deviceInfo}
+          loading={isLocHookLoading}
+        />
+      )}
     </div>
   );
 };

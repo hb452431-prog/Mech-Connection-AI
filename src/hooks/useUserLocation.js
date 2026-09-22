@@ -2,10 +2,10 @@ import { useLocation, DEFAULT_FALLBACK_LOCATION } from './useLocation';
 
 /**
  * useUserLocation - Compatibility layer for existing pages
- * Re-exports the unified useLocation hook
+ * Re-exports the unified useLocation hook with all advanced capabilities
  */
 export const useUserLocation = (autoRequest = false) => {
-  const loc = useLocation({ autoRequest, watch: autoRequest });
+  const loc = useLocation({ autoRequest, watch: autoRequest, allowIPFallback: true });
 
   return {
     location: loc.location,
@@ -19,12 +19,14 @@ export const useUserLocation = (autoRequest = false) => {
     tracking: loc.tracking,
     deviceInfo: loc.deviceInfo,
     requestLocation: loc.requestLocation,
+    fetchIPLocation: loc.fetchIPLocation,
+    turnOnLocation: loc.turnOnLocation,
     startWatching: loc.startWatching,
     stopWatching: loc.stopWatching,
     setManualLocation: loc.setManualLocation,
     useFallbackLocation: loc.useFallbackLocation,
     clearError: loc.clearError,
-    retry: loc.retry
+    retry: loc.turnOnLocation
   };
 };
 

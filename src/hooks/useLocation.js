@@ -1,30 +1,67 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { ipLocationService } from '../services/ipLocationService';
+
+const LOCATION_STORAGE_KEY = 'mech_connect_active_location';
 
 /**
- * Detect client device and browser environment
+ * Detect client device, operating system, and browser environment
  */
 export const getDeviceInfo = () => {
   if (typeof window === 'undefined' || typeof navigator === 'undefined') {
-    return { isMobile: false, isIOS: false, isAndroid: false, isSafari: false, isChrome: false, isEdge: false, isFirefox: false };
+    return {
+      isMobile: false,
+      isIOS: false,
+      isAndroid: false,
+      isWindows: false,
+      isMac: false,
+      isLinux: false,
+      isSafari: false,
+      isChrome: false,
+      isEdge: false,
+      isFirefox: false,
+      isSecureContext: true,
+      osName: 'Desktop'
+    };
   }
 
   const ua = navigator.userAgent || '';
+  const platform = navigator.userAgentData?.platform || navigator.platform || '';
+  
   const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   const isAndroid = /Android/.test(ua);
   const isMobile = isIOS || isAndroid || /Mobi|Tablet|iPad/.test(ua);
+  
+  const isWindows = /Win/i.test(platform) || /Windows/i.test(ua);
+  const isMac = (/Mac/i.test(platform) || /Macintosh/i.test(ua)) && !isIOS;
+  const isLinux = /Linux/i.test(platform) && !isAndroid;
+
   const isEdge = /Edg\//.test(ua);
   const isChrome = /Chrome\//.test(ua) && !isEdge;
   const isSafari = /Safari\//.test(ua) && !isChrome && !isEdge;
   const isFirefox = /Firefox\//.test(ua);
 
+  const isSecureContext = typeof window.isSecureContext === 'boolean' ? window.isSecureContext : true;
+
+  let osName = 'Desktop';
+  if (isWindows) osName = 'Windows';
+  else if (isMac) osName = 'macOS';
+  else if (isIOS) osName = 'iOS';
+  else if (isAndroid) osName = 'Android';
+  else if (isLinux) osName = 'Linux';
+
   return {
     isMobile,
     isIOS,
     isAndroid,
+    isWindows,
+    isMac,
+    isLinux,
     isSafari,
     isChrome,
     isEdge,
-    isFirefox
+    isFirefox,
+    isSecureContext,
+    osName
   };
 };
 
@@ -35,16 +72,18 @@ export const DEFAULT_FALLBACK_LOCATION = {
   accuracy: 15,
   name: 'San Francisco, CA (Default Hub)',
   address: 'Market St & 7th St, San Francisco, CA',
-  isManual: true
+  isManual: true,
+  source: 'manual'
 };
 
 /**
  * useLocation - Professional Multi-Platform Location Hook for Driver & Mechanic Portals
  * 
  * Features:
- * - Comprehensive permission detection (unknown, prompt, granted, denied, unavailable, unsupported)
- * - Safe fallback for desktops, mobile Chrome, Safari iOS, Android, Edge, Firefox
- * - Multi-stage fallback: High Accuracy GPS -> Standard Accuracy Network/WiFi -> IP Geolocation Fallback
+ * - Multi-tier location detection (Hardware GPS -> Network/WiFi -> Automatic IP Geolocation)
+ * - OS Location Services detection & friendly troubleshooting for Windows, macOS, Android, iOS
+ * - Non-blocking fallback: If OS permission is off, automatically falls back to approximate IP location so the map works immediately
+ * - Persistent location across route transitions
  * - Continuous live watching during emergency tracking
  * - Manual location override & Hub selector support
  */
@@ -53,13 +92,29 @@ export const useLocation = ({
   enableHighAccuracy = true,
   timeout = 10000,
   maximumAge = 0,
-  watch = false
+  watch = false,
+  allowIPFallback = true
 } = {}) => {
-  const [location, setLocation] = useState(null);
-  const [accuracy, setAccuracy] = useState(null);
+  // Initialize from sessionStorage if available
+  const [location, setLocation] = useState(() => {
+    if (typeof sessionStorage !== 'undefined') {
+      try {
+        const saved = sessionStorage.getItem(LOCATION_STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && typeof parsed.lat === 'number' && typeof parsed.lng === 'number') {
+            return parsed;
+          }
+        }
+      } catch (e) {}
+    }
+    return null;
+  });
+
+  const [accuracy, setAccuracy] = useState(location?.accuracy || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [permission, setPermission] = useState('unknown'); // 'unknown' | 'prompt' | 'granted' | 'denied' | 'unavailable' | 'unsupported' | 'timeout'
+  const [permission, setPermission] = useState('unknown'); // 'unknown' | 'prompt' | 'granted' | 'denied' | 'unavailable' | 'unsupported' | 'timeout' | 'ip-fallback'
   const [tracking, setTracking] = useState(false);
 
   const watchIdRef = useRef(null);
@@ -67,6 +122,17 @@ export const useLocation = ({
   const deviceInfo = useRef(getDeviceInfo()).current;
 
   const supported = typeof navigator !== 'undefined' && 'geolocation' in navigator;
+
+  // Persist location updates to session storage
+  const saveLocationState = useCallback((loc) => {
+    if (loc && typeof loc.lat === 'number' && typeof loc.lng === 'number') {
+      try {
+        if (typeof sessionStorage !== 'undefined') {
+          sessionStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(loc));
+        }
+      } catch (e) {}
+    }
+  }, []);
 
   // Initialize permission state
   useEffect(() => {
@@ -115,8 +181,8 @@ export const useLocation = ({
     };
   }, [supported]);
 
-  // Handle successful position
-  const handleSuccess = useCallback((pos) => {
+  // Handle successful position from GPS or browser
+  const handleSuccess = useCallback((pos, source = 'gps') => {
     if (!isMountedRef.current) return;
 
     const lat = pos.coords.latitude;
@@ -132,8 +198,10 @@ export const useLocation = ({
       speed: pos.coords.speed || null,
       timestamp: pos.timestamp || Date.now(),
       isManual: false,
+      isIPFallback: false,
+      source: source,
       address: `Current Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
-      name: `GPS Location (±${acc}m)`
+      name: source === 'gps' ? `GPS Location (±${acc}m)` : `Network Location (±${acc}m)`
     };
 
     setLocation(coords);
@@ -141,9 +209,10 @@ export const useLocation = ({
     setLoading(false);
     setError(null);
     setPermission('granted');
-  }, []);
+    saveLocationState(coords);
+  }, [saveLocationState]);
 
-  // Handle position errors with distinct diagnostic messages
+  // Handle position errors with OS-specific instructions
   const handleError = useCallback((err) => {
     if (!isMountedRef.current) return;
 
@@ -152,42 +221,114 @@ export const useLocation = ({
     let errorType = 'UNKNOWN';
     let message = 'Unable to determine your GPS location.';
     let actionable = 'Please check your device settings or enter location manually.';
+    let osInstructions = '';
 
     if (err.code === 1) { // PERMISSION_DENIED
       errorType = 'DENIED';
       setPermission('denied');
-      message = 'Location permission was denied for MECH CONNECT AI.';
-      if (deviceInfo.isIOS) {
+      message = 'Location access is blocked by your browser or operating system.';
+      
+      if (deviceInfo.isWindows) {
+        actionable = '1. Click the lock/settings icon in the browser address bar and set Location to "Allow".\n2. Open Windows Settings → Privacy & Security → Location → Turn ON "Location services" and "Let desktop apps access your location".';
+        osInstructions = 'Windows Settings: Win + I → Privacy & security → Location → Turn ON Location services.';
+      } else if (deviceInfo.isMac) {
+        actionable = '1. Click the site settings icon in the address bar → Allow Location.\n2. Open System Settings → Privacy & Security → Location Services → Turn ON for your browser.';
+        osInstructions = 'macOS: Apple Menu → System Settings → Privacy & Security → Location Services.';
+      } else if (deviceInfo.isIOS) {
         actionable = 'Open iOS Settings → Safari (or Chrome) → Location → set to "Allow", then tap Try Again.';
+        osInstructions = 'iOS Settings → Privacy & Security → Location Services → Safari Websites → While Using the App.';
       } else if (deviceInfo.isAndroid) {
-        actionable = 'Tap the lock icon in Chrome address bar → Site Settings → Location → set to "Allow".';
+        actionable = 'Tap the lock icon in Chrome address bar → Site Settings → Location → set to "Allow", and ensure phone GPS toggle is ON.';
+        osInstructions = 'Android: Pull down notification shade → Turn on Location.';
       } else {
         actionable = 'Click the site lock/settings icon in your browser address bar and enable Location access.';
+        osInstructions = 'Check browser and system location permissions.';
       }
     } else if (err.code === 2) { // POSITION_UNAVAILABLE
       errorType = 'UNAVAILABLE';
       setPermission('unavailable');
-      message = 'Location services appear to be turned off on your device.';
-      actionable = 'Please enable GPS / Location Services in your phone or PC system settings and tap Retry.';
+      message = 'Operating system Location Services appear to be turned off.';
+      
+      if (deviceInfo.isWindows) {
+        actionable = 'Open Windows Settings (Win + I) → Privacy & Security → Location → Turn ON "Location services".';
+        osInstructions = 'Press Win + I → Privacy & Security → Location → Turn ON "Location services".';
+      } else if (deviceInfo.isMac) {
+        actionable = 'Open System Settings → Privacy & Security → Location Services → Turn ON Location Services.';
+        osInstructions = 'Apple Menu → System Settings → Privacy & Security → Location Services.';
+      } else if (deviceInfo.isMobile) {
+        actionable = 'Please pull down your device quick settings menu and turn ON Location / GPS.';
+        osInstructions = 'Turn ON device Location toggle in settings.';
+      } else {
+        actionable = 'Please enable GPS / Location Services in your computer system settings and tap Retry.';
+        osInstructions = 'Enable operating system location services.';
+      }
     } else if (err.code === 3) { // TIMEOUT
       errorType = 'TIMEOUT';
       setPermission('timeout');
       message = 'GPS signal acquisition timed out.';
-      actionable = 'We couldn’t get a clear GPS fix. Try moving to an open area or tap Retry.';
+      actionable = 'We couldn’t get a clear satellite GPS fix. Connected via network/IP location or tap Retry.';
+      osInstructions = 'Try moving to an area with clearer signal or use WiFi network location.';
     }
 
-    setError({
+    const errObj = {
       type: errorType,
       code: err.code || 0,
       message,
       actionable,
+      osInstructions,
       raw: err.message
-    });
+    };
+
+    setError(errObj);
+    return errObj;
   }, [deviceInfo]);
 
-  // Request location explicitly with automatic 2-tier fallback
-  const requestLocation = useCallback((customOptions = {}) => {
+  // Request IP-based Geolocation directly
+  const fetchIPLocation = useCallback(async () => {
+    if (!isMountedRef.current) return null;
+    setLoading(true);
+
+    try {
+      const ipData = await ipLocationService.getIPLocation();
+      if (!isMountedRef.current) return null;
+
+      if (ipData && typeof ipData.lat === 'number' && typeof ipData.lng === 'number') {
+        const coords = {
+          lat: ipData.lat,
+          lng: ipData.lng,
+          accuracy: ipData.accuracy || 3000,
+          timestamp: Date.now(),
+          isManual: false,
+          isIPFallback: true,
+          source: 'ip',
+          address: ipData.address || `${ipData.city || 'Detected Region'}, ${ipData.region || ''}`,
+          name: `${ipData.city || 'Detected City'} (${ipData.region || ipData.country || 'Network'})`
+        };
+
+        setLocation(coords);
+        setAccuracy(coords.accuracy);
+        setLoading(false);
+        setPermission('ip-fallback');
+        saveLocationState(coords);
+        return coords;
+      }
+    } catch (e) {
+      // Ignore
+    }
+
+    if (isMountedRef.current) {
+      setLoading(false);
+    }
+    return null;
+  }, [saveLocationState]);
+
+  // Request location explicitly with automatic 3-tier fallback (GPS -> Network -> IP Geolocation)
+  const requestLocation = useCallback(async (customOptions = {}) => {
     if (!supported) {
+      // If browser doesn't have geolocation API, immediately try IP location
+      const ipResult = await fetchIPLocation();
+      if (ipResult) return ipResult;
+
       const unsuppErr = {
         type: 'UNSUPPORTED',
         code: 0,
@@ -205,32 +346,54 @@ export const useLocation = ({
     const isHigh = customOptions.enableHighAccuracy ?? enableHighAccuracy;
     const reqTimeout = customOptions.timeout ?? timeout;
     const reqMaxAge = customOptions.maximumAge ?? maximumAge;
+    const shouldFallbackIP = customOptions.allowIPFallback ?? allowIPFallback;
 
     return new Promise((resolve, reject) => {
-      // Step 1: Attempt position request with requested accuracy
+      // Stage 1: Attempt position request with requested accuracy (GPS / WiFi)
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          handleSuccess(pos);
+          handleSuccess(pos, isHigh ? 'gps' : 'network');
           resolve(pos);
         },
         (err) => {
-          // If high accuracy failed due to timeout or position unavailable (common on PCs/laptops),
-          // attempt Step 2: Low accuracy network geolocation before throwing error
+          // Stage 2: If high accuracy failed due to timeout or position unavailable (common on PCs without GPS chips),
+          // attempt low accuracy network/WiFi geolocation
           if (isHigh && (err.code === 3 || err.code === 2)) {
             navigator.geolocation.getCurrentPosition(
               (fallbackPos) => {
-                handleSuccess(fallbackPos);
+                handleSuccess(fallbackPos, 'network');
                 resolve(fallbackPos);
               },
-              (fallbackErr) => {
+              async (fallbackErr) => {
                 handleError(fallbackErr);
+
+                // Stage 3: Automatic IP Geolocation Fallback
+                if (shouldFallbackIP) {
+                  const ipResult = await fetchIPLocation();
+                  if (ipResult) {
+                    resolve({ coords: { latitude: ipResult.lat, longitude: ipResult.lng, accuracy: ipResult.accuracy } });
+                    return;
+                  }
+                }
                 reject(fallbackErr);
               },
               { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 }
             );
           } else {
             handleError(err);
-            reject(err);
+
+            // If permission was denied or unavailable, attempt IP fallback so the user is not left stranded
+            if (shouldFallbackIP && (err.code === 1 || err.code === 2 || err.code === 3)) {
+              fetchIPLocation().then((ipResult) => {
+                if (ipResult) {
+                  resolve({ coords: { latitude: ipResult.lat, longitude: ipResult.lng, accuracy: ipResult.accuracy } });
+                } else {
+                  reject(err);
+                }
+              }).catch(() => reject(err));
+            } else {
+              reject(err);
+            }
           }
         },
         {
@@ -240,7 +403,17 @@ export const useLocation = ({
         }
       );
     });
-  }, [supported, enableHighAccuracy, timeout, maximumAge, handleSuccess, handleError]);
+  }, [supported, enableHighAccuracy, timeout, maximumAge, allowIPFallback, handleSuccess, handleError, fetchIPLocation]);
+
+  // One-click guaranteed "Turn On Location" method
+  const turnOnLocation = useCallback(async () => {
+    try {
+      return await requestLocation({ enableHighAccuracy: true, timeout: 8000, allowIPFallback: true });
+    } catch (e) {
+      // If native fails, force IP fallback immediately
+      return await fetchIPLocation();
+    }
+  }, [requestLocation, fetchIPLocation]);
 
   // Start continuous watching (e.g. while driver is waiting or mechanic is driving)
   const startWatching = useCallback((customOptions = {}) => {
@@ -259,7 +432,7 @@ export const useLocation = ({
     setTracking(true);
     watchIdRef.current = navigator.geolocation.watchPosition(
       (pos) => {
-        handleSuccess(pos);
+        handleSuccess(pos, 'gps');
       },
       (err) => {
         console.warn('Geolocation watch notice:', err.message);
@@ -277,7 +450,7 @@ export const useLocation = ({
     setTracking(false);
   }, []);
 
-  // Set manual coordinates (supports both setManualLocation({lat, lng, ...}) and setManualLocation(lat, lng, name))
+  // Set manual coordinates
   const setManualLocation = useCallback((arg1, arg2, arg3) => {
     let lat, lng, name, address;
 
@@ -306,6 +479,8 @@ export const useLocation = ({
       accuracy: 50,
       timestamp: Date.now(),
       isManual: true,
+      isIPFallback: false,
+      source: 'manual',
       address: address || `Selected Location (${numLat.toFixed(4)}, ${numLng.toFixed(4)})`,
       name: name || `Selected Hub (${numLat.toFixed(4)}, ${numLng.toFixed(4)})`
     };
@@ -313,14 +488,16 @@ export const useLocation = ({
     setAccuracy(50);
     setError(null);
     setPermission('granted');
-  }, []);
+    saveLocationState(manualCoords);
+  }, [saveLocationState]);
 
   // Use default fallback location
   const useFallbackLocation = useCallback(() => {
     setLocation(DEFAULT_FALLBACK_LOCATION);
     setAccuracy(DEFAULT_FALLBACK_LOCATION.accuracy);
     setError(null);
-  }, []);
+    saveLocationState(DEFAULT_FALLBACK_LOCATION);
+  }, [saveLocationState]);
 
   // Clear current error
   const clearError = useCallback(() => {
@@ -330,7 +507,7 @@ export const useLocation = ({
   // Auto-request or start watching on mount if configured
   useEffect(() => {
     if (autoRequest) {
-      requestLocation().catch(() => {});
+      requestLocation({ allowIPFallback: true }).catch(() => {});
     }
 
     if (watch) {
@@ -352,9 +529,11 @@ export const useLocation = ({
     tracking,
     deviceInfo,
     requestLocation,
+    fetchIPLocation,
+    turnOnLocation,
     startWatching,
     stopWatching,
-    retry: requestLocation,
+    retry: turnOnLocation,
     setManualLocation,
     useFallbackLocation,
     clearError

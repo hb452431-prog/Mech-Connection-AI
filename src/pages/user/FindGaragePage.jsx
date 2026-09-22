@@ -35,10 +35,12 @@ export const FindGaragePage = () => {
     permission,
     deviceInfo,
     requestLocation,
+    fetchIPLocation,
+    turnOnLocation,
     setManualLocation,
     retry: retryLocation,
     clearError
-  } = useLocation({ autoRequest: true, enableHighAccuracy: true });
+  } = useLocation({ autoRequest: true, enableHighAccuracy: true, allowIPFallback: true });
 
   const [showPermissionModal, setShowPermissionModal] = useState(false);
   const [filter, setFilter] = useState('all'); // 'all' | 'closest' | '247'
@@ -61,7 +63,7 @@ export const FindGaragePage = () => {
   // Handle location request button
   const handleTriggerLocate = async () => {
     try {
-      await requestLocation();
+      await turnOnLocation();
       setShowPermissionModal(false);
     } catch (err) {
       setShowPermissionModal(true);
@@ -403,11 +405,15 @@ export const FindGaragePage = () => {
           }}
           onEnable={async () => {
             try {
-              await requestLocation();
+              await turnOnLocation();
               setShowPermissionModal(false);
             } catch (e) {
               // Stays open with helpful error instructions
             }
+          }}
+          onUseIPLocation={async () => {
+            await fetchIPLocation();
+            setShowPermissionModal(false);
           }}
           onManualSelect={(lat, lng, name) => {
             setManualLocation(lat, lng, name);

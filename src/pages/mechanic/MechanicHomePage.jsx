@@ -29,9 +29,11 @@ export const MechanicHomePage = () => {
     isManual,
     deviceInfo,
     requestLocation,
+    fetchIPLocation,
+    turnOnLocation,
     setManualLocation,
     useFallbackLocation
-  } = useLocation({ autoRequest: true, enableHighAccuracy: true, watch: true });
+  } = useLocation({ autoRequest: true, enableHighAccuracy: true, watch: true, allowIPFallback: true });
 
   useEffect(() => {
     const list = emergencyService.getActiveRequests();
@@ -39,20 +41,24 @@ export const MechanicHomePage = () => {
   }, []);
 
   const handleAccept = (req) => {
+    const mechLat = mechanicLocation?.lat || 37.7749;
+    const mechLng = mechanicLocation?.lng || -122.4194;
     emergencyService.acceptRequest(req.id, {
       ...mechanic,
-      lat: mechanicLocation.lat,
-      lng: mechanicLocation.lng
+      lat: mechLat,
+      lng: mechLng
     });
     navigate('/mechanic/requests');
   };
 
   // Convert requests to pseudo garage/incident markers for map display with real calculated distances
   const requestPins = useMemo(() => {
+    const mechLat = mechanicLocation?.lat || 37.7749;
+    const mechLng = mechanicLocation?.lng || -122.4194;
     return requests.map((r) => {
       const userLat = r.lat || 37.7749;
       const userLng = r.lng || -122.4194;
-      const distKm = calculateDistanceKm(mechanicLocation.lat, mechanicLocation.lng, userLat, userLng);
+      const distKm = calculateDistanceKm(mechLat, mechLng, userLat, userLng);
       const computedDistance = formatDistance(distKm);
 
       return {
@@ -118,7 +124,7 @@ export const MechanicHomePage = () => {
           permission={permission}
           tracking={tracking}
           isManual={isManual}
-          onRefreshLocation={() => requestLocation({ forceFresh: true })}
+          onRefreshLocation={() => turnOnLocation()}
           onRequestPermission={() => setShowPermissionModal(true)}
           onOpenHubModal={() => setShowPermissionModal(true)}
         />
@@ -275,11 +281,15 @@ export const MechanicHomePage = () => {
             onClose={() => setShowPermissionModal(false)}
             onEnable={async () => {
               try {
-                await requestLocation();
+                await turnOnLocation();
                 setShowPermissionModal(false);
               } catch (e) {
                 // Stays open showing error recovery guidance
               }
+            }}
+            onUseIPLocation={async () => {
+              await fetchIPLocation();
+              setShowPermissionModal(false);
             }}
             permission={permission}
             error={locationError}
