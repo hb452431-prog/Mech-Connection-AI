@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BrandLogo } from '../components/common/BrandLogo';
 import { AboutWebsiteVideo } from '../components/landing/AboutWebsiteVideo';
+import { SirenLight } from '../components/common/SirenLight';
 import { Wrench, Car, ArrowRight, ShieldCheck, Zap, AlertCircle } from 'lucide-react';
 
 export const LandingPage = () => {
@@ -97,10 +98,10 @@ export const LandingPage = () => {
         <div className="pt-2">
           <Link
             to="/user/emergency"
-            className="w-full btn-emergency py-3.5 px-4 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm rounded-xl"
+            className="w-full btn-emergency py-3.5 px-4 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-md rounded-xl group"
           >
-            <AlertCircle className="w-4 h-4" />
-            <span>Need Emergency Roadside Help Now?</span>
+            <SirenLight size="xs" variant="sticker" animated={true} />
+            <span className="drop-shadow-xs font-black">Need Emergency Roadside Help Now?</span>
           </Link>
         </div>
       </div>

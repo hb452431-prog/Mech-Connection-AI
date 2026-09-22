@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { BrandLogo } from './BrandLogo';
 import { Home, Sparkles, User, AlertCircle, LogOut, Wrench } from 'lucide-react';
+import { SirenLight } from './SirenLight';
 import { authService } from '../../services/authService';
 
 export const UserNavbar = () => {
@@ -70,10 +71,11 @@ export const UserNavbar = () => {
           <div className="flex items-center gap-2.5">
             <Link
               to="/user/emergency"
-              className="btn-emergency px-3.5 py-2 text-xs uppercase tracking-wider font-extrabold flex items-center gap-1.5 shadow-sm"
+              className="btn-emergency px-3.5 py-2 text-xs uppercase tracking-wider font-extrabold flex items-center gap-2 shadow-md group"
+              title="Request Emergency Mechanic Rescue"
             >
-              <AlertCircle className="w-4 h-4" />
-              <span>SOS Rescue</span>
+              <SirenLight size="xs" variant="sticker" animated={true} />
+              <span className="font-extrabold tracking-wide drop-shadow-xs">SOS Rescue</span>
             </Link>
 
             <button

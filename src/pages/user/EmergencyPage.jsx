@@ -3,6 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import UserNavbar from '../../components/common/UserNavbar';
 import { emergencyService } from '../../services/emergencyService';
 import { authService } from '../../services/authService';
+import { SirenLight, SirenBadge } from '../../components/common/SirenLight';
 import { 
   AlertCircle, 
   MapPin, 
@@ -18,7 +19,8 @@ import {
   Disc,
   BatteryCharging,
   Flame,
-  HelpCircle
+  HelpCircle,
+  Radio
 } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import L from 'leaflet';
@@ -106,32 +108,37 @@ export const EmergencyPage = () => {
         <div>
           <Link
             to="/user"
-            className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-800 mb-1"
+            className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-800 mb-2"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Back to Home
           </Link>
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
-              <AlertCircle className="w-5 h-5" />
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-100 to-red-100 border border-orange-200 flex items-center justify-center flex-shrink-0 shadow-xs">
+              <SirenLight size="md" variant="ambulance" animated={true} />
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
-              Request Emergency Mechanic
-            </h1>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
+                Request Emergency Mechanic
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+                Send high-priority GPS rescue signal to certified mobile mechanics and workshops nearby.
+              </p>
+            </div>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Send high-priority GPS rescue signal to certified mobile mechanics and workshops nearby.
-          </p>
         </div>
 
         {/* 1. FORM STAGE */}
         {stage === 'FORM' && (
-          <div className="clean-card p-6 sm:p-7 space-y-6 border-slate-200 shadow-sm">
+          <div className="clean-card emergency-card-active p-6 sm:p-7 space-y-6 shadow-md rounded-2xl">
             {/* Question: What happened? */}
             <div className="space-y-3">
-              <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider font-mono">
-                What happened to your vehicle?
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider font-mono">
+                  What happened to your vehicle?
+                </label>
+                <SirenBadge text="Live Network" liveStatus="Ready" size="xs" />
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {emergencyOptions.map((opt) => {
@@ -145,7 +152,7 @@ export const EmergencyPage = () => {
                       onClick={() => setSelectedOption(opt.name)}
                       className={`p-3.5 rounded-xl border text-left transition-all flex items-start gap-3 ${
                         isSelected
-                          ? 'border-orange-500 bg-orange-50/60 text-orange-950 ring-2 ring-orange-100 shadow-xs'
+                          ? 'border-orange-500 bg-orange-50 text-orange-950 ring-2 ring-orange-200 shadow-xs'
                           : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                       }`}
                     >
@@ -193,40 +200,42 @@ export const EmergencyPage = () => {
             <button
               type="button"
               onClick={() => setShowConfirmModal(true)}
-              className="w-full btn-emergency py-4 text-xs sm:text-sm font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-md"
+              className="w-full btn-emergency py-4 text-xs sm:text-sm font-black uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg group"
             >
-              <AlertCircle className="w-5 h-5" />
-              🚨 SEND EMERGENCY REQUEST
+              <SirenLight size="sm" variant="sticker" animated={true} />
+              <span className="drop-shadow-xs font-black">DISPATCH EMERGENCY MECHANIC</span>
             </button>
           </div>
         )}
 
         {/* 2. SEARCHING STAGE */}
         {stage === 'SEARCHING' && (
-          <div className="clean-card p-10 text-center space-y-6 border-slate-200 shadow-md animate-in fade-in duration-200">
-            <div className="w-20 h-20 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center mx-auto animate-pulse-radar shadow-md">
-              <AlertCircle className="w-10 h-10" />
+          <div className="clean-card emergency-card-active p-10 text-center space-y-6 shadow-lg rounded-2xl animate-in fade-in duration-200">
+            <div className="relative inline-flex items-center justify-center p-4">
+              <SirenLight size="2xl" variant="ambulance" hasWaves={true} animated={true} />
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading">
-                Searching for nearby mechanics...
+                Broadcasting Emergency Siren & GPS...
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto leading-relaxed">
-                Broadcasting your emergency request and live coordinates to mobile units and workshops in your area.
+                Dispatching your vehicle location and emergency request to all active mobile mechanics and partner repair garages in your radius.
               </p>
             </div>
 
-            <div className="p-3.5 bg-slate-50 rounded-xl inline-flex items-center gap-2 text-xs font-mono text-slate-700 border border-slate-200">
-              <span className="w-2 h-2 rounded-full bg-orange-600 animate-ping" />
+            <div className="p-3.5 bg-white/90 rounded-xl inline-flex items-center gap-2 text-xs font-mono text-slate-700 border border-orange-200 shadow-xs">
+              <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping" />
               <span>Incident: <strong>{selectedOption}</strong></span>
+              <span className="text-slate-400">|</span>
+              <span className="text-orange-600 font-bold">Scanning 5 km radius</span>
             </div>
           </div>
         )}
 
         {/* 3. ACCEPTED STAGE (Live Ride-tracking screen) */}
         {stage === 'ACCEPTED' && acceptedMechanic && (
-          <div className="clean-card p-6 sm:p-7 space-y-6 border-l-4 border-l-emerald-600 animate-in fade-in duration-200 shadow-md">
+          <div className="clean-card p-6 sm:p-7 space-y-6 border-l-4 border-l-emerald-600 animate-in fade-in duration-200 shadow-md rounded-2xl">
             {/* Acceptance Banner */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
               <div className="space-y-1">
@@ -304,16 +313,16 @@ export const EmergencyPage = () => {
         {/* CONFIRMATION DIALOG MODAL */}
         {showConfirmModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-150">
-            <div className="clean-card p-6 sm:p-7 max-w-sm w-full space-y-4 shadow-2xl">
+            <div className="clean-card emergency-card-active p-6 sm:p-7 max-w-sm w-full space-y-4 shadow-2xl rounded-2xl">
               <div className="flex items-center gap-3 text-orange-600">
-                <AlertCircle className="w-7 h-7 flex-shrink-0" />
+                <SirenLight size="md" variant="sticker" animated={true} />
                 <h3 className="text-lg font-black text-slate-900 font-heading">
-                  Send Emergency Request?
+                  Dispatch Emergency Rescue?
                 </h3>
               </div>
 
               <p className="text-xs text-slate-600 leading-relaxed">
-                Send your current location and emergency request for <strong>"{selectedOption}"</strong> to certified mechanics nearby?
+                Send your current location and priority emergency alert for <strong>"{selectedOption}"</strong> to certified mechanics nearby?
               </p>
 
               <div className="grid grid-cols-2 gap-2 pt-2">
@@ -327,9 +336,10 @@ export const EmergencyPage = () => {
                 <button
                   type="button"
                   onClick={handleConfirmSend}
-                  className="btn-emergency py-2.5 text-xs font-bold shadow-xs"
+                  className="btn-emergency py-2.5 text-xs font-bold shadow-md flex items-center justify-center gap-1.5"
                 >
-                  Send Request
+                  <SirenLight size="xs" variant="sticker" animated={false} />
+                  <span>Send SOS</span>
                 </button>
               </div>
             </div>
@@ -339,5 +349,5 @@ export const EmergencyPage = () => {
     </div>
   );
 };
-
 export default EmergencyPage;
+

@@ -93,23 +93,56 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-emergency {
-  background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
+  position: relative;
+  background: linear-gradient(135deg, #F97316 0%, #EA580C 50%, #DC2626 100%);
   color: #FFFFFF;
   font-weight: 800;
   border-radius: 0.875rem;
-  border: 1px solid rgba(234, 88, 12, 0.3);
-  box-shadow: 0 4px 14px 0px rgba(234, 88, 12, 0.35);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 14px 0px rgba(234, 88, 12, 0.4), 0 0 0 1px rgba(220, 38, 38, 0.2);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.btn-emergency::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transition: 0.6s ease;
+  pointer-events: none;
+}
+
+.btn-emergency:hover::before {
+  left: 100%;
 }
 
 .btn-emergency:hover {
-  background: linear-gradient(135deg, #FB923C 0%, #F97316 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px 2px rgba(234, 88, 12, 0.45);
+  background: linear-gradient(135deg, #FB923C 0%, #F97316 50%, #EA580C 100%);
+  transform: translateY(-1.5px) scale(1.02);
+  box-shadow: 0 8px 24px 2px rgba(234, 88, 12, 0.55), 0 0 16px rgba(220, 38, 38, 0.4);
 }
 
 .btn-emergency:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.99);
+}
+
+.btn-emergency-glow {
+  position: relative;
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 50%, #991B1B 100%);
+  color: #FFFFFF;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-emergency-glow:hover {
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.8), 0 6px 20px rgba(0, 0, 0, 0.4);
+  transform: scale(1.03);
 }
 
 .btn-secondary {
@@ -127,7 +160,42 @@ h1, h2, h3, h4, h5, h6 {
   border-color: #CBD5E1;
 }
 
+/* Emergency Rescue Glowing Card */
+.emergency-card-active {
+  background: linear-gradient(135deg, rgba(255, 247, 237, 0.95) 0%, #FFFFFF 50%, rgba(254, 242, 242, 0.95) 100%);
+  border: 2px solid #FDBA74;
+  box-shadow: 0 8px 25px -4px rgba(234, 88, 12, 0.18), 0 4px 10px -2px rgba(220, 38, 38, 0.08);
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.emergency-card-active:hover {
+  border-color: #F97316;
+  box-shadow: 0 14px 35px -4px rgba(234, 88, 12, 0.28), 0 0 20px rgba(249, 115, 22, 0.2);
+  transform: translateY(-2px);
+}
+
 /* Animations */
+@keyframes sirenLightSweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes sirenFlashAura {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.12);
+  }
+}
+
 @keyframes pulse-radar {
   0%, 100% {
     opacity: 0.8;
@@ -137,6 +205,14 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 1;
     transform: scale(1.08);
   }
+}
+
+.animate-siren-sweep {
+  animation: sirenLightSweep 2s linear infinite;
+}
+
+.animate-siren-aura {
+  animation: sirenFlashAura 1.5s ease-in-out infinite;
 }
 
 .animate-pulse-radar {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import UserNavbar from '../../components/common/UserNavbar';
 import { aiService } from '../../services/aiService';
+import { SirenLight } from '../../components/common/SirenLight';
 import { 
   Sparkles, 
   Upload, 
@@ -240,10 +241,10 @@ export const AiHelpPage = () => {
 
               <Link
                 to="/user/emergency"
-                className="btn-emergency py-3.5 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 text-center"
+                className="btn-emergency py-3.5 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 text-center group shadow-md"
               >
-                <AlertTriangle className="w-4 h-4" />
-                Emergency Help
+                <SirenLight size="xs" variant="sticker" animated={true} />
+                <span>Emergency Help</span>
               </Link>
             </div>
           </div>
