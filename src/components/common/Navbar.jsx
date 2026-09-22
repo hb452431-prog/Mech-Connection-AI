@@ -17,7 +17,8 @@ import {
   Sparkles,
   ShieldCheck,
   ChevronDown
-} from 'lucide-react';
+import { SirenLight } from './SirenLight';
+import ThemeToggle from './ThemeToggle';
 
 export const Navbar = () => {
   const { currentUser, isDriver, isMechanic, switchRole, logout } = useAuth();
@@ -45,7 +46,7 @@ export const Navbar = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-navy-950/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 w-full border-b border-white/10 dark:border-slate-800 bg-navy-950/80 dark:bg-slate-950/90 backdrop-blur-xl">
       {/* Top micro alert strip */}
       <div className="bg-gradient-to-r from-navy-900 via-cyan-950/50 to-navy-900 border-b border-cyan-500/10 py-1 px-4 text-xs">
         <div className="container-custom flex items-center justify-between text-slate-300">
@@ -64,7 +65,7 @@ export const Navbar = () => {
         </div>
       </div>
 
-      <div className="container-custom flex h-16 items-center justify-between">
+      <div className="container-custom flex h-16 items-center justify-between px-4 sm:px-6">
         {/* Brand Logo */}
         <BrandLogo size="md" />
 
@@ -135,11 +136,14 @@ export const Navbar = () => {
         </nav>
 
         {/* Right CTA Actions */}
-        <div className="hidden sm:flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Theme Toggle in top-right */}
+          <ThemeToggle />
+
           {/* Switch Role Quick Switcher */}
           <button
             onClick={handleRoleToggle}
-            className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-slate-400 hover:text-slate-200 bg-slate-900 border border-slate-700/60 rounded-md transition-colors"
+            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-slate-400 hover:text-slate-200 bg-slate-900 border border-slate-700/60 rounded-md transition-colors"
             title="Toggle between Driver and Mechanic Partner view"
           >
             <span className="text-slate-500">Mode:</span>
@@ -150,7 +154,7 @@ export const Navbar = () => {
 
           {/* User Profile / Login */}
           {currentUser ? (
-            <div className="relative">
+            <div className="relative hidden sm:block">
               <button
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                 className="flex items-center gap-2 p-1.5 pl-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-all text-left"
@@ -218,7 +222,7 @@ export const Navbar = () => {
           ) : (
             <Link
               to="/login"
-              className="btn-primary-glow px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
+              className="hidden sm:flex btn-primary-glow px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider items-center gap-1.5"
             >
               <User className="w-3.5 h-3.5" />
               Sign In
@@ -228,21 +232,21 @@ export const Navbar = () => {
           {/* Quick SOS Trigger */}
           <Link
             to="/sos"
-            className="btn-emergency-glow px-3.5 py-1.5 rounded-lg text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5 shadow-lg shadow-rose-900/40"
+            className="btn-emergency-glow px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5 shadow-lg shadow-rose-900/40"
           >
             <AlertCircle className="w-4 h-4 animate-spin-slow" />
             SOS
           </Link>
-        </div>
 
-        {/* Mobile Menu Toggle Button */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800"
-          aria-label="Toggle Navigation Menu"
-        >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+          {/* Mobile Menu Toggle Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+            aria-label="Toggle Navigation Menu"
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Drawer */}

@@ -9,28 +9,28 @@ export const UserHomePage = () => {
   const user = authService.getUser() || {};
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] flex flex-col pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-24 md:pb-12 transition-colors duration-200">
       <UserNavbar />
 
       <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-7">
         {/* Top Driver Status Card */}
-        <div className="clean-card p-5 sm:p-6 bg-gradient-to-r from-white via-indigo-50/40 to-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-slate-200">
+        <div className="clean-card p-5 sm:p-6 bg-gradient-to-r from-white via-indigo-50/40 to-white dark:from-slate-900 dark:via-indigo-950/30 dark:to-slate-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-slate-200 dark:border-slate-800">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center flex-shrink-0 font-bold">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 flex items-center justify-center flex-shrink-0 font-bold">
               <Car className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base sm:text-lg font-black text-slate-900 font-heading">
+                <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white font-heading">
                   Hello, {user.name || 'Driver'}
                 </h2>
-                <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-bold font-mono flex items-center gap-1">
+                <span className="px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-[10px] font-bold font-mono flex items-center gap-1 border border-emerald-200 dark:border-emerald-800">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
                   Vehicle Active
                 </span>
               </div>
-              <p className="text-xs text-slate-500 font-medium">
-                {user.vehicle?.year || user.vehicleBrand || 'Registered'} {user.vehicle?.model || user.vehicleModel || 'Vehicle'} • License: <span className="font-mono font-bold text-slate-700">{user.vehicle?.plate || user.vehicleNumber || 'Registered'}</span>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                {user.vehicle?.year || user.vehicleBrand || 'Registered'} {user.vehicle?.model || user.vehicleModel || 'Vehicle'} • License: <span className="font-mono font-bold text-slate-700 dark:text-slate-300">{user.vehicle?.plate || user.vehicleNumber || 'Registered'}</span>
               </p>
             </div>
           </div>
@@ -47,10 +47,10 @@ export const UserHomePage = () => {
 
         {/* Main Heading */}
         <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
             How can we help you today?
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 font-medium">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
             Choose a service below for instant AI diagnosis, local workshops, or roadside dispatch.
           </p>
         </div>
@@ -58,17 +58,17 @@ export const UserHomePage = () => {
         {/* 2 Main Action Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Card 1: Find Nearby Garage */}
-          <div className="clean-card p-6 flex flex-col justify-between group hover:border-indigo-500 hover:shadow-md transition-all">
+          <div className="clean-card p-6 flex flex-col justify-between group hover:border-indigo-500 dark:hover:border-indigo-400 hover:shadow-md transition-all">
             <div className="space-y-4 mb-6">
-              <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:scale-105 transition-transform">
                 <MapPin className="w-7 h-7" />
               </div>
 
               <div>
-                <h2 className="text-xl font-black text-slate-900 font-heading group-hover:text-indigo-600 transition-colors">
+                <h2 className="text-xl font-black text-slate-900 dark:text-white font-heading group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                   FIND NEARBY GARAGE
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed mt-1">
+                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed mt-1">
                   Locate certified repair shops near you on the live interactive map with real-time distance and ratings.
                 </p>
               </div>
@@ -85,17 +85,17 @@ export const UserHomePage = () => {
           </div>
 
           {/* Card 2: AI Vehicle Help */}
-          <div className="clean-card p-6 flex flex-col justify-between group hover:border-indigo-500 hover:shadow-md transition-all">
+          <div className="clean-card p-6 flex flex-col justify-between group hover:border-indigo-500 dark:hover:border-indigo-400 hover:shadow-md transition-all">
             <div className="space-y-4 mb-6">
-              <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:scale-105 transition-transform">
                 <Sparkles className="w-7 h-7" />
               </div>
 
               <div>
-                <h2 className="text-xl font-black text-slate-900 font-heading group-hover:text-indigo-600 transition-colors">
+                <h2 className="text-xl font-black text-slate-900 dark:text-white font-heading group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                   AI VEHICLE HELP
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed mt-1">
+                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed mt-1">
                   Describe your vehicle problem or upload an image to receive instant step-by-step troubleshooting.
                 </p>
               </div>
@@ -120,7 +120,7 @@ export const UserHomePage = () => {
           <div className="flex items-center gap-4 text-center sm:text-left relative z-10">
             {/* Animated Ambulance Siren Light Sticker Beacon */}
             <div className="relative flex-shrink-0">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-100 to-red-100 border border-orange-300 flex items-center justify-center shadow-inner relative">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-950 dark:to-red-950 border border-orange-300 dark:border-orange-700 flex items-center justify-center shadow-inner relative">
                 <SirenLight size="lg" variant="ambulance" hasWaves={true} animated={true} />
               </div>
             </div>
@@ -129,13 +129,13 @@ export const UserHomePage = () => {
               <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
                 <SirenBadge text="Immediate Breakdown Rescue" liveStatus="24/7 Live" size="xs" />
               </div>
-              <h3 className="text-xl font-black text-slate-900 font-heading mt-0.5 tracking-tight flex items-center justify-center sm:justify-start gap-2">
+              <h3 className="text-xl font-black text-slate-900 dark:text-white font-heading mt-0.5 tracking-tight flex items-center justify-center sm:justify-start gap-2">
                 <span>EMERGENCY HELP</span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-extrabold bg-red-100 text-red-700 border border-red-200">
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-extrabold bg-red-100 dark:bg-red-950/80 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800">
                   SOS DISPATCH
                 </span>
               </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-md mt-0.5">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-md mt-0.5">
                 Flat tyre, dead battery, or broken down on the road? Send an instant priority alert to nearby mobile mechanics.
               </p>
             </div>
@@ -150,8 +150,8 @@ export const UserHomePage = () => {
               <span className="drop-shadow-xs font-black">Request Emergency Mechanic</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <span className="text-[10px] font-medium text-slate-500 flex items-center gap-1 font-mono">
-              ⚡ Avg response: <strong className="text-orange-700 font-bold">~4.2 mins</strong>
+            <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1 font-mono">
+              ⚡ Avg response: <strong className="text-orange-700 dark:text-orange-400 font-bold">~4.2 mins</strong>
             </span>
           </div>
         </div>

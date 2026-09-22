@@ -208,7 +208,7 @@ export const EmergencyPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] flex flex-col pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-24 md:pb-12 transition-colors duration-200">
       <UserNavbar />
 
       <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
@@ -216,20 +216,20 @@ export const EmergencyPage = () => {
         <div>
           <Link
             to="/user"
-            className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-800 mb-2"
+            className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-2"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Back to Home
           </Link>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-100 to-red-100 border border-orange-200 flex items-center justify-center flex-shrink-0 shadow-xs">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-950 dark:to-red-950 border border-orange-200 dark:border-orange-800 flex items-center justify-center flex-shrink-0 shadow-xs">
               <SirenLight size="md" variant="ambulance" animated={true} />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading">
                 Request Emergency Mechanic
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                 Send high-priority GPS rescue signal to certified mobile mechanics and workshops nearby.
               </p>
             </div>
@@ -242,7 +242,7 @@ export const EmergencyPage = () => {
             {/* Question: What happened? */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider font-mono">
+                <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider font-mono">
                   What happened to your vehicle?
                 </label>
                 <SirenBadge text="Live Network" liveStatus="Ready" size="xs" />
@@ -260,17 +260,17 @@ export const EmergencyPage = () => {
                       onClick={() => setSelectedOption(opt.name)}
                       className={`p-3.5 rounded-xl border text-left transition-all flex items-start gap-3 ${
                         isSelected
-                          ? 'border-orange-500 bg-orange-50 text-orange-950 ring-2 ring-orange-200 shadow-xs'
-                          : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                          ? 'border-orange-500 bg-orange-50 dark:bg-orange-950/60 text-orange-950 dark:text-orange-200 ring-2 ring-orange-200 dark:ring-orange-800 shadow-xs'
+                          : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
-                      <Icon className={`w-5 h-5 flex-shrink-0 mt-0.5 ${isSelected ? 'text-orange-600' : 'text-slate-400'}`} />
+                      <Icon className={`w-5 h-5 flex-shrink-0 mt-0.5 ${isSelected ? 'text-orange-600 dark:text-orange-400' : 'text-slate-400'}`} />
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <p className="font-bold text-xs sm:text-sm">{opt.name}</p>
-                          {isSelected && <CheckCircle2 className="w-4 h-4 text-orange-600" />}
+                          {isSelected && <CheckCircle2 className="w-4 h-4 text-orange-600 dark:text-orange-400" />}
                         </div>
-                        <p className="text-[11px] text-slate-500">{opt.desc}</p>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400">{opt.desc}</p>
                       </div>
                     </button>
                   );
@@ -280,7 +280,7 @@ export const EmergencyPage = () => {
 
             {/* Optional details */}
             <div className="space-y-1">
-              <label className="block text-xs font-bold text-slate-700">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
                 Additional Details (Optional)
               </label>
               <input
@@ -293,20 +293,20 @@ export const EmergencyPage = () => {
             </div>
 
             {/* Current Location Display with Mini Map preview */}
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="p-4 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-slate-400 uppercase font-mono">
+                <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase font-mono">
                   Current Location (GPS Locked)
                 </span>
-                <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded">
+                <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-300 font-bold bg-emerald-100 dark:bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
                   ● Telemetry Ready
                 </span>
               </div>
-              <p className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-orange-600 flex-shrink-0" />
+              <p className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <MapPin className="w-4 h-4 text-orange-600 dark:text-orange-400 flex-shrink-0" />
                 {userCoords.address || 'Market St & 7th St, Downtown, San Francisco, CA'}
               </p>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
                 Coordinates: {userCoords.lat.toFixed(4)}, {userCoords.lng.toFixed(4)}
               </p>
             </div>
@@ -331,47 +331,47 @@ export const EmergencyPage = () => {
             </div>
 
             <div className="space-y-2">
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading">
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-heading">
                 Broadcasting Emergency Siren & GPS...
               </h2>
-              <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
                 Dispatching your vehicle location and emergency request to all active mobile mechanics and partner repair garages in your radius.
               </p>
             </div>
 
-            <div className="p-3.5 bg-white/90 rounded-xl inline-flex items-center gap-2 text-xs font-mono text-slate-700 border border-orange-200 shadow-xs">
+            <div className="p-3.5 bg-white/90 dark:bg-slate-900/90 rounded-xl inline-flex items-center gap-2 text-xs font-mono text-slate-700 dark:text-slate-300 border border-orange-200 dark:border-orange-800 shadow-xs">
               <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping" />
               <span>Incident: <strong>{selectedOption}</strong></span>
               <span className="text-slate-400">|</span>
-              <span className="text-orange-600 font-bold">Scanning 5 km radius</span>
+              <span className="text-orange-600 dark:text-orange-400 font-bold">Scanning 5 km radius</span>
             </div>
           </div>
         )}
 
         {/* 3. ACCEPTED STAGE (Live Ride-tracking screen with interactive Map & Movement) */}
         {stage === 'ACCEPTED' && acceptedMechanic && (
-          <div className="clean-card p-6 sm:p-7 space-y-6 border-l-4 border-l-emerald-600 animate-in fade-in duration-200 shadow-md rounded-2xl">
+          <div className="clean-card p-6 sm:p-7 space-y-6 border-l-4 border-l-emerald-600 animate-in fade-in duration-200 shadow-md rounded-2xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
             {/* Acceptance Banner */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
               <div className="space-y-1">
-                <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 inline-flex items-center gap-1.5 shadow-2xs">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 inline-flex items-center gap-1.5 shadow-2xs border border-emerald-200 dark:border-emerald-800">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   Mechanic Accepted Your Request
                 </span>
-                <h2 className="text-xl font-black text-slate-900 font-heading">
+                <h2 className="text-xl font-black text-slate-900 dark:text-white font-heading">
                   {acceptedMechanic.garageName}
                 </h2>
-                <p className="text-xs text-slate-500 font-medium">
-                  Assigned Master Tech: <strong>{acceptedMechanic.mechanicName}</strong> ({acceptedMechanic.vehicle})
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                  Assigned Master Tech: <strong className="text-slate-700 dark:text-slate-200">{acceptedMechanic.mechanicName}</strong> ({acceptedMechanic.vehicle})
                 </p>
               </div>
 
               {/* Dynamic Live Arrival Badge */}
-              <div className="text-left sm:text-right bg-gradient-to-br from-indigo-50 to-orange-50 px-4 py-2.5 rounded-2xl border border-indigo-100 self-start sm:self-auto shadow-xs">
-                <span className="text-[10px] text-slate-500 font-mono uppercase block font-bold">Estimated Arrival</span>
+              <div className="text-left sm:text-right bg-gradient-to-br from-indigo-50 to-orange-50 dark:from-slate-800 dark:to-slate-800/80 px-4 py-2.5 rounded-2xl border border-indigo-100 dark:border-slate-700 self-start sm:self-auto shadow-xs">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono uppercase block font-bold">Estimated Arrival</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl font-black font-mono text-indigo-700">{liveETA}</span>
-                  <span className="text-xs font-mono font-bold text-orange-600 bg-white px-2 py-0.5 rounded-md border border-orange-200">
+                  <span className="text-2xl font-black font-mono text-indigo-700 dark:text-indigo-400">{liveETA}</span>
+                  <span className="text-xs font-mono font-bold text-orange-600 dark:text-orange-400 bg-white dark:bg-slate-900 px-2 py-0.5 rounded-md border border-orange-200 dark:border-orange-800">
                     {liveDistance}
                   </span>
                 </div>
@@ -380,12 +380,12 @@ export const EmergencyPage = () => {
 
             {/* Ride Tracking Map (Leaflet MechMap) */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs font-bold text-slate-600 px-1">
-                <span className="flex items-center gap-1.5 text-indigo-700">
+              <div className="flex items-center justify-between text-xs font-bold text-slate-600 dark:text-slate-400 px-1">
+                <span className="flex items-center gap-1.5 text-indigo-700 dark:text-indigo-400">
                   <span className="w-2.5 h-2.5 rounded-full bg-indigo-600" />
                   📍 You (Stranded Location)
                 </span>
-                <span className="flex items-center gap-1.5 text-orange-700">
+                <span className="flex items-center gap-1.5 text-orange-700 dark:text-orange-400">
                   <span className="w-2.5 h-2.5 rounded-full bg-orange-600 animate-ping" />
                   🚚 Mechanic (Live Moving Unit)
                 </span>
@@ -406,8 +406,8 @@ export const EmergencyPage = () => {
               />
 
               {/* Simulation Controls Toolbar */}
-              <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-slate-50 rounded-xl border border-slate-200 text-xs">
-                <span className="text-slate-600 font-medium flex items-center gap-1.5">
+              <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
+                <span className="text-slate-600 dark:text-slate-300 font-medium flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span>Demo simulation: Mechanic is driving towards your vehicle coordinates.</span>
                 </span>
@@ -415,22 +415,22 @@ export const EmergencyPage = () => {
                 <button
                   type="button"
                   onClick={handleRestartSimulation}
-                  className="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 rounded-lg font-bold border border-slate-300 shadow-2xs flex items-center gap-1 transition-all"
+                  className="px-3 py-1.5 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-lg font-bold border border-slate-300 dark:border-slate-700 shadow-2xs flex items-center gap-1 transition-all"
                 >
-                  <RotateCcw className="w-3.5 h-3.5 text-indigo-600" />
+                  <RotateCcw className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                   <span>Restart Tracking Demo</span>
                 </button>
               </div>
             </div>
 
             {/* Status & Driver Card */}
-            <div className="p-4 bg-indigo-50/80 rounded-2xl border border-indigo-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
+            <div className="p-4 bg-indigo-50/80 dark:bg-slate-800/90 rounded-2xl border border-indigo-200 dark:border-slate-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
               <div>
-                <p className="text-sm font-black text-indigo-950 flex items-center gap-1.5">
-                  <Navigation className="w-4 h-4 text-indigo-600" />
+                <p className="text-sm font-black text-indigo-950 dark:text-indigo-200 flex items-center gap-1.5">
+                  <Navigation className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                   Mechanic is en route.
                 </p>
-                <p className="text-slate-600 mt-0.5">
+                <p className="text-slate-600 dark:text-slate-400 mt-0.5">
                   Remaining distance: <strong>{liveDistance}</strong> • Please turn on vehicle hazard lights.
                 </p>
               </div>
@@ -448,16 +448,16 @@ export const EmergencyPage = () => {
 
         {/* CONFIRMATION DIALOG MODAL */}
         {showConfirmModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-150">
-            <div className="clean-card emergency-card-active p-6 sm:p-7 max-w-sm w-full space-y-4 shadow-2xl rounded-2xl">
-              <div className="flex items-center gap-3 text-orange-600">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
+            <div className="clean-card emergency-card-active p-6 sm:p-7 max-w-sm w-full space-y-4 shadow-2xl rounded-2xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
+              <div className="flex items-center gap-3 text-orange-600 dark:text-orange-400">
                 <SirenLight size="md" variant="sticker" animated={true} />
-                <h3 className="text-lg font-black text-slate-900 font-heading">
+                <h3 className="text-lg font-black text-slate-900 dark:text-white font-heading">
                   Dispatch Emergency Rescue?
                 </h3>
               </div>
 
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 Send your current location and priority emergency alert for <strong>"{selectedOption}"</strong> to certified mechanics nearby?
               </p>
 

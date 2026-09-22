@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { BrandLogo } from '../../components/common/BrandLogo';
 import { authService } from '../../services/authService';
-import { Car, ArrowLeft } from 'lucide-react';
+import ThemeToggle from '../../components/common/ThemeToggle';
+import { Car, ArrowLeft, ShieldCheck, Sparkles } from 'lucide-react';
 
 export const UserAuthPage = () => {
   const [isRegister, setIsRegister] = useState(false);
@@ -41,12 +42,17 @@ export const UserAuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] flex flex-col justify-center items-center px-4 py-10">
+    <div className="min-h-screen bg-[#F6F8FC] dark:bg-slate-950 flex flex-col justify-center items-center px-4 py-8 relative transition-colors">
+      {/* Top right Theme Toggle */}
+      <div className="absolute top-4 right-4 z-20">
+        <ThemeToggle />
+      </div>
+
       <div className="w-full max-w-md space-y-6">
         {/* Back Link */}
         <Link
           to="/"
-          className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-800"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Portal Selection
@@ -57,29 +63,31 @@ export const UserAuthPage = () => {
           <div className="flex justify-center mb-1">
             <BrandLogo size="md" clickable={false} />
           </div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider">
-            <Car className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold uppercase tracking-wider border border-slate-200 dark:border-slate-700">
+            <Car className="w-3.5 h-3.5 text-cyan-500" />
             User / Driver Portal
           </div>
-          <h1 className="text-2xl font-black text-slate-900 font-heading">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading">
             {isRegister ? 'Create Driver Account' : 'Driver Login'}
           </h1>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto">
             {isRegister
               ? 'Sign up to get instant AI vehicle diagnostics and nearby garage assistance.'
-              : 'Sign in to access your vehicle assistance services.'}
+              : 'Sign in to access your vehicle assistance services and live roadside map.'}
           </p>
         </div>
 
         {/* Auth Card */}
-        <div className="clean-card p-6 sm:p-8 space-y-5">
+        <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-6 sm:p-8 space-y-5 shadow-lg">
           {/* Tab Switcher */}
-          <div className="grid grid-cols-2 gap-1 p-1 bg-slate-100 rounded-xl">
+          <div className="grid grid-cols-2 gap-1 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
             <button
               type="button"
               onClick={() => setIsRegister(false)}
               className={`py-2 text-xs font-bold rounded-lg transition-all ${
-                !isRegister ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500'
+                !isRegister 
+                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs' 
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
               Login
@@ -88,7 +96,9 @@ export const UserAuthPage = () => {
               type="button"
               onClick={() => setIsRegister(true)}
               className={`py-2 text-xs font-bold rounded-lg transition-all ${
-                isRegister ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500'
+                isRegister 
+                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs' 
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
               Create Account
@@ -99,7 +109,7 @@ export const UserAuthPage = () => {
             {isRegister && (
               <>
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1">Your Full Name</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Your Full Name</label>
                   <input
                     type="text"
                     required
@@ -111,7 +121,7 @@ export const UserAuthPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1">Phone Number</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Phone Number</label>
                   <input
                     type="tel"
                     required
@@ -125,7 +135,7 @@ export const UserAuthPage = () => {
             )}
 
             <div>
-              <label className="block text-slate-700 font-bold mb-1">Email Address</label>
+              <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Email Address</label>
               <input
                 type="email"
                 required
@@ -137,7 +147,7 @@ export const UserAuthPage = () => {
             </div>
 
             <div>
-              <label className="block text-slate-700 font-bold mb-1">Password</label>
+              <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Password</label>
               <input
                 type="password"
                 required
@@ -150,14 +160,14 @@ export const UserAuthPage = () => {
 
             {/* Optional Vehicle info for registration */}
             {isRegister && (
-              <div className="pt-2 border-t border-slate-100 space-y-3">
-                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+              <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-3">
+                <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Vehicle Information (Optional)
                 </p>
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-slate-600 mb-1">Brand</label>
+                    <label className="block text-slate-600 dark:text-slate-400 mb-1 font-medium">Brand</label>
                     <input
                       type="text"
                       value={vehicleBrand}
@@ -167,7 +177,7 @@ export const UserAuthPage = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-slate-600 mb-1">Model</label>
+                    <label className="block text-slate-600 dark:text-slate-400 mb-1 font-medium">Model</label>
                     <input
                       type="text"
                       value={vehicleModel}
@@ -179,7 +189,7 @@ export const UserAuthPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-600 mb-1">Vehicle License Number</label>
+                  <label className="block text-slate-600 dark:text-slate-400 mb-1 font-medium">Vehicle License Number</label>
                   <input
                     type="text"
                     value={vehicleNumber}

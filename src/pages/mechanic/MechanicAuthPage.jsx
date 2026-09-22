@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { BrandLogo } from '../../components/common/BrandLogo';
 import { authService } from '../../services/authService';
-import { Wrench, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import ThemeToggle from '../../components/common/ThemeToggle';
+import { Wrench, ArrowLeft, CheckCircle2, ShieldCheck } from 'lucide-react';
 
 export const MechanicAuthPage = () => {
   const [isRegister, setIsRegister] = useState(false);
@@ -41,12 +42,17 @@ export const MechanicAuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] flex flex-col justify-center items-center px-4 py-10">
+    <div className="min-h-screen bg-[#F6F8FC] dark:bg-slate-950 flex flex-col justify-center items-center px-4 py-8 relative transition-colors">
+      {/* Top right Theme Toggle */}
+      <div className="absolute top-4 right-4 z-20">
+        <ThemeToggle />
+      </div>
+
       <div className="w-full max-w-md space-y-6">
         {/* Back Link */}
         <Link
           to="/"
-          className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-800"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Portal Selection
@@ -57,14 +63,14 @@ export const MechanicAuthPage = () => {
           <div className="flex justify-center mb-1">
             <BrandLogo size="md" clickable={false} />
           </div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider border border-indigo-100">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider border border-indigo-100 dark:border-indigo-800">
             <Wrench className="w-3.5 h-3.5" />
             Mechanic Portal
           </div>
-          <h1 className="text-2xl font-black text-slate-900 font-heading">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading">
             {isRegister ? 'Create Garage Account' : 'Mechanic Login'}
           </h1>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto">
             {isRegister
               ? 'Register your workshop to receive nearby driver assistance requests.'
               : 'Sign in to access your incoming roadside assistance requests.'}
@@ -72,14 +78,16 @@ export const MechanicAuthPage = () => {
         </div>
 
         {/* Auth Card */}
-        <div className="clean-card p-6 sm:p-8 space-y-5">
+        <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-6 sm:p-8 space-y-5 shadow-lg">
           {/* Tab Switcher */}
-          <div className="grid grid-cols-2 gap-1 p-1 bg-slate-100 rounded-xl">
+          <div className="grid grid-cols-2 gap-1 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
             <button
               type="button"
               onClick={() => setIsRegister(false)}
               className={`py-2 text-xs font-bold rounded-lg transition-all ${
-                !isRegister ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500'
+                !isRegister 
+                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs' 
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
               Login
@@ -88,7 +96,9 @@ export const MechanicAuthPage = () => {
               type="button"
               onClick={() => setIsRegister(true)}
               className={`py-2 text-xs font-bold rounded-lg transition-all ${
-                isRegister ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500'
+                isRegister 
+                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs' 
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
               Register Garage
@@ -99,7 +109,7 @@ export const MechanicAuthPage = () => {
             {isRegister && (
               <>
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1">Garage Name</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Garage Name</label>
                   <input
                     type="text"
                     required
@@ -111,7 +121,7 @@ export const MechanicAuthPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1">Mechanic Name</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Mechanic Name</label>
                   <input
                     type="text"
                     required
@@ -123,7 +133,7 @@ export const MechanicAuthPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1">Phone Number</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Phone Number</label>
                   <input
                     type="tel"
                     required
@@ -135,7 +145,7 @@ export const MechanicAuthPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1">Garage Address</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Garage Address</label>
                   <input
                     type="text"
                     required
@@ -147,7 +157,7 @@ export const MechanicAuthPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 font-bold mb-1">Services Offered</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Services Offered</label>
                   <input
                     type="text"
                     required

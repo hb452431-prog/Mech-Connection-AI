@@ -74,21 +74,21 @@ export const MechanicRequestsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] flex flex-col pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F6F8FC] dark:bg-slate-950 flex flex-col pb-24 md:pb-12 transition-colors">
       <MechanicNavbar />
 
       <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading">
               Active Assistance Requests
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
               Live roadside breakdown alerts received from nearby vehicle drivers.
             </p>
           </div>
 
-          <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200 self-start sm:self-auto">
+          <span className="text-xs font-mono font-bold text-indigo-700 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-3 py-1 rounded-full border border-indigo-200 dark:border-indigo-800 self-start sm:self-auto">
             {requests.length} Requests in Queue
           </span>
         </div>
@@ -96,44 +96,44 @@ export const MechanicRequestsPage = () => {
         {/* Requests List */}
         <div className="space-y-4">
           {requests.length === 0 ? (
-            <div className="clean-card p-12 text-center text-slate-500 space-y-2 border-slate-200">
+            <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-12 text-center text-slate-500 dark:text-slate-400 space-y-2 border-slate-200 shadow-sm">
               <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto" />
-              <p className="text-sm font-bold text-slate-800">No pending requests right now.</p>
-              <p className="text-xs text-slate-400">You're all caught up with your assistance queue.</p>
+              <p className="text-sm font-bold text-slate-800 dark:text-slate-200">No pending requests right now.</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500">You're all caught up with your assistance queue.</p>
             </div>
           ) : (
             requests.map((req) => {
               const isAccepted = req.status === 'ACCEPTED';
 
               return (
-                <div key={req.id} className="clean-card p-5 sm:p-6 space-y-4 border-slate-200 shadow-sm">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                <div key={req.id} className="clean-card dark:bg-slate-900 dark:border-slate-800 p-5 sm:p-6 space-y-4 border-slate-200 shadow-sm">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
                     <div className="flex items-center gap-2">
-                      <span className="font-black text-slate-900 text-base flex items-center gap-1.5 font-heading">
-                        <User className="w-4 h-4 text-indigo-600" />
+                      <span className="font-black text-slate-900 dark:text-white text-base flex items-center gap-1.5 font-heading">
+                        <User className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                         {req.userName}
                       </span>
                       {isAccepted && (
-                        <span className="px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                        <span className="px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
                           <CheckCircle2 className="w-3.5 h-3.5" />
                           Request Accepted
                         </span>
                       )}
                     </div>
-                    <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg self-start sm:self-auto border border-indigo-100">
+                    <span className="text-xs font-mono font-bold text-indigo-700 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2.5 py-1 rounded-lg self-start sm:self-auto border border-indigo-100 dark:border-indigo-800">
                       Distance: {req.distance}
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-700">
-                    <div className="p-3 bg-slate-50 rounded-xl space-y-1 border border-slate-100">
-                      <p className="text-slate-400 font-bold uppercase font-mono text-[10px]">Problem</p>
-                      <p className="text-xs sm:text-sm font-bold text-slate-900">{req.problem}</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-700 dark:text-slate-300">
+                    <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl space-y-1 border border-slate-100 dark:border-slate-800">
+                      <p className="text-slate-400 dark:text-slate-500 font-bold uppercase font-mono text-[10px]">Problem</p>
+                      <p className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">{req.problem}</p>
                     </div>
 
-                    <div className="p-3 bg-slate-50 rounded-xl space-y-1 border border-slate-100">
-                      <p className="text-slate-400 font-bold uppercase font-mono text-[10px]">User Location</p>
-                      <p className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1">
+                    <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl space-y-1 border border-slate-100 dark:border-slate-800">
+                      <p className="text-slate-400 dark:text-slate-500 font-bold uppercase font-mono text-[10px]">User Location</p>
+                      <p className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1">
                         <MapPin className="w-3.5 h-3.5 text-orange-600 flex-shrink-0" />
                         {req.location}
                       </p>
@@ -143,10 +143,10 @@ export const MechanicRequestsPage = () => {
                   {/* Action Controls */}
                   <div className="pt-2">
                     {isAccepted ? (
-                      <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 bg-emerald-50/80 p-4 rounded-xl border border-emerald-200">
-                        <div className="text-xs text-emerald-900 text-center sm:text-left">
+                      <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 bg-emerald-50/80 dark:bg-emerald-950/40 p-4 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                        <div className="text-xs text-emerald-900 dark:text-emerald-300 text-center sm:text-left">
                           <p className="font-bold">You accepted this roadside assistance job.</p>
-                          <p className="text-slate-600 mt-0.5">Driver is waiting at: <strong>{req.location}</strong></p>
+                          <p className="text-slate-600 dark:text-slate-400 mt-0.5">Driver is waiting at: <strong>{req.location}</strong></p>
                         </div>
 
                         <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -173,7 +173,7 @@ export const MechanicRequestsPage = () => {
                         <button
                           type="button"
                           onClick={() => handleReject(req.id)}
-                          className="btn-secondary px-4 py-2.5 text-xs font-bold flex items-center gap-1 text-orange-700 hover:bg-orange-50 border-orange-200"
+                          className="btn-secondary px-4 py-2.5 text-xs font-bold flex items-center gap-1 text-orange-700 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/30 border-orange-200 dark:border-orange-800"
                         >
                           <X className="w-3.5 h-3.5" />
                           Reject
@@ -198,21 +198,21 @@ export const MechanicRequestsPage = () => {
 
         {/* Live Navigation Modal with Interactive MechMap */}
         {navigatingReq && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-150">
-            <div className="clean-card p-6 max-w-2xl w-full space-y-4 shadow-2xl">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
+            <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-6 max-w-2xl w-full space-y-4 shadow-2xl">
+              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <div>
-                  <h3 className="text-base font-black text-slate-900 font-heading flex items-center gap-1.5">
-                    <Navigation className="w-4 h-4 text-indigo-600" />
+                  <h3 className="text-base font-black text-slate-900 dark:text-white font-heading flex items-center gap-1.5">
+                    <Navigation className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                     Navigating to {navigatingReq.userName}
                   </h3>
-                  <p className="text-xs text-slate-500">
-                    Location: {navigatingReq.location} • Problem: <strong>{navigatingReq.problem}</strong>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Location: {navigatingReq.location} • Problem: <strong className="text-slate-800 dark:text-slate-200">{navigatingReq.problem}</strong>
                   </p>
                 </div>
                 <button
                   onClick={() => setNavigatingReq(null)}
-                  className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+                  className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -237,7 +237,7 @@ export const MechanicRequestsPage = () => {
                   href={`tel:${navigatingReq.userPhone || '+15550199'}`}
                   className="btn-secondary py-2.5 px-4 text-xs font-bold flex items-center gap-1.5"
                 >
-                  <Phone className="w-3.5 h-3.5 text-indigo-600" />
+                  <Phone className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                   Call Driver ({navigatingReq.userName.split(' ')[0]})
                 </a>
 
