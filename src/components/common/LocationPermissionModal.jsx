@@ -19,7 +19,11 @@ export const LocationPermissionModal = ({
   isOpen,
   onClose,
   onEnable,
+  onGrant,
+  onRequestPermission,
   onManualSelect,
+  onSelectManualLocation,
+  onUseFallback,
   error,
   permission = 'prompt',
   loading = false,
@@ -27,6 +31,7 @@ export const LocationPermissionModal = ({
 }) => {
   const [showManualSearch, setShowManualSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isActivating, setIsActivating] = useState(false);
 
   if (!isOpen) return null;
 
@@ -39,9 +44,29 @@ export const LocationPermissionModal = ({
     { name: 'London, Central', lat: 51.5074, lng: -0.1278 }
   ];
 
+  const handleEnableClick = async () => {
+    setIsActivating(true);
+    const triggerFn = onEnable || onGrant || onRequestPermission;
+    if (triggerFn) {
+      try {
+        await triggerFn();
+      } catch (err) {
+        // Modal will show corresponding error state
+      } finally {
+        setIsActivating(false);
+      }
+    } else {
+      setIsActivating(false);
+      if (onClose) onClose();
+    }
+  };
+
   const handleSelectHub = (hub) => {
     if (onManualSelect) {
       onManualSelect(hub.lat, hub.lng, hub.name);
+    }
+    if (onSelectManualLocation) {
+      onSelectManualLocation({ lat: hub.lat, lng: hub.lng, name: hub.name, address: hub.name });
     }
     if (onClose) onClose();
   };
@@ -50,6 +75,7 @@ export const LocationPermissionModal = ({
   const isUnavailable = permission === 'unavailable' || error?.type === 'UNAVAILABLE';
   const isTimeout = error?.type === 'TIMEOUT';
   const isUnsupported = permission === 'unsupported' || error?.type === 'UNSUPPORTED';
+  const showLoading = loading || isActivating;
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
@@ -69,7 +95,7 @@ export const LocationPermissionModal = ({
         {/* Header Icon & Title */}
         <div className="text-center space-y-2 pt-1">
           <div className="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 text-white flex items-center justify-center shadow-lg shadow-indigo-500/25 relative group">
-            {loading ? (
+            {showLoading ? (
               <Navigation className="w-7 h-7 animate-spin text-white" />
             ) : isDenied || isUnavailable ? (
               <AlertTriangle className="w-7 h-7 text-amber-300 animate-pulse" />
@@ -174,11 +200,11 @@ export const LocationPermissionModal = ({
                 <div className="space-y-2 pt-1">
                   <button
                     type="button"
-                    onClick={onEnable}
-                    disabled={loading}
+                    onClick={handleEnableClick}
+                    disabled={showLoading}
                     className="w-full btn-primary py-3.5 px-4 text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md shadow-indigo-500/20"
                   >
-                    {loading ? (
+                    {showLoading ? (
                       <>
                         <Navigation className="w-4 h-4 animate-spin" />
                         <span>Detecting Coordinates...</span>
@@ -229,10 +255,15 @@ export const LocationPermissionModal = ({
                 <div className="flex gap-2 pt-1">
                   <button
                     type="button"
-                    onClick={onEnable}
+                    onClick={handleEnableClick}
+                    disabled={showLoading}
                     className="flex-1 btn-primary py-3 text-xs font-bold flex items-center justify-center gap-1.5"
                   >
-                    <RotateCcw className="w-3.5 h-3.5" />
+                    {showLoading ? (
+                      <Navigation className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <RotateCcw className="w-3.5 h-3.5" />
+                    )}
                     <span>Try Again</span>
                   </button>
                   <button
@@ -262,10 +293,15 @@ export const LocationPermissionModal = ({
                 <div className="flex gap-2 pt-1">
                   <button
                     type="button"
-                    onClick={onEnable}
+                    onClick={handleEnableClick}
+                    disabled={showLoading}
                     className="flex-1 btn-primary py-3 text-xs font-bold flex items-center justify-center gap-1.5"
                   >
-                    <RotateCcw className="w-3.5 h-3.5" />
+                    {showLoading ? (
+                      <Navigation className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <RotateCcw className="w-3.5 h-3.5" />
+                    )}
                     <span>Check Again</span>
                   </button>
                   <button
@@ -295,10 +331,15 @@ export const LocationPermissionModal = ({
                 <div className="flex gap-2 pt-1">
                   <button
                     type="button"
-                    onClick={onEnable}
+                    onClick={handleEnableClick}
+                    disabled={showLoading}
                     className="flex-1 btn-primary py-3 text-xs font-bold flex items-center justify-center gap-1.5"
                   >
-                    <RotateCcw className="w-3.5 h-3.5" />
+                    {showLoading ? (
+                      <Navigation className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <RotateCcw className="w-3.5 h-3.5" />
+                    )}
                     <span>Retry GPS</span>
                   </button>
                   <button

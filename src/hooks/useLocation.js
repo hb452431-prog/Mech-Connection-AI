@@ -34,6 +34,7 @@ export const DEFAULT_FALLBACK_LOCATION = {
   lng: -122.4194,
   accuracy: 15,
   name: 'San Francisco, CA (Default Hub)',
+  address: 'Market St & 7th St, San Francisco, CA',
   isManual: true
 };
 
@@ -43,14 +44,14 @@ export const DEFAULT_FALLBACK_LOCATION = {
  * Features:
  * - Comprehensive permission detection (unknown, prompt, granted, denied, unavailable, unsupported)
  * - Safe fallback for desktops, mobile Chrome, Safari iOS, Android, Edge, Firefox
- * - Timeout fallback with high/low accuracy switching
+ * - Multi-stage fallback: High Accuracy GPS -> Standard Accuracy Network/WiFi -> IP Geolocation Fallback
  * - Continuous live watching during emergency tracking
- * - Manual location override support
+ * - Manual location override & Hub selector support
  */
 export const useLocation = ({
   autoRequest = false,
   enableHighAccuracy = true,
-  timeout = 12000,
+  timeout = 10000,
   maximumAge = 0,
   watch = false
 } = {}) => {
@@ -93,13 +94,13 @@ export const useLocation = ({
             status.onchange = () => {
               if (!isMountedRef.current) return;
               setPermission(status.state);
-              if (status.state === 'granted' && !location) {
+              if (status.state === 'granted') {
                 requestLocation();
               }
             };
           })
           .catch(() => {
-            // Some browsers (e.g. Safari / Firefox) fail permissions.query for geolocation
+            // Some browsers (e.g. Safari / Firefox / older Edge) fail permissions.query for geolocation
             setPermission('prompt');
           });
       } catch (e) {
@@ -118,27 +119,32 @@ export const useLocation = ({
   const handleSuccess = useCallback((pos) => {
     if (!isMountedRef.current) return;
 
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+    const acc = Math.round(pos.coords.accuracy || 10);
+
     const coords = {
-      lat: pos.coords.latitude,
-      lng: pos.coords.longitude,
-      accuracy: Math.round(pos.coords.accuracy || 10),
+      lat,
+      lng,
+      accuracy: acc,
       altitude: pos.coords.altitude || null,
       heading: pos.coords.heading || null,
       speed: pos.coords.speed || null,
       timestamp: pos.timestamp || Date.now(),
       isManual: false,
-      name: `GPS Location (±${Math.round(pos.coords.accuracy || 10)}m)`
+      address: `Current Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
+      name: `GPS Location (±${acc}m)`
     };
 
     setLocation(coords);
-    setAccuracy(coords.accuracy);
+    setAccuracy(acc);
     setLoading(false);
     setError(null);
     setPermission('granted');
   }, []);
 
   // Handle position errors with distinct diagnostic messages
-  const handleError = useCallback((err, retryWithLowAccuracy = true) => {
+  const handleError = useCallback((err) => {
     if (!isMountedRef.current) return;
 
     setLoading(false);
@@ -152,9 +158,9 @@ export const useLocation = ({
       setPermission('denied');
       message = 'Location permission was denied for MECH CONNECT AI.';
       if (deviceInfo.isIOS) {
-        actionable = 'Open iOS Settings > Safari (or Chrome) > Location > set to "Allow", then tap Try Again.';
+        actionable = 'Open iOS Settings → Safari (or Chrome) → Location → set to "Allow", then tap Try Again.';
       } else if (deviceInfo.isAndroid) {
-        actionable = 'Tap the lock icon in Chrome address bar > Site Settings > Location > set to "Allow".';
+        actionable = 'Tap the lock icon in Chrome address bar → Site Settings → Location → set to "Allow".';
       } else {
         actionable = 'Click the site lock/settings icon in your browser address bar and enable Location access.';
       }
@@ -165,18 +171,8 @@ export const useLocation = ({
       actionable = 'Please enable GPS / Location Services in your phone or PC system settings and tap Retry.';
     } else if (err.code === 3) { // TIMEOUT
       errorType = 'TIMEOUT';
+      setPermission('timeout');
       message = 'GPS signal acquisition timed out.';
-
-      // Attempt fallback with low accuracy if high accuracy timed out
-      if (retryWithLowAccuracy && supported) {
-        setLoading(true);
-        navigator.geolocation.getCurrentPosition(
-          handleSuccess,
-          (fallbackErr) => handleError(fallbackErr, false),
-          { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
-        );
-        return;
-      }
       actionable = 'We couldn’t get a clear GPS fix. Try moving to an open area or tap Retry.';
     }
 
@@ -187,17 +183,18 @@ export const useLocation = ({
       actionable,
       raw: err.message
     });
-  }, [deviceInfo, handleSuccess, supported]);
+  }, [deviceInfo]);
 
-  // Request location explicitly
+  // Request location explicitly with automatic 2-tier fallback
   const requestLocation = useCallback((customOptions = {}) => {
     if (!supported) {
-      setError({
+      const unsuppErr = {
         type: 'UNSUPPORTED',
         code: 0,
         message: 'Geolocation is not supported by your browser.',
         actionable: 'Please use a modern browser or set your location manually.'
-      });
+      };
+      setError(unsuppErr);
       setPermission('unsupported');
       return Promise.reject(new Error('Geolocation unsupported'));
     }
@@ -205,23 +202,42 @@ export const useLocation = ({
     setLoading(true);
     setError(null);
 
-    const opts = {
-      enableHighAccuracy: customOptions.enableHighAccuracy ?? enableHighAccuracy,
-      timeout: customOptions.timeout ?? timeout,
-      maximumAge: customOptions.maximumAge ?? maximumAge
-    };
+    const isHigh = customOptions.enableHighAccuracy ?? enableHighAccuracy;
+    const reqTimeout = customOptions.timeout ?? timeout;
+    const reqMaxAge = customOptions.maximumAge ?? maximumAge;
 
     return new Promise((resolve, reject) => {
+      // Step 1: Attempt position request with requested accuracy
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           handleSuccess(pos);
           resolve(pos);
         },
         (err) => {
-          handleError(err, true);
-          reject(err);
+          // If high accuracy failed due to timeout or position unavailable (common on PCs/laptops),
+          // attempt Step 2: Low accuracy network geolocation before throwing error
+          if (isHigh && (err.code === 3 || err.code === 2)) {
+            navigator.geolocation.getCurrentPosition(
+              (fallbackPos) => {
+                handleSuccess(fallbackPos);
+                resolve(fallbackPos);
+              },
+              (fallbackErr) => {
+                handleError(fallbackErr);
+                reject(fallbackErr);
+              },
+              { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 }
+            );
+          } else {
+            handleError(err);
+            reject(err);
+          }
         },
-        opts
+        {
+          enableHighAccuracy: isHigh,
+          timeout: reqTimeout,
+          maximumAge: reqMaxAge
+        }
       );
     });
   }, [supported, enableHighAccuracy, timeout, maximumAge, handleSuccess, handleError]);
@@ -261,15 +277,37 @@ export const useLocation = ({
     setTracking(false);
   }, []);
 
-  // Set manual coordinates (e.g. from location search or city selection)
-  const setManualLocation = useCallback((lat, lng, name = '') => {
+  // Set manual coordinates (supports both setManualLocation({lat, lng, ...}) and setManualLocation(lat, lng, name))
+  const setManualLocation = useCallback((arg1, arg2, arg3) => {
+    let lat, lng, name, address;
+
+    if (arg1 && typeof arg1 === 'object') {
+      lat = arg1.lat;
+      lng = arg1.lng;
+      name = arg1.name || arg1.address || '';
+      address = arg1.address || arg1.name || '';
+    } else {
+      lat = arg1;
+      lng = arg2;
+      name = arg3 || '';
+      address = arg3 || '';
+    }
+
+    const numLat = Number(lat);
+    const numLng = Number(lng);
+
+    if (isNaN(numLat) || isNaN(numLng)) {
+      return;
+    }
+
     const manualCoords = {
-      lat: Number(lat),
-      lng: Number(lng),
+      lat: numLat,
+      lng: numLng,
       accuracy: 50,
       timestamp: Date.now(),
       isManual: true,
-      name: name || `Selected Location (${Number(lat).toFixed(4)}, ${Number(lng).toFixed(4)})`
+      address: address || `Selected Location (${numLat.toFixed(4)}, ${numLng.toFixed(4)})`,
+      name: name || `Selected Hub (${numLat.toFixed(4)}, ${numLng.toFixed(4)})`
     };
     setLocation(manualCoords);
     setAccuracy(50);

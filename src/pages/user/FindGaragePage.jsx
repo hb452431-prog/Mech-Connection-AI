@@ -38,7 +38,7 @@ export const FindGaragePage = () => {
     setManualLocation,
     retry: retryLocation,
     clearError
-  } = useLocation({ autoRequest: false });
+  } = useLocation({ autoRequest: true, enableHighAccuracy: true });
 
   const [showPermissionModal, setShowPermissionModal] = useState(false);
   const [filter, setFilter] = useState('all'); // 'all' | 'closest' | '247'
@@ -60,13 +60,9 @@ export const FindGaragePage = () => {
 
   // Handle location request button
   const handleTriggerLocate = async () => {
-    if (permission === 'denied' || locationError) {
-      setShowPermissionModal(true);
-      return;
-    }
-
     try {
       await requestLocation();
+      setShowPermissionModal(false);
     } catch (err) {
       setShowPermissionModal(true);
     }

@@ -273,19 +273,20 @@ export const MechanicHomePage = () => {
           <LocationPermissionModal
             isOpen={showPermissionModal}
             onClose={() => setShowPermissionModal(false)}
-            onGrant={() => {
-              setShowPermissionModal(false);
-              requestLocation({ forceFresh: true });
+            onEnable={async () => {
+              try {
+                await requestLocation();
+                setShowPermissionModal(false);
+              } catch (e) {
+                // Stays open showing error recovery guidance
+              }
             }}
             permission={permission}
             error={locationError}
             deviceInfo={deviceInfo}
-            onSelectManualLocation={(loc) => {
-              setManualLocation(loc);
-              setShowPermissionModal(false);
-            }}
-            onUseFallback={() => {
-              useFallbackLocation();
+            loading={isLocating}
+            onManualSelect={(lat, lng, name) => {
+              setManualLocation(lat, lng, name);
               setShowPermissionModal(false);
             }}
           />
