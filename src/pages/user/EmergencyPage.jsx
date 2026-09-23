@@ -26,15 +26,18 @@ import {
   BatteryCharging,
   Flame,
   HelpCircle,
-  Play,
-  RotateCcw
+  Truck,
+  Zap,
+  AlertTriangle,
+  RotateCcw,
+  Sparkles
 } from 'lucide-react';
 
 export const EmergencyPage = () => {
   const [searchParams] = useSearchParams();
   const initialNotes = searchParams.get('notes') || '';
   const initialGarage = searchParams.get('garage') || '';
-  const initialType = searchParams.get('type') || 'Vehicle Breakdown';
+  const initialType = searchParams.get('type') || 'Flat Tyre';
   const user = authService.getUser() || {};
 
   const {
@@ -58,10 +61,18 @@ export const EmergencyPage = () => {
 
   // Screen stages: 'FORM' | 'SEARCHING' | 'ACCEPTED'
   const [stage, setStage] = useState('FORM');
-  const [selectedOption, setSelectedOption] = useState(initialType);
+
+  // Comprehensive Driver Emergency Inputs
+  const [vehicleType, setVehicleType] = useState('🚗 Car / 4-Wheeler');
+  const [vehicleBrand, setVehicleBrand] = useState(user.vehicle?.year ? `${user.vehicle.year} ${user.vehicle.model}` : user.vehicleBrand || 'Honda');
+  const [vehicleModel, setVehicleModel] = useState(user.vehicle?.model || user.vehicleModel || 'Civic');
+  const [vehiclePlate, setVehiclePlate] = useState(user.vehicle?.plate || user.vehicleNumber || 'CA-8XYZ92');
+  const [selectedProblem, setSelectedProblem] = useState(initialType);
+  const [urgencyLevel, setUrgencyLevel] = useState('⚡ Highway / Danger Zone');
   const [customNotes, setCustomNotes] = useState(
     initialNotes ? `${initialGarage ? `Request for ${initialGarage}: ` : ''}${initialNotes}` : ''
   );
+
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [acceptedMechanic, setAcceptedMechanic] = useState(null);
 
@@ -75,34 +86,46 @@ export const EmergencyPage = () => {
 
   const simulationIntervalRef = useRef(null);
 
-  const emergencyOptions = [
-    { name: 'Vehicle Breakdown', icon: Car, desc: 'Car stalled or won\'t move' },
-    { name: 'Flat Tyre', icon: Disc, desc: 'Puncture or wheel damage' },
-    { name: 'Battery Problem', icon: BatteryCharging, desc: 'Dead battery / jumpstart needed' },
-    { name: 'Engine Problem', icon: Flame, desc: 'Smoke, overheating, or noise' },
-    { name: 'Other', icon: HelpCircle, desc: 'Lockout, fuel, or general aid' }
+  const vehicleTypeOptions = [
+    { id: 'bike', label: 'Bike / 2-Wheeler', icon: '🏍️', badge: 'Fastest 3-Min ETA' },
+    { id: 'car', label: 'Car / 4-Wheeler', icon: '🚗', badge: 'Full Breakdown Rescue' },
+    { id: 'auto', label: 'Auto / 3-Wheeler', icon: '🛺', badge: 'City Rapid Assist' },
+    { id: 'heavy', label: 'Heavy Commercial', icon: '🚚', badge: 'Tow & Heavy Repair' }
   ];
 
-  // Auto-prompt permission dialog if location is unknown/prompt and not yet granted on emergency page
-  useEffect(() => {
-    if (permission === 'prompt' || permission === 'denied' || permission === 'blocked' || permission === 'disabled') {
-      // Don't auto-open repeatedly if dismissed, but make it available
-    }
-  }, [permission]);
+  const problemOptions = [
+    { name: 'Flat Tyre', icon: Disc, desc: 'Puncture, valve leak, or wheel blowout' },
+    { name: 'Battery Problem', icon: BatteryCharging, desc: 'Dead battery / jumpstart required' },
+    { name: 'Engine Problem', icon: Flame, desc: 'Overheating, white smoke, or sudden stall' },
+    { name: 'Vehicle Breakdown', icon: Car, desc: 'Transmission, belt snap, or immobile' },
+    { name: 'Towing Needed', icon: Truck, desc: 'Vehicle cannot be driven safely' },
+    { name: 'Fuel / Lockout / Other', icon: HelpCircle, desc: 'Out of gas, locked out, or general assist' }
+  ];
+
+  const urgencyOptions = [
+    { id: 'danger', label: '⚡ Highway / Danger Zone', desc: 'Critical priority dispatch', color: 'border-red-500 bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 ring-red-400' },
+    { id: 'roadside', label: '🟡 Roadside Breakdown', desc: 'Parked on street shoulder', color: 'border-amber-500 bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 ring-amber-400' },
+    { id: 'safe', label: '🟢 Safe Location / Parking', desc: 'Safe inside parking lot/home', color: 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 ring-emerald-400' }
+  ];
 
   // Confirm and send emergency request
   const handleConfirmSend = async () => {
     setShowConfirmModal(false);
     setStage('SEARCHING');
 
-    // Create request in local service
+    // Create request in local service with all rich driver inputs
     await emergencyService.createRequest({
-      problemType: selectedOption,
+      vehicleType,
+      vehicleBrand,
+      vehicleModel,
+      vehiclePlate,
+      problemType: selectedProblem,
+      urgency: urgencyLevel,
       notes: customNotes,
       userName: user.name || 'John Doe',
       userPhone: user.phone || '+1 555-0199',
       userLocation: {
-        address: userCoords.address || 'Detected GPS Location',
+        address: userCoords.address || 'Detected GPS Location, San Francisco, CA',
         lat: userCoords.lat,
         lng: userCoords.lng
       }
@@ -222,7 +245,7 @@ export const EmergencyPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-24 md:pb-12 transition-colors duration-200">
+    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#080D1A] text-slate-900 dark:text-slate-100 flex flex-col pb-24 md:pb-12 transition-colors duration-200">
       <UserNavbar />
 
       <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
@@ -230,21 +253,21 @@ export const EmergencyPage = () => {
         <div>
           <Link
             to="/user"
-            className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-2"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-2"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Back to Home
           </Link>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-950 dark:to-red-950 border border-orange-200 dark:border-orange-800 flex items-center justify-center flex-shrink-0 shadow-xs">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-950 dark:to-red-950 border-2 border-orange-300 dark:border-orange-800 flex items-center justify-center flex-shrink-0 shadow-md">
               <SirenLight size="md" variant="ambulance" animated={true} />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading">
+              <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white font-heading">
                 Request Emergency Mechanic
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                Send high-priority GPS rescue signal to certified mobile mechanics and workshops nearby.
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
+                Send a real-time GPS dispatch signal with your vehicle details to nearby mobile units.
               </p>
             </div>
           </div>
@@ -264,29 +287,101 @@ export const EmergencyPage = () => {
           onOpenHubModal={() => setShowPermissionModal(true)}
         />
 
-        {/* 1. FORM STAGE */}
+        {/* 1. FORM STAGE (Comprehensive Driver Breakdown Intake) */}
         {stage === 'FORM' && (
-          <div className="clean-card emergency-card-active p-6 sm:p-8 space-y-6 shadow-xl rounded-3xl">
-            {/* Question: What happened? */}
+          <div className="clean-card emergency-card-active p-6 sm:p-8 space-y-7 shadow-xl rounded-3xl border-2 border-orange-200 dark:border-orange-900/60 bg-white dark:bg-slate-900">
+            
+            {/* STEP 1: VEHICLE TYPE SELECTOR (Rapido Style) */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <label className="block text-xs sm:text-sm font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider font-mono">
-                  Select Vehicle Problem:
+                <label className="block text-xs sm:text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider font-mono flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-xs font-black">1</span>
+                  <span>Select Vehicle Type:</span>
                 </label>
-                <SirenBadge text="Live Network" liveStatus="Ready" size="xs" />
+                <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+                  ● GPS Active
+                </span>
               </div>
 
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                {vehicleTypeOptions.map((opt) => {
+                  const isSelected = vehicleType.includes(opt.label.split('/')[0].trim());
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => setVehicleType(`${opt.icon} ${opt.label}`)}
+                      className={`p-3.5 rounded-2xl border-2 text-left transition-all flex flex-col justify-between gap-2.5 ${
+                        isSelected
+                          ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/60 text-slate-900 dark:text-white ring-2 ring-amber-400/40 shadow-md scale-[1.02]'
+                          : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-3xl">{opt.icon}</span>
+                        {isSelected && <CheckCircle2 className="w-5 h-5 text-amber-600 dark:text-amber-400" />}
+                      </div>
+                      <div>
+                        <div className="font-black text-xs sm:text-sm leading-tight font-heading">{opt.label}</div>
+                        <div className="text-[10px] font-mono text-amber-700 dark:text-amber-400 font-bold mt-0.5">
+                          {opt.badge}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* STEP 2: VEHICLE DETAILS */}
+            <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <label className="block text-xs sm:text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider font-mono flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-amber-500 text-slate-900 flex items-center justify-center text-xs font-black">2</span>
+                <span>Vehicle Identification:</span>
+              </label>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {emergencyOptions.map((opt) => {
+                <div>
+                  <label className="block text-slate-600 dark:text-slate-400 text-xs font-bold mb-1">Make / Model</label>
+                  <input
+                    type="text"
+                    value={vehicleBrand}
+                    onChange={(e) => setVehicleBrand(e.target.value)}
+                    placeholder="e.g. Honda Civic or Royal Enfield"
+                    className="w-full clean-input px-4 py-3 text-sm font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-600 dark:text-slate-400 text-xs font-bold mb-1">License Plate Number</label>
+                  <input
+                    type="text"
+                    value={vehiclePlate}
+                    onChange={(e) => setVehiclePlate(e.target.value)}
+                    placeholder="e.g. CA-8XYZ92"
+                    className="w-full clean-input px-4 py-3 text-sm font-mono font-black uppercase"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* STEP 3: BREAKDOWN PROBLEM CATEGORY */}
+            <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <label className="block text-xs sm:text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider font-mono flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-amber-500 text-slate-900 flex items-center justify-center text-xs font-black">3</span>
+                <span>What Happened to your Vehicle?</span>
+              </label>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {problemOptions.map((opt) => {
                   const Icon = opt.icon;
-                  const isSelected = selectedOption === opt.name;
+                  const isSelected = selectedProblem === opt.name;
 
                   return (
                     <button
                       key={opt.name}
                       type="button"
-                      onClick={() => setSelectedOption(opt.name)}
-                      className={`p-4 sm:p-5 rounded-2xl border-2 text-left transition-all flex items-start gap-3.5 ${
+                      onClick={() => setSelectedProblem(opt.name)}
+                      className={`p-4 rounded-2xl border-2 text-left transition-all flex items-start gap-3.5 ${
                         isSelected
                           ? 'border-orange-500 bg-orange-50 dark:bg-orange-950/70 text-orange-950 dark:text-orange-100 ring-2 ring-orange-300 dark:ring-orange-800 shadow-md scale-[1.01]'
                           : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
@@ -308,33 +403,66 @@ export const EmergencyPage = () => {
               </div>
             </div>
 
-            {/* Optional details */}
-            <div className="space-y-1.5">
-              <label className="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300">
-                Additional Details (Optional)
+            {/* STEP 4: URGENCY & SAFETY LEVEL */}
+            <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <label className="block text-xs sm:text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider font-mono flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-amber-500 text-slate-900 flex items-center justify-center text-xs font-black">4</span>
+                <span>Breakdown Urgency & Safety Status:</span>
+              </label>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                {urgencyOptions.map((urg) => {
+                  const isSelected = urgencyLevel === urg.label;
+                  return (
+                    <button
+                      key={urg.id}
+                      type="button"
+                      onClick={() => setUrgencyLevel(urg.label)}
+                      className={`p-3.5 rounded-2xl border-2 text-left transition-all ${
+                        isSelected
+                          ? `${urg.color} ring-2 shadow-sm font-bold scale-[1.01]`
+                          : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300'
+                      }`}
+                    >
+                      <div className="font-black text-xs sm:text-sm font-heading">{urg.label}</div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium">{urg.desc}</div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* STEP 5: NOTES & SPECIFIC LANDMARKS */}
+            <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <label className="block text-xs sm:text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider font-mono flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-amber-500 text-slate-900 flex items-center justify-center text-xs font-black">5</span>
+                <span>Additional Breakdown Notes / Landmarks (Optional):</span>
               </label>
               <input
                 type="text"
                 value={customNotes}
                 onChange={(e) => setCustomNotes(e.target.value)}
-                placeholder="e.g. Near the main signal, hazard lights are turned on..."
-                className="w-full clean-input px-4 py-3 text-sm font-medium"
+                placeholder="e.g. Front tyre flat, waiting near bridge toll gate with hazard lights on..."
+                className="w-full clean-input px-4 py-3.5 text-sm font-medium"
               />
             </div>
 
-            {/* Current Location Display with Mini Map preview */}
+            {/* GPS Location & Telemetry Display */}
             <div className="p-4 sm:p-5 bg-slate-50 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase font-mono">
-                  GPS Location Locked
+                <span className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase font-mono">
+                  Current GPS Locked Coordinates
                 </span>
                 <span className="text-xs font-mono text-emerald-700 dark:text-emerald-300 font-bold bg-emerald-100 dark:bg-emerald-950/80 px-2.5 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
-                  ● Telemetry Ready
+                  ● Telemetry Verified
                 </span>
               </div>
               <p className="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-orange-600 dark:text-orange-400 flex-shrink-0" />
                 {userCoords.address || 'Market St & 7th St, Downtown, San Francisco, CA'}
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                Driver: <strong>{user.name || 'John Doe'}</strong> • Phone: <strong>{user.phone || '+1 555-0199'}</strong>
               </p>
             </div>
 
@@ -342,7 +470,7 @@ export const EmergencyPage = () => {
             <button
               type="button"
               onClick={() => setShowConfirmModal(true)}
-              className="w-full btn-emergency py-5 text-sm sm:text-base font-black uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl group"
+              className="w-full btn-emergency py-5 text-base sm:text-lg font-black uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl group"
             >
               <SirenLight size="sm" variant="sticker" animated={true} />
               <span className="drop-shadow-xs font-black">DISPATCH EMERGENCY MECHANIC</span>
@@ -352,53 +480,55 @@ export const EmergencyPage = () => {
 
         {/* 2. SEARCHING STAGE */}
         {stage === 'SEARCHING' && (
-          <div className="clean-card emergency-card-active p-10 text-center space-y-6 shadow-lg rounded-2xl animate-in fade-in duration-200">
+          <div className="clean-card emergency-card-active p-10 text-center space-y-6 shadow-xl rounded-3xl animate-in fade-in duration-200 border-2 border-orange-300 dark:border-orange-800">
             <div className="relative inline-flex items-center justify-center p-4">
               <SirenLight size="2xl" variant="ambulance" hasWaves={true} animated={true} />
             </div>
 
             <div className="space-y-2">
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-heading">
-                Broadcasting Emergency Siren & GPS...
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading">
+                Broadcasting Emergency GPS Siren...
               </h2>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
-                Dispatching your vehicle location and emergency request to all active mobile mechanics and partner repair garages in your radius.
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto leading-relaxed">
+                Dispatching your vehicle telemetry (<strong>{vehicleType}</strong> • <strong>{selectedProblem}</strong>) to all certified mechanics and mobile units in your radius.
               </p>
             </div>
 
-            <div className="p-3.5 bg-white/90 dark:bg-slate-900/90 rounded-xl inline-flex items-center gap-2 text-xs font-mono text-slate-700 dark:text-slate-300 border border-orange-200 dark:border-orange-800 shadow-xs">
-              <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping" />
-              <span>Incident: <strong>{selectedOption}</strong></span>
+            <div className="p-4 bg-white/90 dark:bg-slate-900/90 rounded-2xl inline-flex flex-wrap items-center justify-center gap-3 text-xs font-mono text-slate-800 dark:text-slate-200 border border-orange-200 dark:border-orange-800 shadow-sm">
+              <span className="w-3 h-3 rounded-full bg-red-600 animate-ping" />
+              <span>Vehicle: <strong>{vehicleBrand} ({vehiclePlate})</strong></span>
               <span className="text-slate-400">|</span>
-              <span className="text-orange-600 dark:text-orange-400 font-bold">Scanning 5 km radius</span>
+              <span className="text-orange-600 dark:text-orange-400 font-bold">{urgencyLevel}</span>
+              <span className="text-slate-400">|</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-bold">Scanning 5 km radius</span>
             </div>
           </div>
         )}
 
         {/* 3. ACCEPTED STAGE (Live Ride-tracking screen with interactive Map & Movement) */}
         {stage === 'ACCEPTED' && acceptedMechanic && (
-          <div className="clean-card p-6 sm:p-7 space-y-6 border-l-4 border-l-emerald-600 animate-in fade-in duration-200 shadow-md rounded-2xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
+          <div className="clean-card p-6 sm:p-8 space-y-6 border-l-4 border-l-emerald-600 animate-in fade-in duration-200 shadow-xl rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800">
             {/* Acceptance Banner */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-              <div className="space-y-1">
-                <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 inline-flex items-center gap-1.5 shadow-2xs border border-emerald-200 dark:border-emerald-800">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-5">
+              <div className="space-y-1.5">
+                <span className="px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 inline-flex items-center gap-2 shadow-2xs border border-emerald-200 dark:border-emerald-800">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   Mechanic Accepted Your Request
                 </span>
-                <h2 className="text-xl font-black text-slate-900 dark:text-white font-heading">
+                <h2 className="text-2xl font-black text-slate-900 dark:text-white font-heading">
                   {acceptedMechanic.garageName}
                 </h2>
-                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                  Assigned Master Tech: <strong className="text-slate-700 dark:text-slate-200">{acceptedMechanic.mechanicName}</strong> ({acceptedMechanic.vehicle})
+                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
+                  Assigned Master Tech: <strong className="text-slate-800 dark:text-slate-200">{acceptedMechanic.mechanicName}</strong> ({acceptedMechanic.vehicle})
                 </p>
               </div>
 
               {/* Dynamic Live Arrival Badge */}
-              <div className="text-left sm:text-right bg-gradient-to-br from-indigo-50 to-orange-50 dark:from-slate-800 dark:to-slate-800/80 px-4 py-2.5 rounded-2xl border border-indigo-100 dark:border-slate-700 self-start sm:self-auto shadow-xs">
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono uppercase block font-bold">Estimated Arrival</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl font-black font-mono text-indigo-700 dark:text-indigo-400">{liveETA}</span>
-                  <span className="text-xs font-mono font-bold text-orange-600 dark:text-orange-400 bg-white dark:bg-slate-900 px-2 py-0.5 rounded-md border border-orange-200 dark:border-orange-800">
+              <div className="text-left sm:text-right bg-gradient-to-br from-indigo-50 to-orange-50 dark:from-slate-800 dark:to-slate-800/80 px-5 py-3 rounded-2xl border border-indigo-100 dark:border-slate-700 self-start sm:self-auto shadow-sm">
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-mono uppercase block font-bold">Estimated Arrival</span>
+                <div className="flex items-center gap-2.5 mt-0.5">
+                  <span className="text-3xl font-black font-mono text-indigo-700 dark:text-indigo-400">{liveETA}</span>
+                  <span className="text-xs font-mono font-bold text-orange-600 dark:text-orange-400 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg border border-orange-200 dark:border-orange-800">
                     {liveDistance}
                   </span>
                 </div>
@@ -410,11 +540,11 @@ export const EmergencyPage = () => {
               <div className="flex items-center justify-between text-xs font-bold text-slate-600 dark:text-slate-400 px-1">
                 <span className="flex items-center gap-1.5 text-indigo-700 dark:text-indigo-400">
                   <span className="w-2.5 h-2.5 rounded-full bg-indigo-600" />
-                  📍 You (Stranded Location)
+                  📍 You ({vehicleBrand})
                 </span>
                 <span className="flex items-center gap-1.5 text-orange-700 dark:text-orange-400">
                   <span className="w-2.5 h-2.5 rounded-full bg-orange-600 animate-ping" />
-                  🚚 Mechanic (Live Moving Unit)
+                  🚚 Mechanic ({acceptedMechanic.vehicle})
                 </span>
               </div>
 
@@ -433,18 +563,18 @@ export const EmergencyPage = () => {
               />
 
               {/* Simulation Controls Toolbar */}
-              <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
-                <span className="text-slate-600 dark:text-slate-300 font-medium flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-slate-50 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700 text-xs">
+                <span className="text-slate-600 dark:text-slate-300 font-medium flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                   <span>Demo simulation: Mechanic is driving towards your vehicle coordinates.</span>
                 </span>
 
                 <button
                   type="button"
                   onClick={handleRestartSimulation}
-                  className="px-3 py-1.5 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-lg font-bold border border-slate-300 dark:border-slate-700 shadow-2xs flex items-center gap-1 transition-all"
+                  className="px-3.5 py-2 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl font-bold border border-slate-300 dark:border-slate-700 shadow-xs flex items-center gap-1.5 transition-all"
                 >
-                  <RotateCcw className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                  <RotateCcw className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                   <span>Restart Tracking Demo</span>
                 </button>
               </div>
@@ -484,9 +614,12 @@ export const EmergencyPage = () => {
                 </h3>
               </div>
 
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                Send your current GPS coordinates and high-priority emergency rescue signal for <strong>"{selectedOption}"</strong> to certified mobile mechanics nearby?
-              </p>
+              <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 space-y-2 bg-slate-50 dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <p><strong>Vehicle:</strong> {vehicleType} • {vehicleBrand} ({vehiclePlate})</p>
+                <p><strong>Problem:</strong> {selectedProblem}</p>
+                <p><strong>Urgency:</strong> {urgencyLevel}</p>
+                {customNotes && <p><strong>Notes:</strong> {customNotes}</p>}
+              </div>
 
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <button

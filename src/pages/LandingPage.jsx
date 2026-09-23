@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { BrandLogo } from '../components/common/BrandLogo';
 import { AboutWebsiteVideo } from '../components/landing/AboutWebsiteVideo';
 import { ThemeToggle } from '../components/common/ThemeToggle';
@@ -10,32 +10,14 @@ import {
   Zap, 
   AlertCircle, 
   Sparkles, 
-  Navigation, 
-  Radio, 
   ArrowRight, 
   Clock, 
   MapPin, 
   CheckCircle2,
-  Bike,
-  Truck
+  Cpu
 } from 'lucide-react';
-import { SirenLight } from '../components/common/SirenLight';
 
 export const LandingPage = () => {
-  const navigate = useNavigate();
-  const [selectedVehicleType, setSelectedVehicleType] = useState('car');
-
-  const vehicleOptions = [
-    { id: 'bike', label: 'Bike / 2-Wheeler', icon: '🏍️', badge: 'Fastest 3-Min ETA' },
-    { id: 'car', label: 'Car / 4-Wheeler', icon: '🚗', badge: 'Full Breakdown Rescue' },
-    { id: 'auto', label: 'Auto / 3-Wheeler', icon: '🛺', badge: 'City Rapid Assist' },
-    { id: 'heavy', label: 'Heavy / Commercial', icon: '🚚', badge: 'Tow & Heavy Repair' }
-  ];
-
-  const handleQuickRescue = (typeId) => {
-    navigate(`/user/emergency?type=${encodeURIComponent(typeId === 'bike' ? 'Bike Breakdown' : 'Vehicle Breakdown')}`);
-  };
-
   return (
     <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#080D1A] text-slate-900 dark:text-slate-100 flex flex-col justify-between items-center px-4 py-6 sm:py-10 transition-colors duration-200 relative overflow-hidden">
       {/* Top Floating Sun / Moon Theme Toggle */}
@@ -44,7 +26,7 @@ export const LandingPage = () => {
       </div>
 
       {/* Cybernetic Ambient Glow Background */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[500px] bg-gradient-to-b from-indigo-500/15 via-amber-500/10 to-transparent blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[500px] bg-gradient-to-b from-indigo-500/15 via-cyan-500/10 to-transparent blur-3xl pointer-events-none -z-10" />
 
       {/* Top Brand Header */}
       <header className="w-full max-w-4xl text-center space-y-4 pt-2">
@@ -52,7 +34,7 @@ export const LandingPage = () => {
           <BrandLogo size="lg" clickable={false} />
         </div>
 
-        {/* Live Mobility Status Pill Ticker (Rapido style) */}
+        {/* Live Mobility Status Pill Ticker */}
         <div className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-4 px-4 py-2 rounded-full bg-white/90 dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-800 shadow-sm text-xs font-mono">
           <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
@@ -72,91 +54,22 @@ export const LandingPage = () => {
         {/* Hero Headline */}
         <div className="space-y-2">
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-slate-900 dark:text-white font-heading tracking-tight leading-tight">
-            Fastest Vehicle Help On-Demand.
+            Smart Help When You Need It.
           </h1>
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-medium max-w-xl mx-auto">
-            Instant AI diagnosis, real-time certified mechanics on live GPS map, and rapid roadside dispatch.
+            Instant AI diagnosis, real-time certified mechanics on live GPS map, and priority roadside dispatch.
           </p>
         </div>
       </header>
 
-      {/* Rapido-Style Quick Booking / Vehicle Type Bar */}
-      <section className="w-full max-w-3xl my-6 bg-white dark:bg-slate-900/90 border-2 border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg space-y-4">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-black uppercase tracking-wider font-mono text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-            <Zap className="w-4 h-4 text-amber-500" />
-            <span>Select Vehicle Type for Instant Dispatch:</span>
-          </span>
-          <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
-            ● GPS Active
-          </span>
-        </div>
-
-        {/* Vehicle Selection Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          {vehicleOptions.map((opt) => {
-            const isSelected = selectedVehicleType === opt.id;
-            return (
-              <button
-                key={opt.id}
-                type="button"
-                onClick={() => setSelectedVehicleType(opt.id)}
-                className={`p-3 rounded-xl border-2 text-left transition-all flex flex-col justify-between gap-2 ${
-                  isSelected
-                    ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/40 text-slate-900 dark:text-white ring-2 ring-amber-400/40 shadow-sm'
-                    : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl">{opt.icon}</span>
-                  {isSelected && <CheckCircle2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />}
-                </div>
-                <div>
-                  <div className="font-extrabold text-xs sm:text-sm leading-tight">{opt.label}</div>
-                  <div className="text-[10px] font-mono text-amber-700 dark:text-amber-400 font-bold mt-0.5">
-                    {opt.badge}
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Big Quick Action Buttons */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-          <button
-            type="button"
-            onClick={() => handleQuickRescue(selectedVehicleType)}
-            className="btn-emergency py-4 text-sm sm:text-base font-black flex items-center justify-center gap-2 shadow-lg sm:col-span-1"
-          >
-            <SirenLight size="xs" variant="sticker" animated={true} />
-            <span>DISPATCH SOS NOW</span>
-          </button>
-
-          <Link
-            to="/user/garages"
-            className="btn-primary py-4 text-sm sm:text-base font-black flex items-center justify-center gap-2 shadow-md sm:col-span-1"
-          >
-            <MapPin className="w-4 h-4" />
-            <span>FIND WORKSHOPS</span>
-          </Link>
-
-          <Link
-            to="/user/ai-help"
-            className="btn-rapido py-4 text-sm sm:text-base font-black flex items-center justify-center gap-2 shadow-md sm:col-span-1"
-          >
-            <Sparkles className="w-4 h-4" />
-            <span>AI DIAGNOSTIC SCAN</span>
-          </Link>
-        </div>
-      </section>
-
       {/* Main Dual Portal Selection Area (Oversized & High-Impact) */}
-      <section className="w-full max-w-4xl my-4 space-y-4">
-        <div className="text-center">
-          <span className="text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 font-mono">
-            Or Choose Your Dedicated Portal
+      <section className="w-full max-w-4xl my-6 space-y-4">
+        <div className="flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono px-1">
+          <span className="flex items-center gap-1.5">
+            <Cpu className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <span>Select Portal</span>
           </span>
+          <span className="text-indigo-600 dark:text-indigo-400 font-bold">Choose Role</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

@@ -8,8 +8,14 @@ const INITIAL_ACTIVE_REQUESTS = [
     id: 'REQ-101',
     userName: 'Sarah Jenkins',
     userPhone: '+1 555-9821',
+    vehicleType: '🚗 Car / 4-Wheeler',
+    vehicleBrand: 'Toyota',
+    vehicleModel: 'Camry',
+    vehiclePlate: 'CA-9ABC12',
     problem: 'Flat Tyre on roadside',
     problemType: 'Flat Tyre',
+    urgency: '⚡ Highway / Danger Zone',
+    notes: 'Front right tyre blown on bridge approach, hazard lights on',
     distance: '1.4 km',
     location: '450 10th St, Downtown',
     time: '5 mins ago',
@@ -21,8 +27,14 @@ const INITIAL_ACTIVE_REQUESTS = [
     id: 'REQ-102',
     userName: 'Michael Chang',
     userPhone: '+1 555-3344',
+    vehicleType: '🏍️ Bike / 2-Wheeler',
+    vehicleBrand: 'Yamaha',
+    vehicleModel: 'MT-07',
+    vehiclePlate: 'CA-2MOTO5',
     problem: 'Battery dead / won\'t crank',
     problemType: 'Battery Problem',
+    urgency: '🟡 Roadside Breakdown',
+    notes: 'Ignition clicking, starter motor not turning over',
     distance: '2.1 km',
     location: '780 Mission Street',
     time: '12 mins ago',
@@ -36,6 +48,7 @@ const INITIAL_COMPLETED_REQUESTS = [
   {
     id: 'REQ-098',
     userName: 'Elena Gomez',
+    vehicleType: '🚗 Car / 4-Wheeler',
     problem: 'Jumpstart & 12V Battery Check',
     date: 'Yesterday, 4:30 PM',
     garage: 'Apex Auto Care & Diagnostics',
@@ -44,6 +57,7 @@ const INITIAL_COMPLETED_REQUESTS = [
   {
     id: 'REQ-095',
     userName: 'Robert Taylor',
+    vehicleType: '🚚 Heavy Commercial',
     problem: 'Emergency Flat Tyre Replacement',
     date: '20 Sep 2026',
     garage: 'Apex Auto Care & Diagnostics',
@@ -80,17 +94,34 @@ export const emergencyService = {
     return completed;
   },
 
-  // User creates an emergency request
-  createRequest: async ({ problemType, notes, userLocation, userName, userPhone }) => {
+  // User creates an emergency request with rich driver inputs
+  createRequest: async ({ 
+    vehicleType = '🚗 Car / 4-Wheeler',
+    vehicleBrand = 'Honda',
+    vehicleModel = 'Civic',
+    vehiclePlate = 'CA-8XYZ92',
+    problemType = 'Vehicle Breakdown', 
+    urgency = '🟡 Roadside Breakdown',
+    notes = '', 
+    userLocation, 
+    userName = 'John Doe', 
+    userPhone = '+1 555-0199' 
+  }) => {
     await new Promise((r) => setTimeout(r, 600));
     const newReq = {
       id: 'REQ-' + Math.floor(100 + Math.random() * 900),
       userName: userName || 'John Doe',
       userPhone: userPhone || '+1 555-0199',
-      problem: problemType + (notes ? ` (${notes})` : ''),
+      vehicleType: vehicleType || '🚗 Car / 4-Wheeler',
+      vehicleBrand: vehicleBrand || 'Honda',
+      vehicleModel: vehicleModel || 'Civic',
+      vehiclePlate: vehiclePlate || 'CA-8XYZ92',
       problemType: problemType || 'Vehicle Breakdown',
+      problem: problemType + (notes ? ` - ${notes}` : ''),
+      urgency: urgency || '🟡 Roadside Breakdown',
+      notes: notes || '',
       distance: '1.2 km',
-      location: userLocation?.address || 'Market St & 7th St, Downtown',
+      location: userLocation?.address || 'Market St & 7th St, Downtown, San Francisco, CA',
       time: 'Just now',
       status: 'PENDING',
       lat: userLocation?.lat || 37.7749,
