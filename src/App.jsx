@@ -48,6 +48,10 @@ export const App = () => {
         <Route path="/user/emergency" element={<EmergencyPage />} />
         <Route path="/user/profile" element={<UserProfilePage />} />
 
+        {/* Global Emergency SOS Route Aliases */}
+        <Route path="/emergency" element={<EmergencyPage />} />
+        <Route path="/sos" element={<EmergencyPage />} />
+
         {/* Catch-all fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
@@ -56,3 +60,4 @@ export const App = () => {
 };
 
 export default App;
+

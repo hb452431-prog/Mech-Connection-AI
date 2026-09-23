@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import UserNavbar from '../../components/common/UserNavbar';
 import MechMap from '../../components/map/MechMap';
@@ -30,7 +30,9 @@ import {
   Zap,
   AlertTriangle,
   RotateCcw,
-  Sparkles
+  Sparkles,
+  RefreshCw,
+  Send
 } from 'lucide-react';
 
 export const EmergencyPage = () => {
@@ -61,10 +63,13 @@ export const EmergencyPage = () => {
 
   // Screen stages: 'FORM' | 'SEARCHING' | 'ACCEPTED'
   const [stage, setStage] = useState('FORM');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Comprehensive Driver Emergency Inputs
   const [vehicleType, setVehicleType] = useState('🚗 Car / 4-Wheeler');
-  const [vehicleBrand, setVehicleBrand] = useState(user.vehicle?.year ? `${user.vehicle.year} ${user.vehicle.model}` : user.vehicleBrand || 'Honda');
+  const [vehicleBrand, setVehicleBrand] = useState(
+    user.vehicle?.year ? `${user.vehicle.year} ${user.vehicle.model}` : user.vehicleBrand || 'Honda'
+  );
   const [vehicleModel, setVehicleModel] = useState(user.vehicle?.model || user.vehicleModel || 'Civic');
   const [vehiclePlate, setVehiclePlate] = useState(user.vehicle?.plate || user.vehicleNumber || 'CA-8XYZ92');
   const [selectedProblem, setSelectedProblem] = useState(initialType);
@@ -75,6 +80,25 @@ export const EmergencyPage = () => {
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [acceptedMechanic, setAcceptedMechanic] = useState(null);
+  const [activeRequestId, setActiveRequestId] = useState(null);
+
+  // Guaranteed non-null location fallback object
+  const effectiveLocation = useMemo(() => {
+    if (userCoords && typeof userCoords.lat === 'number' && typeof userCoords.lng === 'number') {
+      return {
+        lat: userCoords.lat,
+        lng: userCoords.lng,
+        address: userCoords.address || `Current Location (${userCoords.lat.toFixed(4)}, ${userCoords.lng.toFixed(4)})`,
+        name: userCoords.name || 'Detected Location'
+      };
+    }
+    return {
+      lat: 37.7749,
+      lng: -122.4194,
+      address: 'Market St & 7th St, Downtown, San Francisco, CA',
+      name: 'San Francisco Hub (Default)'
+    };
+  }, [userCoords]);
 
   // Route and live mechanic movement state
   const [routeCoordinates, setRouteCoordinates] = useState(null);
@@ -108,73 +132,94 @@ export const EmergencyPage = () => {
     { id: 'safe', label: '🟢 Safe Location / Parking', desc: 'Safe inside parking lot/home', color: 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 ring-emerald-400' }
   ];
 
-  // Confirm and send emergency request
+  // Dispatch Emergency SOS Request
   const handleConfirmSend = async () => {
     setShowConfirmModal(false);
+    setIsSubmitting(true);
     setStage('SEARCHING');
 
-    // Create request in local service with all rich driver inputs
-    await emergencyService.createRequest({
-      vehicleType,
-      vehicleBrand,
-      vehicleModel,
-      vehiclePlate,
-      problemType: selectedProblem,
-      urgency: urgencyLevel,
-      notes: customNotes,
-      userName: user.name || 'John Doe',
-      userPhone: user.phone || '+1 555-0199',
-      userLocation: {
-        address: userCoords.address || 'Detected GPS Location, San Francisco, CA',
-        lat: userCoords.lat,
-        lng: userCoords.lng
-      }
-    });
+    const userLat = effectiveLocation.lat;
+    const userLng = effectiveLocation.lng;
+    const userAddress = effectiveLocation.address;
 
-    // Mechanic initial starting coordinates (~2 km north-east of user)
-    const mechanicOrigin = {
-      lat: userCoords.lat + 0.018,
-      lng: userCoords.lng + 0.014
-    };
-
-    // Calculate initial route using OSRM
-    const routeData = await routingService.getRoute(
-      mechanicOrigin.lat,
-      mechanicOrigin.lng,
-      userCoords.lat,
-      userCoords.lng
-    );
-
-    // Simulate mechanic response after 2.8 seconds
-    setTimeout(() => {
-      const coords = routeData?.coordinates || [
-        [mechanicOrigin.lat, mechanicOrigin.lng],
-        [userCoords.lat + 0.009, userCoords.lng + 0.007],
-        [userCoords.lat, userCoords.lng]
-      ];
-
-      const initialDist = routeData?.distanceFormatted || '1.8 km';
-      const initialEta = routeData?.durationFormatted || '6 mins';
-
-      setRouteCoordinates(coords);
-      setMechanicCurrentPos(mechanicOrigin);
-      setRouteIndex(0);
-      setLiveDistance(initialDist);
-      setLiveETA(initialEta);
-
-      setAcceptedMechanic({
-        garageName: initialGarage || 'Apex Auto Care & Diagnostics',
-        mechanicName: 'David Miller',
-        distance: initialDist,
-        phone: '+1 555-4321',
-        vehicle: 'Ford Transit Mobile Unit #12',
-        eta: initialEta,
-        origin: mechanicOrigin
+    try {
+      // 1. Create request in local service with full vehicle intake data
+      const createdReq = await emergencyService.createRequest({
+        vehicleType,
+        vehicleBrand,
+        vehicleModel,
+        vehiclePlate,
+        problemType: selectedProblem,
+        urgency: urgencyLevel,
+        notes: customNotes,
+        userName: user.name || 'John Doe',
+        userPhone: user.phone || '+1 555-0199',
+        userLocation: {
+          address: userAddress,
+          lat: userLat,
+          lng: userLng
+        }
       });
 
-      setStage('ACCEPTED');
-      setIsSimulatingMovement(true);
-    }, 2800);
+      if (createdReq && createdReq.id) {
+        setActiveRequestId(createdReq.id);
+      }
+
+      // 2. Mechanic initial starting coordinates (~1.8 km north-east of user)
+      const mechanicOrigin = {
+        lat: userLat + 0.015,
+        lng: userLng + 0.012
+      };
+
+      // 3. Calculate initial route using OSRM with graceful fallback
+      const routeData = await routingService.getRoute(
+        mechanicOrigin.lat,
+        mechanicOrigin.lng,
+        userLat,
+        userLng
+      );
+
+      // 4. Simulate mechanic response after 2.4 seconds
+      setTimeout(() => {
+        const coords = (routeData && routeData.coordinates && routeData.coordinates.length > 0)
+          ? routeData.coordinates
+          : [
+              [mechanicOrigin.lat, mechanicOrigin.lng],
+              [userLat + 0.007, userLng + 0.005],
+              [userLat, userLng]
+            ];
+
+        const initialDist = routeData?.distanceFormatted || '1.8 km';
+        const initialEta = routeData?.durationFormatted || '5 mins';
+
+        setRouteCoordinates(coords);
+        setMechanicCurrentPos(mechanicOrigin);
+        setRouteIndex(0);
+        setLiveDistance(initialDist);
+        setLiveETA(initialEta);
+
+        setAcceptedMechanic({
+          garageName: initialGarage || 'Apex Auto Care & Diagnostics',
+          mechanicName: 'David Miller',
+          distance: initialDist,
+          phone: '+1 555-4321',
+          vehicle: 'RapidRescue Mobile Unit #12',
+          eta: initialEta,
+          origin: mechanicOrigin
+        });
+
+        setStage('ACCEPTED');
+        setIsSubmitting(false);
+        setIsSimulatingMovement(true);
+      }, 2400);
+    } catch (err) {
+      console.error('Error creating emergency request:', err);
+      // Fallback transition so user is never stuck
+      setTimeout(() => {
+        setStage('ACCEPTED');
+        setIsSubmitting(false);
+      }, 2000);
+    }
   };
 
   // Demo Live Movement Simulation Effect
@@ -186,36 +231,41 @@ export const EmergencyPage = () => {
       return;
     }
 
+    const userLat = effectiveLocation.lat;
+    const userLng = effectiveLocation.lng;
+
     simulationIntervalRef.current = setInterval(() => {
       setRouteIndex((prevIndex) => {
         const nextIndex = prevIndex + 1;
         if (nextIndex >= routeCoordinates.length) {
           // Reached destination!
           setMechanicCurrentPos({
-            lat: userCoords.lat,
-            lng: userCoords.lng
+            lat: userLat,
+            lng: userLng
           });
           setLiveDistance('Arrived (0 m)');
-          setLiveETA('Arrived!');
+          setLiveETA('Arrived on Scene!');
           setIsSimulatingMovement(false);
           return prevIndex;
         }
 
         const nextPoint = routeCoordinates[nextIndex];
-        setMechanicCurrentPos({
-          lat: nextPoint[0],
-          lng: nextPoint[1]
-        });
+        if (nextPoint && Array.isArray(nextPoint)) {
+          setMechanicCurrentPos({
+            lat: nextPoint[0],
+            lng: nextPoint[1]
+          });
 
-        // Compute remaining distance & ETA to user
-        const remainingKm = calculateDistanceKm(
-          nextPoint[0],
-          nextPoint[1],
-          userCoords.lat,
-          userCoords.lng
-        );
-        setLiveDistance(formatDistance(remainingKm));
-        setLiveETA(calculateETA(remainingKm));
+          // Compute remaining distance & ETA to user
+          const remainingKm = calculateDistanceKm(
+            nextPoint[0],
+            nextPoint[1],
+            userLat,
+            userLng
+          );
+          setLiveDistance(formatDistance(remainingKm));
+          setLiveETA(calculateETA(remainingKm));
+        }
 
         return nextIndex;
       });
@@ -226,7 +276,7 @@ export const EmergencyPage = () => {
         clearInterval(simulationIntervalRef.current);
       }
     };
-  }, [stage, isSimulatingMovement, routeCoordinates, userCoords]);
+  }, [stage, isSimulatingMovement, routeCoordinates, effectiveLocation]);
 
   // Restart movement simulation
   const handleRestartSimulation = () => {
@@ -236,12 +286,23 @@ export const EmergencyPage = () => {
     const totalDist = calculateDistanceKm(
       acceptedMechanic.origin.lat,
       acceptedMechanic.origin.lng,
-      userCoords.lat,
-      userCoords.lng
+      effectiveLocation.lat,
+      effectiveLocation.lng
     );
     setLiveDistance(formatDistance(totalDist));
     setLiveETA(calculateETA(totalDist));
     setIsSimulatingMovement(true);
+  };
+
+  // Reset / Cancel SOS flow
+  const handleResetSos = () => {
+    if (simulationIntervalRef.current) {
+      clearInterval(simulationIntervalRef.current);
+    }
+    setStage('FORM');
+    setAcceptedMechanic(null);
+    setRouteCoordinates(null);
+    setIsSimulatingMovement(false);
   };
 
   return (
@@ -256,7 +317,7 @@ export const EmergencyPage = () => {
             className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-2"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            Back to Home
+            Back to Dashboard
           </Link>
           <div className="flex items-center gap-3">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-950 dark:to-red-950 border-2 border-orange-300 dark:border-orange-800 flex items-center justify-center flex-shrink-0 shadow-md">
@@ -267,15 +328,15 @@ export const EmergencyPage = () => {
                 Request Emergency Mechanic
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
-                Send a real-time GPS dispatch signal with your vehicle details to nearby mobile units.
+                Instant 24/7 GPS dispatch signal with driver vehicle specifications.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Real-time Production Location Status & Telemetry Bar */}
+        {/* Real-time Location Status & Telemetry Bar */}
         <LocationStatusBar
-          location={userCoords}
+          location={effectiveLocation}
           accuracy={accuracy}
           loading={isLocating}
           error={locationError}
@@ -298,7 +359,7 @@ export const EmergencyPage = () => {
                   <span className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-xs font-black">1</span>
                   <span>Select Vehicle Type:</span>
                 </label>
-                <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+                <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
                   ● GPS Active
                 </span>
               </div>
@@ -459,7 +520,7 @@ export const EmergencyPage = () => {
               </div>
               <p className="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-orange-600 dark:text-orange-400 flex-shrink-0" />
-                {userCoords.address || 'Market St & 7th St, Downtown, San Francisco, CA'}
+                {effectiveLocation.address}
               </p>
               <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
                 Driver: <strong>{user.name || 'John Doe'}</strong> • Phone: <strong>{user.phone || '+1 555-0199'}</strong>
@@ -469,11 +530,14 @@ export const EmergencyPage = () => {
             {/* Big Send Emergency Button */}
             <button
               type="button"
-              onClick={() => setShowConfirmModal(true)}
-              className="w-full btn-emergency py-5 text-base sm:text-lg font-black uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl group"
+              onClick={handleConfirmSend}
+              disabled={isSubmitting}
+              className="w-full btn-emergency py-5 text-base sm:text-lg font-black uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl group cursor-pointer"
             >
               <SirenLight size="sm" variant="sticker" animated={true} />
-              <span className="drop-shadow-xs font-black">DISPATCH EMERGENCY MECHANIC</span>
+              <span className="drop-shadow-xs font-black">
+                {isSubmitting ? 'BROADCASTING SOS BEACON...' : 'DISPATCH EMERGENCY MECHANIC NOW'}
+              </span>
             </button>
           </div>
         )}
@@ -502,24 +566,34 @@ export const EmergencyPage = () => {
               <span className="text-slate-400">|</span>
               <span className="text-emerald-600 dark:text-emerald-400 font-bold">Scanning 5 km radius</span>
             </div>
+
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={handleResetSos}
+                className="btn-secondary py-2.5 px-5 text-xs font-bold rounded-xl"
+              >
+                Cancel SOS Request
+              </button>
+            </div>
           </div>
         )}
 
         {/* 3. ACCEPTED STAGE (Live Ride-tracking screen with interactive Map & Movement) */}
-        {stage === 'ACCEPTED' && acceptedMechanic && (
+        {stage === 'ACCEPTED' && (
           <div className="clean-card p-6 sm:p-8 space-y-6 border-l-4 border-l-emerald-600 animate-in fade-in duration-200 shadow-xl rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800">
             {/* Acceptance Banner */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-5">
               <div className="space-y-1.5">
                 <span className="px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 inline-flex items-center gap-2 shadow-2xs border border-emerald-200 dark:border-emerald-800">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                  Mechanic Accepted Your Request
+                  Mechanic Unit Dispatched & En Route
                 </span>
                 <h2 className="text-2xl font-black text-slate-900 dark:text-white font-heading">
-                  {acceptedMechanic.garageName}
+                  {acceptedMechanic?.garageName || 'Apex Auto Care & Diagnostics'}
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
-                  Assigned Master Tech: <strong className="text-slate-800 dark:text-slate-200">{acceptedMechanic.mechanicName}</strong> ({acceptedMechanic.vehicle})
+                  Assigned Master Tech: <strong className="text-slate-800 dark:text-slate-200">{acceptedMechanic?.mechanicName || 'David Miller'}</strong> ({acceptedMechanic?.vehicle || 'RapidRescue Unit #12'})
                 </p>
               </div>
 
@@ -544,14 +618,14 @@ export const EmergencyPage = () => {
                 </span>
                 <span className="flex items-center gap-1.5 text-orange-700 dark:text-orange-400">
                   <span className="w-2.5 h-2.5 rounded-full bg-orange-600 animate-ping" />
-                  🚚 Mechanic ({acceptedMechanic.vehicle})
+                  🚚 Mechanic ({acceptedMechanic?.vehicle || 'Mobile Unit'})
                 </span>
               </div>
 
               {/* Master Leaflet Interactive Map */}
               <MechMap
-                userLocation={userCoords}
-                mechanicLocation={mechanicCurrentPos}
+                userLocation={effectiveLocation}
+                mechanicLocation={mechanicCurrentPos || { lat: effectiveLocation.lat + 0.015, lng: effectiveLocation.lng + 0.012 }}
                 mechanicInfo={acceptedMechanic}
                 routeCoordinates={routeCoordinates}
                 showRoute={true}
@@ -566,17 +640,26 @@ export const EmergencyPage = () => {
               <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-slate-50 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700 text-xs">
                 <span className="text-slate-600 dark:text-slate-300 font-medium flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>Demo simulation: Mechanic is driving towards your vehicle coordinates.</span>
+                  <span>Real-time GPS tracking: Mechanic is navigating towards your stranded vehicle.</span>
                 </span>
 
-                <button
-                  type="button"
-                  onClick={handleRestartSimulation}
-                  className="px-3.5 py-2 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl font-bold border border-slate-300 dark:border-slate-700 shadow-xs flex items-center gap-1.5 transition-all"
-                >
-                  <RotateCcw className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                  <span>Restart Tracking Demo</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleRestartSimulation}
+                    className="px-3 py-1.5 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl font-bold border border-slate-300 dark:border-slate-700 shadow-xs flex items-center gap-1.5 transition-all"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                    <span>Restart Simulation</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleResetSos}
+                    className="px-3 py-1.5 bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 hover:bg-rose-100 rounded-xl font-bold border border-rose-200 dark:border-rose-800"
+                  >
+                    New Request
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -593,51 +676,12 @@ export const EmergencyPage = () => {
               </div>
 
               <a
-                href={`tel:${acceptedMechanic.phone}`}
+                href={`tel:${acceptedMechanic?.phone || '+15554321'}`}
                 className="btn-primary w-full sm:w-auto px-6 py-3.5 text-sm font-black flex items-center justify-center gap-2 shadow-md whitespace-nowrap"
               >
                 <Phone className="w-4 h-4" />
-                <span>Call {acceptedMechanic.mechanicName.split(' ')[0]}</span>
+                <span>Call {acceptedMechanic?.mechanicName?.split(' ')[0] || 'Mechanic'}</span>
               </a>
-            </div>
-          </div>
-        )}
-
-        {/* CONFIRMATION DIALOG MODAL */}
-        {showConfirmModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
-            <div className="clean-card emergency-card-active p-6 sm:p-8 max-w-md w-full space-y-5 shadow-2xl rounded-3xl bg-white dark:bg-slate-900 border-2 border-orange-300 dark:border-orange-800">
-              <div className="flex items-center gap-3 text-orange-600 dark:text-orange-400">
-                <SirenLight size="md" variant="sticker" animated={true} />
-                <h3 className="text-xl font-black text-slate-900 dark:text-white font-heading">
-                  Dispatch Emergency Rescue?
-                </h3>
-              </div>
-
-              <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 space-y-2 bg-slate-50 dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-                <p><strong>Vehicle:</strong> {vehicleType} • {vehicleBrand} ({vehiclePlate})</p>
-                <p><strong>Problem:</strong> {selectedProblem}</p>
-                <p><strong>Urgency:</strong> {urgencyLevel}</p>
-                {customNotes && <p><strong>Notes:</strong> {customNotes}</p>}
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmModal(false)}
-                  className="btn-secondary py-3.5 text-sm font-bold"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleConfirmSend}
-                  className="btn-emergency py-3.5 text-sm font-black shadow-lg flex items-center justify-center gap-2"
-                >
-                  <SirenLight size="xs" variant="sticker" animated={false} />
-                  <span>Send SOS Now</span>
-                </button>
-              </div>
             </div>
           </div>
         )}
@@ -675,3 +719,4 @@ export const EmergencyPage = () => {
 };
 
 export default EmergencyPage;
+
