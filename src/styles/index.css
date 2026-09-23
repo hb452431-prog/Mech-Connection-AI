@@ -184,37 +184,63 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
 }
 
-/* Interactive Action Buttons */
+/* Interactive Action Buttons - Upgraded for High-Impact Rapido-Style Mobility Experience */
 .btn-primary {
-  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%);
   color: #FFFFFF;
-  font-weight: 700;
-  border-radius: 0.875rem;
-  border: 1px solid rgba(99, 102, 241, 0.3);
-  box-shadow: 0 4px 12px -2px rgba(79, 70, 229, 0.35);
+  font-weight: 800;
+  border-radius: 1rem;
+  border: 1px solid rgba(129, 140, 248, 0.4);
+  box-shadow: 0 4px 14px -1px rgba(79, 70, 229, 0.4);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: -0.01em;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #818CF8 0%, #6366F1 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px 0px rgba(79, 70, 229, 0.45);
+  background: linear-gradient(135deg, #6366F1 0%, #4338CA 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px 0px rgba(79, 70, 229, 0.55);
 }
 
 .btn-primary:active {
   transform: translateY(0);
 }
 
+/* Rapido Signature Electric Amber / Gold Button */
+.btn-rapido {
+  position: relative;
+  background: linear-gradient(135deg, #FFC700 0%, #FF9900 100%);
+  color: #0A0F1D;
+  font-weight: 900;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 6px 18px -2px rgba(255, 170, 0, 0.45), 0 0 12px rgba(255, 200, 0, 0.25);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.btn-rapido:hover {
+  background: linear-gradient(135deg, #FFD53D 0%, #FFA81A 100%);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 10px 28px -2px rgba(255, 170, 0, 0.65), 0 0 20px rgba(255, 200, 0, 0.4);
+}
+
+.btn-rapido:active {
+  transform: translateY(0) scale(0.99);
+}
+
 .btn-emergency {
   position: relative;
   background: linear-gradient(135deg, #F97316 0%, #EA580C 50%, #DC2626 100%);
   color: #FFFFFF;
-  font-weight: 800;
-  border-radius: 0.875rem;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 4px 14px 0px rgba(234, 88, 12, 0.4), 0 0 0 1px rgba(220, 38, 38, 0.2);
+  font-weight: 900;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 6px 18px 0px rgba(234, 88, 12, 0.45), 0 0 0 1px rgba(220, 38, 38, 0.25);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
+  letter-spacing: 0.02em;
 }
 
 .btn-emergency::before {
@@ -224,7 +250,7 @@ h1, h2, h3, h4, h5, h6 {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
   transition: 0.6s ease;
   pointer-events: none;
 }
@@ -235,8 +261,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-emergency:hover {
   background: linear-gradient(135deg, #FB923C 0%, #F97316 50%, #EA580C 100%);
-  transform: translateY(-1.5px) scale(1.02);
-  box-shadow: 0 8px 24px 2px rgba(234, 88, 12, 0.55), 0 0 16px rgba(220, 38, 38, 0.4);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 30px 2px rgba(234, 88, 12, 0.65), 0 0 20px rgba(220, 38, 38, 0.5);
 }
 
 .btn-emergency:active {
@@ -247,40 +273,41 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   background: linear-gradient(135deg, #EF4444 0%, #DC2626 50%, #991B1B 100%);
   color: #FFFFFF;
-  font-weight: 800;
+  font-weight: 900;
   border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 24px rgba(239, 68, 68, 0.6), 0 4px 14px rgba(0, 0, 0, 0.35);
   transition: all 0.2s ease;
 }
 
 .btn-emergency-glow:hover {
-  box-shadow: 0 0 30px rgba(239, 68, 68, 0.8), 0 6px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.85), 0 8px 24px rgba(0, 0, 0, 0.45);
   transform: scale(1.03);
 }
 
 .btn-secondary {
   background-color: #F8FAFC;
-  color: #334155;
-  font-weight: 600;
-  border: 1px solid #E2E8F0;
-  border-radius: 0.875rem;
+  color: #1E293B;
+  font-weight: 700;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 1rem;
   transition: all 0.2s ease;
 }
 
 .dark .btn-secondary {
   background-color: #1E293B;
-  color: #E2E8F0;
+  color: #F1F5F9;
   border-color: #334155;
 }
 
 .btn-secondary:hover {
-  background-color: #F1F5F9;
+  background-color: #FFFFFF;
   color: #0F172A;
   border-color: #CBD5E1;
+  transform: translateY(-1px);
 }
 
 .dark .btn-secondary:hover {
-  background-color: #334155;
+  background-color: #283548;
   color: #FFFFFF;
   border-color: #475569;
 }

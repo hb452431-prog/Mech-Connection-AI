@@ -120,10 +120,12 @@ export const PricingSection = () => {
 
               <div className="pt-8">
                 <Link
-                  to="/register"
-                  className={`w-full py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 ${plan.buttonStyle}`}
+                  to="/user/auth"
+                  className={`w-full py-4 rounded-2xl text-sm sm:text-base font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg ${
+                    plan.popular ? 'btn-rapido' : 'btn-primary'
+                  }`}
                 >
-                  {plan.buttonText}
+                  <span>{plan.buttonText}</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>

@@ -89,15 +89,15 @@ export const MechanicAuthPage = () => {
         </div>
 
         {/* Auth Card */}
-        <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-6 sm:p-8 space-y-5 shadow-lg border-2 border-slate-200 dark:border-slate-800">
+        <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl border-2 border-slate-200 dark:border-slate-800 rounded-3xl">
           {/* Tab Switcher */}
-          <div className="grid grid-cols-2 gap-1 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
+          <div className="grid grid-cols-2 gap-1.5 p-1.5 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200/50 dark:border-slate-700/50">
             <button
               type="button"
               onClick={() => setIsRegister(false)}
-              className={`py-2 text-xs font-bold rounded-lg transition-all ${
+              className={`py-2.5 text-xs sm:text-sm font-black rounded-xl transition-all ${
                 !isRegister 
-                  ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs' 
+                  ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm' 
                   : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
@@ -106,9 +106,9 @@ export const MechanicAuthPage = () => {
             <button
               type="button"
               onClick={() => setIsRegister(true)}
-              className={`py-2 text-xs font-bold rounded-lg transition-all ${
+              className={`py-2.5 text-xs sm:text-sm font-black rounded-xl transition-all ${
                 isRegister 
-                  ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs' 
+                  ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm' 
                   : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
@@ -116,85 +116,85 @@ export const MechanicAuthPage = () => {
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+          <form onSubmit={handleSubmit} className="space-y-4 text-xs sm:text-sm">
             {isRegister && (
               <>
                 <div>
-                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Garage Workshop Name</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1.5">Garage Workshop Name</label>
                   <input
                     type="text"
                     required
                     value={garageName}
                     onChange={(e) => setGarageName(e.target.value)}
                     placeholder="e.g. Apex Auto Care & Diagnostics"
-                    className="w-full clean-input px-3.5 py-2.5 text-sm"
+                    className="w-full clean-input px-4 py-3 text-sm sm:text-base font-medium"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Lead Mechanic / Manager Name</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1.5">Lead Mechanic / Manager Name</label>
                   <input
                     type="text"
                     required
                     value={mechanicName}
                     onChange={(e) => setMechanicName(e.target.value)}
                     placeholder="e.g. David Miller"
-                    className="w-full clean-input px-3.5 py-2.5 text-sm"
+                    className="w-full clean-input px-4 py-3 text-sm sm:text-base font-medium"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Workshop Phone Number</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1.5">Workshop Phone Number</label>
                   <input
                     type="tel"
                     required
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+1 555-4321"
-                    className="w-full clean-input px-3.5 py-2.5 text-sm"
+                    className="w-full clean-input px-4 py-3 text-sm sm:text-base font-medium"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Physical Garage Address</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1.5">Physical Garage Address</label>
                   <input
                     type="text"
                     required
                     value={garageAddress}
                     onChange={(e) => setGarageAddress(e.target.value)}
                     placeholder="e.g. 142 Market Street, Downtown"
-                    className="w-full clean-input px-3.5 py-2.5 text-sm"
+                    className="w-full clean-input px-4 py-3 text-sm sm:text-base font-medium"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Services Offered</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1.5">Services Offered</label>
                   <input
                     type="text"
                     required
                     value={services}
                     onChange={(e) => setServices(e.target.value)}
                     placeholder="e.g. Car Repair, Battery, Tyre, Oil Change, 24/7 Roadside"
-                    className="w-full clean-input px-3.5 py-2.5 text-sm"
+                    className="w-full clean-input px-4 py-3 text-sm sm:text-base font-medium"
                   />
                 </div>
               </>
             )}
 
             <div>
-              <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Email Address</label>
+              <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1.5">Email Address</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="david@apexauto.com"
-                className="w-full clean-input px-3.5 py-2.5 text-sm"
+                className="w-full clean-input px-4 py-3 text-sm sm:text-base font-medium"
               />
             </div>
 
             <div>
-              <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Password</label>
+              <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1.5">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -202,15 +202,15 @@ export const MechanicAuthPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full clean-input px-3.5 py-2.5 text-sm pr-10"
+                  className="w-full clean-input px-4 py-3 text-sm sm:text-base font-medium pr-12"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
                   tabIndex={-1}
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
@@ -220,30 +220,30 @@ export const MechanicAuthPage = () => {
               <button
                 type="button"
                 onClick={handleDemoFill}
-                className="text-[11px] font-mono text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 font-semibold"
+                className="text-xs font-mono text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1.5 font-bold"
               >
-                <Sparkles className="w-3 h-3" />
+                <Sparkles className="w-3.5 h-3.5" />
                 <span>Fill Demo Credentials</span>
               </button>
-              <span className="text-[10px] text-slate-400 font-mono">Encrypted • 256-bit</span>
+              <span className="text-[11px] text-slate-400 font-mono">Encrypted • 256-bit</span>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full btn-primary py-3.5 text-sm font-bold shadow-md flex items-center justify-center gap-2 mt-2"
+              className="w-full btn-primary py-4 text-base sm:text-lg font-black shadow-lg flex items-center justify-center gap-2 mt-2"
             >
               {loading ? (
                 <span>Processing...</span>
               ) : isRegister ? (
                 <>
-                  <Building2 className="w-4 h-4" />
-                  <span>Register Garage Workshop</span>
+                  <Building2 className="w-5 h-5" />
+                  <span>REGISTER GARAGE WORKSHOP</span>
                 </>
               ) : (
                 <>
-                  <Wrench className="w-4 h-4" />
-                  <span>Sign In to Mechanic Portal</span>
+                  <Wrench className="w-5 h-5" />
+                  <span>SIGN IN TO MECHANIC PORTAL</span>
                 </>
               )}
             </button>

@@ -126,12 +126,12 @@ export const AiHelpPage = () => {
               />
 
               {/* Sample suggestion chips */}
-              <div className="space-y-1.5 pt-1">
-                <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500">Common symptoms:</span>
-                <div className="flex flex-wrap gap-1.5">
+              <div className="space-y-2 pt-1">
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 font-mono uppercase">Common breakdown symptoms:</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {[
                     'Car battery clicking / won\'t start',
-                    'Engine overheating with white smoke',
+                    'Engine overheating with smoke',
                     'Soft spongy brake pedal',
                     'Sudden vehicle power loss'
                   ].map((sample, idx) => (
@@ -139,9 +139,9 @@ export const AiHelpPage = () => {
                       key={idx}
                       type="button"
                       onClick={() => handleQuickChip(sample)}
-                      className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/60 hover:text-indigo-700 dark:hover:text-indigo-300 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-colors"
+                      className="text-xs sm:text-sm font-bold p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-amber-950/60 hover:text-amber-800 dark:hover:text-amber-300 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-all text-left"
                     >
-                      "{sample}"
+                      💡 {sample}
                     </button>
                   ))}
                 </div>
@@ -150,12 +150,12 @@ export const AiHelpPage = () => {
 
             {/* 2. Upload vehicle image */}
             <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
-              <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider font-mono">
+              <label className="block text-xs sm:text-sm font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider font-mono">
                 2. Upload Vehicle Photo (Optional)
               </label>
 
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                <label className="btn-secondary px-4 py-2.5 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-2xs">
+                <label className="btn-secondary px-5 py-3 text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer shadow-xs">
                   <Upload className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                   <span>{imageFile ? 'Change Photo' : 'Upload Warning Light / Engine Photo'}</span>
                   <input
@@ -167,31 +167,31 @@ export const AiHelpPage = () => {
                 </label>
 
                 {imageFile && (
-                  <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700">
+                  <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700">
                     <span className="text-xs text-slate-700 dark:text-slate-300 font-medium truncate max-w-xs">
                       📎 {imageFile.name}
                     </span>
                     <button
                       type="button"
                       onClick={handleRemoveImage}
-                      className="p-0.5 text-slate-400 hover:text-red-500 rounded transition-colors"
+                      className="p-1 text-slate-400 hover:text-red-500 rounded transition-colors"
                       title="Remove image"
                     >
-                      <X className="w-3.5 h-3.5" />
+                      <X className="w-4 h-4" />
                     </button>
                   </div>
                 )}
               </div>
 
               {imagePreview && (
-                <div className="mt-2 relative w-36 h-24 rounded-xl overflow-hidden border-2 border-indigo-200 dark:border-indigo-800 shadow-xs group">
+                <div className="mt-2 relative w-40 h-28 rounded-2xl overflow-hidden border-2 border-indigo-300 dark:border-indigo-800 shadow-md group">
                   <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                   <button
                     type="button"
                     onClick={handleRemoveImage}
-                    className="absolute top-1 right-1 p-1 rounded-full bg-slate-900/80 text-white hover:bg-red-600 transition-colors shadow-sm"
+                    className="absolute top-1.5 right-1.5 p-1 rounded-full bg-slate-900/80 text-white hover:bg-red-600 transition-colors shadow-sm"
                   >
-                    <X className="w-3 h-3" />
+                    <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
               )}
@@ -201,17 +201,17 @@ export const AiHelpPage = () => {
             <button
               type="submit"
               disabled={isAnalyzing || (!typedProblem.trim() && !imageFile)}
-              className="w-full btn-primary py-3.5 text-sm font-bold shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full btn-rapido py-4 sm:py-5 text-base sm:text-lg font-black shadow-lg flex items-center justify-center gap-2.5 disabled:opacity-50"
             >
               {isAnalyzing ? (
                 <>
-                  <Sparkles className="w-4 h-4 animate-spin text-cyan-300" />
-                  <span>Analyzing Diagnostics with AI Engine...</span>
+                  <Sparkles className="w-5 h-5 animate-spin text-slate-950" />
+                  <span>ANALYZING DIAGNOSTICS WITH AI ENGINE...</span>
                 </>
               ) : (
                 <>
-                  <Zap className="w-4 h-4" />
-                  <span>Diagnose Problem with AI</span>
+                  <Zap className="w-5 h-5" />
+                  <span>DIAGNOSE PROBLEM WITH AI</span>
                 </>
               )}
             </button>
@@ -220,12 +220,12 @@ export const AiHelpPage = () => {
 
         {/* AI ANALYSIS RESULTS DISPLAY */}
         {analysisResult && (
-          <div className="clean-card p-6 sm:p-7 space-y-6 border-l-4 border-l-indigo-600 animate-in fade-in duration-200 shadow-md bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800">
+          <div className="clean-card p-6 sm:p-8 space-y-6 border-l-4 border-l-amber-500 animate-in fade-in duration-200 shadow-xl bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 rounded-3xl">
             {/* Header with Problem & Category Badge */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 font-mono flex items-center gap-1.5">
-                  <Zap className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                <span className="text-xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 font-mono flex items-center gap-1.5">
+                  <Zap className="w-4 h-4 text-amber-500" />
                   Diagnosis Result
                 </span>
 
@@ -233,20 +233,20 @@ export const AiHelpPage = () => {
                   <button
                     type="button"
                     onClick={handleCopyReport}
-                    className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center gap-1 font-mono transition-colors"
+                    className="text-xs px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center gap-1.5 font-mono transition-colors font-bold"
                   >
-                    {copied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copied ? 'Copied' : 'Copy'}</span>
                   </button>
 
                   {/* SIMPLE PROBLEM vs COMPLEX PROBLEM */}
                   {analysisResult.type === 'SIMPLE' ? (
-                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5 shadow-2xs">
+                    <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5 shadow-xs">
                       <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
                       🟢 {analysisResult.badgeText}
                     </span>
                   ) : (
-                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-orange-100 dark:bg-orange-950/80 text-orange-800 dark:text-orange-300 border border-orange-200 dark:border-orange-800 flex items-center gap-1.5 shadow-2xs">
+                    <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-orange-100 dark:bg-orange-950/80 text-orange-800 dark:text-orange-300 border border-orange-200 dark:border-orange-800 flex items-center gap-1.5 shadow-xs">
                       <span className="w-2 h-2 rounded-full bg-orange-600 animate-pulse" />
                       🟠 {analysisResult.badgeText}
                     </span>
@@ -255,11 +255,11 @@ export const AiHelpPage = () => {
               </div>
 
               <div>
-                <p className="text-[11px] text-slate-400 dark:text-slate-500 font-bold uppercase font-mono">Identified Issue:</p>
-                <h2 className="text-xl font-black text-slate-900 dark:text-white font-heading mt-0.5">
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-black uppercase font-mono">Identified Issue:</p>
+                <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-heading mt-0.5">
                   "{analysisResult.problem}"
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1.5 font-medium leading-relaxed bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                <p className="text-sm text-slate-700 dark:text-slate-200 mt-2 font-medium leading-relaxed bg-slate-50 dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
                   💡 {analysisResult.advice}
                 </p>
               </div>
@@ -267,20 +267,20 @@ export const AiHelpPage = () => {
 
             {/* 3-Step Solution */}
             <div className="space-y-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 font-mono flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <h3 className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200 font-mono flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                 Step-by-Step Resolution Steps
               </h3>
 
-              <div className="space-y-2.5">
+              <div className="space-y-3">
                 {analysisResult.steps.map((step, idx) => (
-                  <div key={idx} className="p-3.5 bg-slate-50 dark:bg-slate-800/80 rounded-xl flex items-start gap-3 border border-slate-100 dark:border-slate-800">
-                    <span className="w-6 h-6 rounded-full bg-indigo-600 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5 shadow-2xs font-mono">
+                  <div key={idx} className="p-4 bg-slate-50 dark:bg-slate-800/80 rounded-2xl flex items-start gap-3.5 border border-slate-200 dark:border-slate-700">
+                    <span className="w-7 h-7 rounded-xl bg-indigo-600 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs font-mono">
                       {idx + 1}
                     </span>
                     <div>
-                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200 block">Step {idx + 1}:</span>
-                      <p className="text-xs sm:text-sm text-slate-900 dark:text-white leading-relaxed font-medium mt-0.5">
+                      <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase font-mono block">Step {idx + 1}</span>
+                      <p className="text-sm sm:text-base text-slate-900 dark:text-white leading-relaxed font-bold mt-0.5">
                         {step}
                       </p>
                     </div>
@@ -290,21 +290,21 @@ export const AiHelpPage = () => {
             </div>
 
             {/* Direct Action Buttons: Find Nearby Garage & Emergency Help */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-4 border-t border-slate-100 dark:border-slate-800">
               <Link
                 to="/user/garages"
-                className="btn-primary py-3.5 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 text-center"
+                className="btn-primary py-4 text-sm sm:text-base font-black flex items-center justify-center gap-2 text-center"
               >
                 <Wrench className="w-4 h-4" />
-                Find Nearby Garage
+                <span>FIND NEARBY GARAGE</span>
               </Link>
 
               <Link
                 to="/user/emergency"
-                className="btn-emergency py-3.5 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 text-center group shadow-md"
+                className="btn-emergency py-4 text-sm sm:text-base font-black flex items-center justify-center gap-2 text-center group shadow-lg"
               >
                 <SirenLight size="xs" variant="sticker" animated={true} />
-                <span>Request Priority Rescue</span>
+                <span>REQUEST PRIORITY RESCUE</span>
               </Link>
             </div>
           </div>

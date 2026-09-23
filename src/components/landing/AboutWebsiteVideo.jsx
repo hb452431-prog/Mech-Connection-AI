@@ -159,29 +159,26 @@ export const AboutWebsiteVideo = () => {
   return (
     <section className="w-full max-w-4xl mx-auto my-8 px-2 sm:px-4" id="about-website-video">
       {/* Section Header */}
-      <div className="text-center space-y-2 mb-5">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold font-mono tracking-wider shadow-2xs">
+      <div className="text-center space-y-2 mb-6">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold font-mono tracking-wider shadow-2xs">
           <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 animate-pulse" />
-          OFFICIAL PLATFORM DEMO
+          OFFICIAL PLATFORM OVERVIEW
         </div>
-        <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
+        <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
           How MECH CONNECT AI Works
         </h2>
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto font-medium">
-          Watch how our AI connects stranded vehicle owners with certified mechanics and provides instant emergency rescue.
-        </p>
       </div>
 
       {/* Main Video Player Container */}
       <div 
         ref={containerRef}
         onMouseMove={handleMouseMove}
-        className={`relative rounded-2xl overflow-hidden bg-slate-950 border-2 border-slate-800 shadow-2xl transition-all group ${
+        className={`relative rounded-3xl overflow-hidden bg-slate-950 border-2 border-slate-800 shadow-2xl transition-all group ${
           isFullscreen ? 'fixed inset-0 z-50 rounded-none h-screen flex flex-col justify-between' : ''
         }`}
       >
         {/* Device Top Bar */}
-        <div className="bg-slate-900/95 border-b border-slate-800 px-4 py-2.5 flex items-center justify-between backdrop-blur-md z-20">
+        <div className="bg-slate-900/95 border-b border-slate-800 px-5 py-3 flex items-center justify-between backdrop-blur-md z-20">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-full bg-rose-500/90 inline-block"></span>
@@ -189,16 +186,16 @@ export const AboutWebsiteVideo = () => {
               <span className="w-3 h-3 rounded-full bg-emerald-500/90 inline-block"></span>
             </div>
             <div className="flex items-center gap-2 pl-2 border-l border-slate-700">
-              <Tv className="w-3.5 h-3.5 text-indigo-400" />
+              <Tv className="w-4 h-4 text-indigo-400" />
               <span className="text-xs font-mono font-bold text-slate-200">
-                MECH CONNECT AI • <span className="text-cyan-400">PRODUCT OVERVIEW</span>
+                MECH CONNECT AI • <span className="text-amber-400">DEMO TOUR</span>
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 font-mono text-[11px] font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 font-mono text-xs font-bold">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               HD 60FPS
             </span>
           </div>
@@ -221,10 +218,10 @@ export const AboutWebsiteVideo = () => {
           {!isPlaying && (
             <button
               onClick={togglePlay}
-              className="absolute inset-0 m-auto w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-indigo-600/90 hover:bg-indigo-500 text-white flex items-center justify-center shadow-2xl shadow-indigo-600/50 backdrop-blur-sm transition-transform transform hover:scale-110 z-10"
+              className="absolute inset-0 m-auto w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center shadow-2xl shadow-amber-500/50 backdrop-blur-sm transition-transform transform hover:scale-110 z-10"
               aria-label="Play Video"
             >
-              <Play className="w-8 h-8 sm:w-10 sm:h-10 ml-1 fill-white" />
+              <Play className="w-10 h-10 sm:w-12 sm:h-12 ml-1 fill-current" />
             </button>
           )}
 
@@ -232,57 +229,57 @@ export const AboutWebsiteVideo = () => {
           {isMuted && isPlaying && (
             <button
               onClick={toggleMute}
-              className="absolute top-4 right-4 z-20 px-3 py-1.5 rounded-full bg-black/75 hover:bg-black/90 border border-white/20 text-white text-xs font-mono font-semibold flex items-center gap-1.5 backdrop-blur-md transition-all shadow-lg"
+              className="absolute top-4 right-4 z-20 px-3.5 py-2 rounded-full bg-black/80 hover:bg-black/95 border border-white/30 text-white text-xs font-mono font-bold flex items-center gap-2 backdrop-blur-md transition-all shadow-lg"
             >
-              <VolumeX className="w-3.5 h-3.5 text-amber-400" />
+              <VolumeX className="w-4 h-4 text-amber-400" />
               <span>Tap to Unmute</span>
             </button>
           )}
 
           {/* Bottom Player Overlay Controls (Visible on hover / move) */}
           <div 
-            className={`absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-3 sm:p-4 transition-opacity duration-300 ${
+            className={`absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-4 sm:p-5 transition-opacity duration-300 ${
               showControls || !isPlaying ? 'opacity-100' : 'opacity-0 pointer-events-none'
             }`}
           >
             {/* Scrubber Progress Bar */}
             <div 
-              className="w-full h-2 bg-slate-700/80 hover:h-2.5 rounded-full overflow-hidden cursor-pointer relative transition-all mb-3 group/bar"
+              className="w-full h-2.5 bg-slate-700/80 hover:h-3 rounded-full overflow-hidden cursor-pointer relative transition-all mb-3 group/bar"
               onClick={handleSeek}
             >
               <div 
-                className="h-full bg-gradient-to-r from-cyan-500 via-indigo-500 to-indigo-400 relative"
+                className="h-full bg-gradient-to-r from-amber-400 via-indigo-500 to-indigo-400 relative"
                 style={{ width: `${progressPercentage}%` }}
               >
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-md transform scale-0 group-hover/bar:scale-100 transition-transform"></div>
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-white rounded-full shadow-md transform scale-0 group-hover/bar:scale-100 transition-transform"></div>
               </div>
             </div>
 
             {/* Bottom Controls Row */}
             <div className="flex items-center justify-between text-xs text-slate-300">
               {/* Left Actions: Play, Restart, Volume, Time */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3.5">
                 <button
                   onClick={togglePlay}
-                  className="w-8 h-8 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center transition-all shadow-md shadow-indigo-600/30"
+                  className="w-9 h-9 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center transition-all shadow-md shadow-amber-500/30"
                   title={isPlaying ? 'Pause' : 'Play'}
                 >
-                  {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5 fill-current" />}
+                  {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 ml-0.5 fill-current" />}
                 </button>
 
                 <button
                   onClick={handleRestart}
-                  className="p-1.5 text-slate-400 hover:text-white rounded hover:bg-slate-800 transition-colors"
+                  className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
                   title="Replay Video"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
 
                 {/* Volume Control */}
-                <div className="flex items-center gap-1.5 group/vol">
+                <div className="flex items-center gap-2 group/vol">
                   <button
                     onClick={toggleMute}
-                    className="p-1.5 text-slate-400 hover:text-white rounded hover:bg-slate-800 transition-colors"
+                    className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
                     title={isMuted ? 'Unmute' : 'Mute'}
                   >
                     {isMuted || volume === 0 ? (
@@ -298,23 +295,23 @@ export const AboutWebsiteVideo = () => {
                     step="0.05"
                     value={isMuted ? 0 : volume}
                     onChange={handleVolumeChange}
-                    className="w-16 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500 hidden sm:inline-block"
+                    className="w-20 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-400 hidden sm:inline-block"
                   />
                 </div>
 
                 {/* Time Display */}
-                <div className="font-mono text-[11px] text-slate-300 pl-1">
+                <div className="font-mono text-xs text-slate-300 pl-1 font-bold">
                   <span>{formatTime(currentTime)}</span>
-                  <span className="text-slate-500 mx-1">/</span>
+                  <span className="text-slate-500 mx-1.5">/</span>
                   <span className="text-slate-400">{formatTime(duration)}</span>
                 </div>
               </div>
 
               {/* Right Actions: Speed, Fullscreen */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <button
                   onClick={handleSpeedChange}
-                  className="px-2 py-1 rounded bg-slate-900 border border-slate-700/80 text-[10px] font-mono font-bold text-slate-300 hover:text-white transition-colors"
+                  className="px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700/80 text-xs font-mono font-bold text-slate-300 hover:text-white transition-colors"
                   title="Playback Speed"
                 >
                   {playbackSpeed}x
@@ -322,7 +319,7 @@ export const AboutWebsiteVideo = () => {
 
                 <button
                   onClick={toggleFullscreen}
-                  className="p-1.5 text-slate-400 hover:text-white rounded hover:bg-slate-800 transition-colors"
+                  className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
                   title="Toggle Fullscreen"
                 >
                   {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
