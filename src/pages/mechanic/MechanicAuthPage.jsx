@@ -3,10 +3,11 @@ import { useNavigate, Link } from 'react-router-dom';
 import { BrandLogo } from '../../components/common/BrandLogo';
 import { authService } from '../../services/authService';
 import ThemeToggle from '../../components/common/ThemeToggle';
-import { Wrench, ArrowLeft, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { Wrench, ArrowLeft, CheckCircle2, ShieldCheck, Eye, EyeOff, Sparkles, Building2 } from 'lucide-react';
 
 export const MechanicAuthPage = () => {
   const [isRegister, setIsRegister] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   // Form states
@@ -41,6 +42,16 @@ export const MechanicAuthPage = () => {
     }
   };
 
+  const handleDemoFill = () => {
+    setEmail('david@apexauto.com');
+    setPassword('password123');
+    setGarageName('Apex Auto Care & Diagnostics');
+    setMechanicName('David Miller');
+    setPhone('+1 555-4321');
+    setGarageAddress('142 Market Street, Downtown');
+    setServices('Engine Repair, Battery, Brakes, Tyre, 24/7 Roadside');
+  };
+
   return (
     <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col justify-center items-center px-4 py-8 relative transition-colors duration-200">
       {/* Top right Theme Toggle */}
@@ -52,7 +63,7 @@ export const MechanicAuthPage = () => {
         {/* Back Link */}
         <Link
           to="/"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Portal Selection
@@ -63,22 +74,22 @@ export const MechanicAuthPage = () => {
           <div className="flex justify-center mb-1">
             <BrandLogo size="md" clickable={false} />
           </div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider border border-indigo-100 dark:border-indigo-800">
-            <Wrench className="w-3.5 h-3.5" />
-            Mechanic Portal
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 text-xs font-bold uppercase tracking-wider border border-indigo-200/80 dark:border-indigo-800 shadow-2xs font-mono">
+            <Wrench className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+            Mechanic & Garage Portal
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading">
-            {isRegister ? 'Create Garage Account' : 'Mechanic Login'}
+            {isRegister ? 'Register Workshop' : 'Mechanic Partner Login'}
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto">
             {isRegister
-              ? 'Register your workshop to receive nearby driver assistance requests.'
-              : 'Sign in to access your incoming roadside assistance requests.'}
+              ? 'Register your workshop to receive nearby driver assistance requests on live radar.'
+              : 'Sign in to access your live roadside queue and customer assistance requests.'}
           </p>
         </div>
 
         {/* Auth Card */}
-        <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-6 sm:p-8 space-y-5 shadow-lg">
+        <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-6 sm:p-8 space-y-5 shadow-lg border-2 border-slate-200 dark:border-slate-800">
           {/* Tab Switcher */}
           <div className="grid grid-cols-2 gap-1 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
             <button
@@ -86,18 +97,18 @@ export const MechanicAuthPage = () => {
               onClick={() => setIsRegister(false)}
               className={`py-2 text-xs font-bold rounded-lg transition-all ${
                 !isRegister 
-                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs' 
+                  ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs' 
                   : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
-              Login
+              Sign In
             </button>
             <button
               type="button"
               onClick={() => setIsRegister(true)}
               className={`py-2 text-xs font-bold rounded-lg transition-all ${
                 isRegister 
-                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs' 
+                  ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs' 
                   : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
@@ -109,19 +120,19 @@ export const MechanicAuthPage = () => {
             {isRegister && (
               <>
                 <div>
-                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Garage Name</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Garage Workshop Name</label>
                   <input
                     type="text"
                     required
                     value={garageName}
                     onChange={(e) => setGarageName(e.target.value)}
-                    placeholder="e.g. Apex Auto Care"
+                    placeholder="e.g. Apex Auto Care & Diagnostics"
                     className="w-full clean-input px-3.5 py-2.5 text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Mechanic Name</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Lead Mechanic / Manager Name</label>
                   <input
                     type="text"
                     required
@@ -133,7 +144,7 @@ export const MechanicAuthPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Phone Number</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Workshop Phone Number</label>
                   <input
                     type="tel"
                     required
@@ -145,7 +156,7 @@ export const MechanicAuthPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Garage Address</label>
+                  <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Physical Garage Address</label>
                   <input
                     type="text"
                     required
@@ -163,7 +174,7 @@ export const MechanicAuthPage = () => {
                     required
                     value={services}
                     onChange={(e) => setServices(e.target.value)}
-                    placeholder="e.g. Car Repair, Battery, Tyre, Oil Change"
+                    placeholder="e.g. Car Repair, Battery, Tyre, Oil Change, 24/7 Roadside"
                     className="w-full clean-input px-3.5 py-2.5 text-sm"
                   />
                 </div>
@@ -171,7 +182,7 @@ export const MechanicAuthPage = () => {
             )}
 
             <div>
-              <label className="block text-slate-700 font-bold mb-1">Email Address</label>
+              <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Email Address</label>
               <input
                 type="email"
                 required
@@ -183,23 +194,58 @@ export const MechanicAuthPage = () => {
             </div>
 
             <div>
-              <label className="block text-slate-700 font-bold mb-1">Password</label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full clean-input px-3.5 py-2.5 text-sm"
-              />
+              <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full clean-input px-3.5 py-2.5 text-sm pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Quick Demo Fill Helper */}
+            <div className="flex items-center justify-between pt-1">
+              <button
+                type="button"
+                onClick={handleDemoFill}
+                className="text-[11px] font-mono text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 font-semibold"
+              >
+                <Sparkles className="w-3 h-3" />
+                <span>Fill Demo Credentials</span>
+              </button>
+              <span className="text-[10px] text-slate-400 font-mono">Encrypted • 256-bit</span>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full btn-primary py-3 text-sm font-bold shadow-sm flex items-center justify-center gap-2 mt-2"
+              className="w-full btn-primary py-3.5 text-sm font-bold shadow-md flex items-center justify-center gap-2 mt-2"
             >
-              {loading ? 'Processing...' : isRegister ? 'Register Garage' : 'Login'}
+              {loading ? (
+                <span>Processing...</span>
+              ) : isRegister ? (
+                <>
+                  <Building2 className="w-4 h-4" />
+                  <span>Register Garage Workshop</span>
+                </>
+              ) : (
+                <>
+                  <Wrench className="w-4 h-4" />
+                  <span>Sign In to Mechanic Portal</span>
+                </>
+              )}
             </button>
           </form>
         </div>

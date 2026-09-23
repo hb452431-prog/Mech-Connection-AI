@@ -328,20 +328,20 @@ export const BrandLogo = ({ size = 'md', clickable = true, className = '', showS
   const LogoTypography = () => (
     <div className={`flex flex-col ${isLarge ? 'items-center mt-3 text-center' : 'text-left'}`}>
       <div className="flex items-center gap-1.5 sm:gap-2 tracking-normal leading-none select-none">
-        {/* "MECH" in bold titanium slate */}
-        <span className={`font-black ${currentSize.text} text-slate-900 font-heading tracking-wide`}>
+        {/* "MECH" in bold titanium slate / dark white */}
+        <span className={`font-black ${currentSize.text} text-slate-900 dark:text-white font-heading tracking-wide transition-colors`}>
           MECH
         </span>
         {/* "CONNECT" in signature electric blue */}
-        <span className={`font-black ${currentSize.text} text-[#0077B6] font-heading tracking-wide`}>
+        <span className={`font-black ${currentSize.text} text-[#0077B6] dark:text-[#38BDF8] font-heading tracking-wide`}>
           CONNECT
         </span>
         {/* "AI" with micro-circuit connection */}
         <div className="inline-flex items-center">
-          <span className={`font-black ${currentSize.text} text-[#00B4D8] font-heading tracking-wide`}>
+          <span className={`font-black ${currentSize.text} text-[#00B4D8] dark:text-[#22D3EE] font-heading tracking-wide`}>
             AI
           </span>
-          <svg width="18" height="12" viewBox="0 0 18 12" fill="none" className="ml-1 text-[#00B4D8] flex-shrink-0">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none" className="ml-1 text-[#00B4D8] dark:text-[#22D3EE] flex-shrink-0">
             <line x1="0" y1="6" x2="10" y2="6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
             <circle cx="13" cy="6" r="2.5" fill="currentColor" />
             <line x1="0" y1="2" x2="6" y2="2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
@@ -351,7 +351,7 @@ export const BrandLogo = ({ size = 'md', clickable = true, className = '', showS
       </div>
 
       {showSubtitle && (
-        <span className={`${currentSize.subText} text-slate-500 font-bold tracking-widest uppercase font-mono mt-1.5`}>
+        <span className={`${currentSize.subText} text-slate-500 dark:text-slate-400 font-bold tracking-widest uppercase font-mono mt-1.5 transition-colors`}>
           Vehicle & Mechanic Platform
         </span>
       )}
