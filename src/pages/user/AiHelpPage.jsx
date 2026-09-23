@@ -72,36 +72,36 @@ export const AiHelpPage = () => {
     <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-24 md:pb-12 transition-colors duration-200">
       <UserNavbar />
 
-      <main className="max-w-2xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+      <main className="max-w-2xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10">
         {/* Header */}
-        <div>
+        <div className="space-y-2">
           <Link
             to="/user"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors mb-1"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors mb-2"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 flex items-center justify-center border border-indigo-200 dark:border-indigo-800 shadow-2xs">
-              <Sparkles className="w-5 h-5" />
+          <div className="flex items-center gap-3.5 pt-1">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 flex items-center justify-center border border-indigo-200 dark:border-indigo-800 shadow-2xs">
+              <Sparkles className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading">
+              <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
                 AI Vehicle Diagnostic Assistant
               </h1>
             </div>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 font-medium">
             Explain what happened or upload a dashboard photo to get an instant 3-step diagnostic solution.
           </p>
         </div>
 
         {/* Input Card: 2 Ways to explain problem */}
-        <div className="clean-card p-6 sm:p-7 space-y-5 border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
-          <form onSubmit={handleAnalyze} className="space-y-4">
+        <div className="clean-card p-7 sm:p-10 space-y-7 border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm rounded-3xl">
+          <form onSubmit={handleAnalyze} className="space-y-6">
             {/* 1. Type the problem */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider font-mono">
                   1. Describe the Problem
@@ -122,13 +122,13 @@ export const AiHelpPage = () => {
                 value={typedProblem}
                 onChange={(e) => setTypedProblem(e.target.value)}
                 placeholder='e.g. "My bike suddenly stopped while riding" or "Car makes a loud clicking sound when I turn key"...'
-                className="w-full clean-input p-3.5 text-xs sm:text-sm resize-none font-medium leading-relaxed"
+                className="w-full clean-input p-4 text-xs sm:text-sm resize-none font-medium leading-relaxed"
               />
 
               {/* Sample suggestion chips */}
-              <div className="space-y-2 pt-1">
+              <div className="space-y-2.5 pt-2">
                 <span className="text-xs font-bold text-slate-500 dark:text-slate-400 font-mono uppercase">Common breakdown symptoms:</span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {[
                     'Car battery clicking / won\'t start',
                     'Engine overheating with smoke',
@@ -139,7 +139,7 @@ export const AiHelpPage = () => {
                       key={idx}
                       type="button"
                       onClick={() => handleQuickChip(sample)}
-                      className="text-xs sm:text-sm font-bold p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-amber-950/60 hover:text-amber-800 dark:hover:text-amber-300 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-all text-left"
+                      className="text-xs sm:text-sm font-bold p-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-amber-950/60 hover:text-amber-800 dark:hover:text-amber-300 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-all text-left"
                     >
                       💡 {sample}
                     </button>
@@ -149,13 +149,13 @@ export const AiHelpPage = () => {
             </div>
 
             {/* 2. Upload vehicle image */}
-            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
+            <div className="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-3">
               <label className="block text-xs sm:text-sm font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider font-mono">
                 2. Upload Vehicle Photo (Optional)
               </label>
 
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                <label className="btn-secondary px-5 py-3 text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer shadow-xs">
+                <label className="btn-secondary px-5 py-3.5 text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer shadow-xs rounded-xl">
                   <Upload className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                   <span>{imageFile ? 'Change Photo' : 'Upload Warning Light / Engine Photo'}</span>
                   <input
@@ -167,7 +167,7 @@ export const AiHelpPage = () => {
                 </label>
 
                 {imageFile && (
-                  <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700">
+                  <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
                     <span className="text-xs text-slate-700 dark:text-slate-300 font-medium truncate max-w-xs">
                       📎 {imageFile.name}
                     </span>
@@ -184,56 +184,58 @@ export const AiHelpPage = () => {
               </div>
 
               {imagePreview && (
-                <div className="mt-2 relative w-40 h-28 rounded-2xl overflow-hidden border-2 border-indigo-300 dark:border-indigo-800 shadow-md group">
+                <div className="mt-3 relative w-44 h-32 rounded-2xl overflow-hidden border-2 border-indigo-300 dark:border-indigo-800 shadow-md group">
                   <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                   <button
                     type="button"
                     onClick={handleRemoveImage}
-                    className="absolute top-1.5 right-1.5 p-1 rounded-full bg-slate-900/80 text-white hover:bg-red-600 transition-colors shadow-sm"
+                    className="absolute top-2 right-2 p-1.5 rounded-full bg-slate-900/80 text-white hover:bg-red-600 transition-colors shadow-sm"
                   >
-                    <X className="w-3.5 h-3.5" />
+                    <X className="w-4 h-4" />
                   </button>
                 </div>
               )}
             </div>
 
             {/* Analyze Button */}
-            <button
-              type="submit"
-              disabled={isAnalyzing || (!typedProblem.trim() && !imageFile)}
-              className="w-full btn-rapido py-4 sm:py-5 text-base sm:text-lg font-black shadow-lg flex items-center justify-center gap-2.5 disabled:opacity-50"
-            >
-              {isAnalyzing ? (
-                <>
-                  <Sparkles className="w-5 h-5 animate-spin text-slate-950" />
-                  <span>ANALYZING DIAGNOSTICS WITH AI ENGINE...</span>
-                </>
-              ) : (
-                <>
-                  <Zap className="w-5 h-5" />
-                  <span>DIAGNOSE PROBLEM WITH AI</span>
-                </>
-              )}
-            </button>
+            <div className="pt-3">
+              <button
+                type="submit"
+                disabled={isAnalyzing || (!typedProblem.trim() && !imageFile)}
+                className="w-full btn-rapido py-4 sm:py-5 text-base sm:text-lg font-black shadow-lg flex items-center justify-center gap-3 disabled:opacity-50"
+              >
+                {isAnalyzing ? (
+                  <>
+                    <Sparkles className="w-5 h-5 animate-spin text-slate-950" />
+                    <span>ANALYZING DIAGNOSTICS WITH AI ENGINE...</span>
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-5 h-5" />
+                    <span>DIAGNOSE PROBLEM WITH AI</span>
+                  </>
+                )}
+              </button>
+            </div>
           </form>
         </div>
 
         {/* AI ANALYSIS RESULTS DISPLAY */}
         {analysisResult && (
-          <div className="clean-card p-6 sm:p-8 space-y-6 border-l-4 border-l-amber-500 animate-in fade-in duration-200 shadow-xl bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 rounded-3xl">
+          <div className="clean-card p-7 sm:p-10 space-y-7 border-l-4 border-l-amber-500 animate-in fade-in duration-200 shadow-xl bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 rounded-3xl">
             {/* Header with Problem & Category Badge */}
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 font-mono flex items-center gap-1.5">
+                <span className="text-xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 font-mono flex items-center gap-2">
                   <Zap className="w-4 h-4 text-amber-500" />
                   Diagnosis Result
                 </span>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <button
                     type="button"
                     onClick={handleCopyReport}
-                    className="text-xs px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center gap-1.5 font-mono transition-colors font-bold"
+                    className="text-xs px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center gap-1.5 font-mono transition-colors font-bold"
                   >
                     {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copied ? 'Copied' : 'Copy'}</span>
@@ -241,12 +243,12 @@ export const AiHelpPage = () => {
 
                   {/* SIMPLE PROBLEM vs COMPLEX PROBLEM */}
                   {analysisResult.type === 'SIMPLE' ? (
-                    <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5 shadow-xs">
+                    <span className="px-4 py-2 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5 shadow-xs">
                       <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
                       🟢 {analysisResult.badgeText}
                     </span>
                   ) : (
-                    <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-orange-100 dark:bg-orange-950/80 text-orange-800 dark:text-orange-300 border border-orange-200 dark:border-orange-800 flex items-center gap-1.5 shadow-xs">
+                    <span className="px-4 py-2 rounded-full text-xs font-bold bg-orange-100 dark:bg-orange-950/80 text-orange-800 dark:text-orange-300 border border-orange-200 dark:border-orange-800 flex items-center gap-1.5 shadow-xs">
                       <span className="w-2 h-2 rounded-full bg-orange-600 animate-pulse" />
                       🟠 {analysisResult.badgeText}
                     </span>
@@ -256,31 +258,31 @@ export const AiHelpPage = () => {
 
               <div>
                 <p className="text-xs text-slate-400 dark:text-slate-500 font-black uppercase font-mono">Identified Issue:</p>
-                <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-heading mt-0.5">
+                <h2 className="text-xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading mt-1">
                   "{analysisResult.problem}"
                 </h2>
-                <p className="text-sm text-slate-700 dark:text-slate-200 mt-2 font-medium leading-relaxed bg-slate-50 dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <p className="text-sm text-slate-700 dark:text-slate-200 mt-3 font-medium leading-relaxed bg-slate-50 dark:bg-slate-800/80 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
                   💡 {analysisResult.advice}
                 </p>
               </div>
             </div>
 
             {/* 3-Step Solution */}
-            <div className="space-y-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <div className="space-y-4 pt-6 border-t border-slate-100 dark:border-slate-800">
               <h3 className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-200 font-mono flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                 Step-by-Step Resolution Steps
               </h3>
 
-              <div className="space-y-3">
+              <div className="space-y-3.5">
                 {analysisResult.steps.map((step, idx) => (
-                  <div key={idx} className="p-4 bg-slate-50 dark:bg-slate-800/80 rounded-2xl flex items-start gap-3.5 border border-slate-200 dark:border-slate-700">
-                    <span className="w-7 h-7 rounded-xl bg-indigo-600 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs font-mono">
+                  <div key={idx} className="p-4 sm:p-5 bg-slate-50 dark:bg-slate-800/80 rounded-2xl flex items-start gap-4 border border-slate-200 dark:border-slate-700">
+                    <span className="w-8 h-8 rounded-xl bg-indigo-600 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs font-mono">
                       {idx + 1}
                     </span>
                     <div>
                       <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase font-mono block">Step {idx + 1}</span>
-                      <p className="text-sm sm:text-base text-slate-900 dark:text-white leading-relaxed font-bold mt-0.5">
+                      <p className="text-sm sm:text-base text-slate-900 dark:text-white leading-relaxed font-bold mt-1">
                         {step}
                       </p>
                     </div>
@@ -290,10 +292,10 @@ export const AiHelpPage = () => {
             </div>
 
             {/* Direct Action Buttons: Find Nearby Garage & Emergency Help */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-4 border-t border-slate-100 dark:border-slate-800">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-slate-100 dark:border-slate-800">
               <Link
                 to="/user/garages"
-                className="btn-primary py-4 text-sm sm:text-base font-black flex items-center justify-center gap-2 text-center"
+                className="btn-primary py-4 text-sm sm:text-base font-black flex items-center justify-center gap-2 text-center rounded-2xl"
               >
                 <Wrench className="w-4 h-4" />
                 <span>FIND NEARBY GARAGE</span>
@@ -301,7 +303,7 @@ export const AiHelpPage = () => {
 
               <Link
                 to="/user/emergency"
-                className="btn-emergency py-4 text-sm sm:text-base font-black flex items-center justify-center gap-2 text-center group shadow-lg"
+                className="btn-emergency py-4 text-sm sm:text-base font-black flex items-center justify-center gap-2 text-center group shadow-lg rounded-2xl"
               >
                 <SirenLight size="xs" variant="sticker" animated={true} />
                 <span>REQUEST PRIORITY RESCUE</span>

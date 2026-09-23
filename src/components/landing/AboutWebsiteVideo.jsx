@@ -157,16 +157,19 @@ export const AboutWebsiteVideo = () => {
   const progressPercentage = duration ? (currentTime / duration) * 100 : 0;
 
   return (
-    <section className="w-full max-w-4xl mx-auto my-8 px-2 sm:px-4" id="about-website-video">
+    <section className="w-full max-w-4xl mx-auto my-10 sm:my-16 px-4 sm:px-6" id="about-website-video">
       {/* Section Header */}
-      <div className="text-center space-y-2 mb-6">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold font-mono tracking-wider shadow-2xs">
-          <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 animate-pulse" />
+      <div className="text-center space-y-4 mb-8 sm:mb-10">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold font-mono tracking-wider shadow-xs">
+          <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400 animate-pulse" />
           OFFICIAL PLATFORM OVERVIEW
         </div>
-        <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
+        <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
           How MECH CONNECT AI Works
         </h2>
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-lg mx-auto font-medium">
+          Watch our high-speed interactive dispatch in action — connecting stranded drivers directly with mobile mechanics in seconds.
+        </p>
       </div>
 
       {/* Main Video Player Container */}
@@ -177,6 +180,7 @@ export const AboutWebsiteVideo = () => {
           isFullscreen ? 'fixed inset-0 z-50 rounded-none h-screen flex flex-col justify-between' : ''
         }`}
       >
+
         {/* Device Top Bar */}
         <div className="bg-slate-900/95 border-b border-slate-800 px-5 py-3 flex items-center justify-between backdrop-blur-md z-20">
           <div className="flex items-center gap-3">
