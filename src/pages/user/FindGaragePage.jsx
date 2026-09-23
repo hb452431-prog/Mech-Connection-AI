@@ -107,7 +107,7 @@ export const FindGaragePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-24 md:pb-12 transition-colors duration-200">
+    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
       <UserNavbar />
 
       <main className="max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10">
@@ -312,7 +312,7 @@ export const FindGaragePage = () => {
         {/* Request Help Modal */}
         {requestHelpModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
-            <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-6 sm:p-7 max-w-md w-full space-y-4 shadow-2xl">
+            <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-6 sm:p-7 max-w-md w-full space-y-4 shadow-2xl modal-scrollable">
               <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-400 flex items-center justify-center">

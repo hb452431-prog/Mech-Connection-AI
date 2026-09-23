@@ -139,7 +139,7 @@ export const MechanicRequestsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-24 md:pb-12 transition-colors duration-200">
+    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
       <MechanicNavbar />
 
       <main className="max-w-5xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10">
@@ -336,7 +336,7 @@ export const MechanicRequestsPage = () => {
         {/* Live Navigation Modal with Interactive MechMap */}
         {navigatingReq && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
-            <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-6 max-w-2xl w-full space-y-4 shadow-2xl rounded-3xl border-2 border-indigo-300 dark:border-indigo-800">
+            <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-5 sm:p-6 max-w-2xl w-full space-y-4 shadow-2xl rounded-3xl border-2 border-indigo-300 dark:border-indigo-800 modal-scrollable">
               <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <div>
                   <h3 className="text-base font-black text-slate-900 dark:text-white font-heading flex items-center gap-1.5">

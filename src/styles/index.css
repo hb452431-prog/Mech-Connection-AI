@@ -470,15 +470,56 @@ button, a {
   touch-action: manipulation;
 }
 
+/* Safe Area Inset Support for Mobile Browsers */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .pb-safe {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+  }
+}
+
+/* Universal Mobile Modal & Viewport Responsive Optimizations */
+.modal-scrollable {
+  max-height: 90vh;
+  max-height: calc(100dvh - 2.5rem);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 @media (max-width: 640px) {
-  /* Prevent horizontal scrollbars on mobile */
-  body, #root {
+  /* Prevent horizontal overflow on mobile screens */
+  html, body, #root {
     overflow-x: hidden;
     width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    min-height: 100dvh;
   }
 
-  /* Optimize modal positioning on mobile */
+  /* Responsive card padding on mobile phones to maximize content visibility */
   .clean-card {
-    border-radius: 1rem;
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+  }
+
+  .portal-card-user,
+  .portal-card-mechanic {
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+  }
+
+  .clean-input {
+    border-radius: 0.875rem;
+    padding: 0.75rem 0.875rem;
+  }
+
+  /* Ensure video/media containers never exceed viewport */
+  img, video, iframe, canvas, svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Adjust Leaflet map height on small screens */
+  .leaflet-container {
+    border-radius: 0.875rem;
   }
 }
