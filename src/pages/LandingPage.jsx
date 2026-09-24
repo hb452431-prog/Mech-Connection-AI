@@ -52,13 +52,10 @@ export const LandingPage = () => {
         </div>
 
         {/* Hero Headline */}
-        <div className="space-y-4 pt-2">
+        <div className="pt-2">
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-slate-900 dark:text-white font-heading tracking-tight leading-tight">
             Smart Help When You Need It.
           </h1>
-          <p className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 font-medium max-w-2xl mx-auto leading-relaxed">
-            Instant AI diagnosis, real-time certified mechanics on live GPS map, and priority roadside dispatch.
-          </p>
         </div>
       </header>
 

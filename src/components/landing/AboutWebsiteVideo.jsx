@@ -6,15 +6,7 @@ import {
   Maximize2, 
   Minimize2, 
   Volume2, 
-  VolumeX, 
-  Sparkles, 
-  ShieldCheck, 
-  Zap, 
-  AlertCircle, 
-  Wrench, 
-  Car, 
-  CheckCircle2,
-  Tv
+  VolumeX
 } from 'lucide-react';
 
 export const AboutWebsiteVideo = () => {
@@ -157,54 +149,22 @@ export const AboutWebsiteVideo = () => {
   const progressPercentage = duration ? (currentTime / duration) * 100 : 0;
 
   return (
-    <section className="w-full max-w-4xl mx-auto my-10 sm:my-16 px-4 sm:px-6" id="about-website-video">
+    <section className="w-full max-w-4xl mx-auto my-6 sm:my-10 px-4 sm:px-6" id="about-website-video">
       {/* Section Header */}
-      <div className="text-center space-y-4 mb-8 sm:mb-10">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold font-mono tracking-wider shadow-xs">
-          <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400 animate-pulse" />
-          OFFICIAL PLATFORM OVERVIEW
-        </div>
+      <div className="text-center mb-6 sm:mb-8">
         <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
           How MECH CONNECT AI Works
         </h2>
-        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-lg mx-auto font-medium">
-          Watch our high-speed interactive dispatch in action — connecting stranded drivers directly with mobile mechanics in seconds.
-        </p>
       </div>
 
-      {/* Main Video Player Container */}
+      {/* Main Video Player Container (Pure video player without fake title bar) */}
       <div 
         ref={containerRef}
         onMouseMove={handleMouseMove}
-        className={`relative rounded-3xl overflow-hidden bg-slate-950 border-2 border-slate-800 shadow-2xl transition-all group ${
+        className={`relative rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 border-2 border-slate-200 dark:border-slate-800 shadow-2xl transition-all group ${
           isFullscreen ? 'fixed inset-0 z-50 rounded-none h-screen flex flex-col justify-between' : ''
         }`}
       >
-
-        {/* Device Top Bar */}
-        <div className="bg-slate-900/95 border-b border-slate-800 px-5 py-3 flex items-center justify-between backdrop-blur-md z-20">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-rose-500/90 inline-block"></span>
-              <span className="w-3 h-3 rounded-full bg-amber-500/90 inline-block"></span>
-              <span className="w-3 h-3 rounded-full bg-emerald-500/90 inline-block"></span>
-            </div>
-            <div className="flex items-center gap-2 pl-2 border-l border-slate-700">
-              <Tv className="w-4 h-4 text-indigo-400" />
-              <span className="text-xs font-mono font-bold text-slate-200">
-                MECH CONNECT AI • <span className="text-amber-400">DEMO TOUR</span>
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 font-mono text-xs font-bold">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              HD 60FPS
-            </span>
-          </div>
-        </div>
-
         {/* Video Canvas Container */}
         <div className="relative aspect-video w-full bg-black flex items-center justify-center overflow-hidden">
           <video
