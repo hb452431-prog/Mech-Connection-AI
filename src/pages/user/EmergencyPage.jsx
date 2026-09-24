@@ -47,7 +47,7 @@ export const EmergencyPage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 500);
+    }, 4000);
     return () => clearTimeout(timer);
   }, []);
 

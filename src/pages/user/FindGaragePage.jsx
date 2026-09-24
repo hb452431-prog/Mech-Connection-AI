@@ -55,7 +55,7 @@ export const FindGaragePage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 600);
+    }, 4000);
     return () => clearTimeout(timer);
   }, []);
 

@@ -12,7 +12,7 @@ export const MechanicCompletedPage = () => {
     setCompletedList(emergencyService.getCompletedRequests());
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 450);
+    }, 4000);
     return () => clearTimeout(timer);
   }, []);
 

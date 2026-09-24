@@ -25,7 +25,7 @@ export const MechLoader = ({
     if (!isAi) return;
     const interval = setInterval(() => {
       setAiStep((prev) => (prev + 1) % aiSteps.length);
-    }, 900);
+    }, 1000);
     return () => clearInterval(interval);
   }, [isAi]);
 

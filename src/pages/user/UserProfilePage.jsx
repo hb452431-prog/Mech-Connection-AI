@@ -14,7 +14,7 @@ export const UserProfilePage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 450);
+    }, 4000);
     return () => clearTimeout(timer);
   }, []);
 

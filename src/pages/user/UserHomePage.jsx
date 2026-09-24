@@ -28,10 +28,10 @@ export const UserHomePage = () => {
   const user = authService.getUser() || {};
 
   useEffect(() => {
-    // Initial portal load telemetry sync simulation
+    // Initial portal load telemetry sync simulation (4 seconds)
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 600);
+    }, 4000);
     return () => clearTimeout(timer);
   }, []);
 

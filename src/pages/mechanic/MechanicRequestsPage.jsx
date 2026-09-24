@@ -61,7 +61,7 @@ export const MechanicRequestsPage = () => {
     setRequests(emergencyService.getActiveRequests());
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 550);
+    }, 4000);
     return () => clearTimeout(timer);
   }, []);
 

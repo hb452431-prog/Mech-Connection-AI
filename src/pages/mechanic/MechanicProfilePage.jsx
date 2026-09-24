@@ -14,7 +14,7 @@ export const MechanicProfilePage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 450);
+    }, 4000);
     return () => clearTimeout(timer);
   }, []);
 

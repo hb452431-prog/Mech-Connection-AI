@@ -70,7 +70,7 @@ const KNOWLEDGE_BASE = [
 
 export const aiService = {
   analyzeProblem: async (typedText, hasImage = false) => {
-    await new Promise((r) => setTimeout(r, 1800));
+    await new Promise((r) => setTimeout(r, 4000));
 
     if (!typedText && hasImage) {
       return {

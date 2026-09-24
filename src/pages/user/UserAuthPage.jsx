@@ -15,7 +15,7 @@ export const UserAuthPage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setPageLoading(false);
-    }, 400);
+    }, 4000);
     return () => clearTimeout(timer);
   }, []);
 
