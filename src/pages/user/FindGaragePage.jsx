@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import UserNavbar from '../../components/common/UserNavbar';
 import MechMap from '../../components/map/MechMap';
+import { FindGarageSkeleton } from '../../components/common/Skeleton';
 import { useLocation } from '../../hooks/useLocation';
 import { LocationPermissionModal } from '../../components/common/LocationPermissionModal';
 import { LocationStatusBar } from '../../components/common/LocationStatusBar';
@@ -27,6 +28,7 @@ import { SirenBadge, SirenLight } from '../../components/common/SirenLight';
 
 export const FindGaragePage = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const {
     location: userLocation,
     accuracy,
@@ -49,6 +51,13 @@ export const FindGaragePage = () => {
   const [problemType, setProblemType] = useState('Battery Problem');
   const [problemNotes, setProblemNotes] = useState('');
   const [garages, setGarages] = useState(BASE_DEMO_GARAGES);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, []);
 
   // When user location is available or manual coordinates change, generate nearby garages dynamically
   useEffect(() => {
@@ -110,7 +119,10 @@ export const FindGaragePage = () => {
     <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
       <UserNavbar />
 
-      <main className="max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10">
+      {loading ? (
+        <FindGarageSkeleton />
+      ) : (
+        <main className="max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
           <div className="space-y-2">
@@ -422,6 +434,7 @@ export const FindGaragePage = () => {
           deviceInfo={deviceInfo}
         />
       </main>
+      )}
     </div>
   );
 };

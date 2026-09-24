@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import UserNavbar from '../../components/common/UserNavbar';
+import { ProfileSkeleton } from '../../components/common/Skeleton';
 import { authService } from '../../services/authService';
 import { User, Phone, Mail, Car, Edit3, LogOut, Check, ArrowLeft, ShieldCheck, Key } from 'lucide-react';
 
 export const UserProfilePage = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(authService.getUser() || {});
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 450);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Edit form states
   const [name, setName] = useState(user.name || '');
@@ -41,7 +50,10 @@ export const UserProfilePage = () => {
     <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
       <UserNavbar />
 
-      <main className="max-w-xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10">
+      {loading ? (
+        <ProfileSkeleton />
+      ) : (
+        <main className="max-w-xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
         <div className="space-y-2">
           <Link
             to="/user"
@@ -237,6 +249,7 @@ export const UserProfilePage = () => {
           )}
         </div>
       </main>
+      )}
     </div>
   );
 };

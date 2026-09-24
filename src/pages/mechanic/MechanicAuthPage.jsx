@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { BrandLogo } from '../../components/common/BrandLogo';
+import { AuthSkeleton } from '../../components/common/Skeleton';
 import { authService } from '../../services/authService';
 import ThemeToggle from '../../components/common/ThemeToggle';
 import { Wrench, ArrowLeft, CheckCircle2, ShieldCheck, Eye, EyeOff, Sparkles, Building2 } from 'lucide-react';
 
 export const MechanicAuthPage = () => {
+  const [pageLoading, setPageLoading] = useState(true);
   const [isRegister, setIsRegister] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPageLoading(false);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Form states
   const [garageName, setGarageName] = useState('Apex Auto Care & Diagnostics');
@@ -52,8 +61,12 @@ export const MechanicAuthPage = () => {
     setServices('Engine Repair, Battery, Brakes, Tyre, 24/7 Roadside');
   };
 
+  if (pageLoading) {
+    return <AuthSkeleton />;
+  }
+
   return (
-    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col justify-center items-center px-4 py-8 relative transition-colors duration-200">
+    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col justify-center items-center px-4 py-8 relative transition-colors duration-200 animate-in fade-in duration-300">
       {/* Top right Theme Toggle */}
       <div className="absolute top-4 right-4 z-20">
         <ThemeToggle />

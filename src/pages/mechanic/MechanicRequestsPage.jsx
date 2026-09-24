@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MechanicNavbar from '../../components/common/MechanicNavbar';
 import MechMap from '../../components/map/MechMap';
+import { MechanicRequestsSkeleton } from '../../components/common/Skeleton';
 import { emergencyService } from '../../services/emergencyService';
 import { authService } from '../../services/authService';
 import { routingService } from '../../services/routingService';
@@ -27,6 +28,7 @@ import {
 
 export const MechanicRequestsPage = () => {
   const mechanic = authService.getMechanic() || {};
+  const [loading, setLoading] = useState(true);
   const [requests, setRequests] = useState([]);
   const [navigatingReq, setNavigatingReq] = useState(null);
   const [routeCoordinates, setRouteCoordinates] = useState(null);
@@ -57,6 +59,10 @@ export const MechanicRequestsPage = () => {
 
   useEffect(() => {
     setRequests(emergencyService.getActiveRequests());
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 550);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleAccept = (reqId) => {
@@ -142,7 +148,10 @@ export const MechanicRequestsPage = () => {
     <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
       <MechanicNavbar />
 
-      <main className="max-w-5xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10">
+      {loading ? (
+        <MechanicRequestsSkeleton />
+      ) : (
+        <main className="max-w-5xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
@@ -419,6 +428,7 @@ export const MechanicRequestsPage = () => {
           />
         )}
       </main>
+      )}
     </div>
   );
 };

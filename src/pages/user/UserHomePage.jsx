@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import UserNavbar from '../../components/common/UserNavbar';
+import { UserHomeSkeleton } from '../../components/common/Skeleton';
 import { authService } from '../../services/authService';
 import { 
   Wrench, 
@@ -23,7 +24,16 @@ import { SirenLight, SirenBadge } from '../../components/common/SirenLight';
 
 export const UserHomePage = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const user = authService.getUser() || {};
+
+  useEffect(() => {
+    // Initial portal load telemetry sync simulation
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, []);
 
   const quickServices = [
     { label: 'Flat Tyre', icon: Disc, type: 'Flat Tyre' },
@@ -41,7 +51,10 @@ export const UserHomePage = () => {
     <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#080D1A] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
       <UserNavbar />
 
-      <main className="max-w-4xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-12 md:py-14 space-y-10 sm:space-y-12">
+      {loading ? (
+        <UserHomeSkeleton />
+      ) : (
+        <main className="max-w-4xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-12 md:py-14 space-y-10 sm:space-y-12 animate-in fade-in duration-300">
         {/* Top Driver Telemetry Status Banner */}
         <div className="clean-card p-7 sm:p-9 bg-gradient-to-r from-white via-cyan-50/40 to-indigo-50/30 dark:from-slate-900 dark:via-cyan-950/30 dark:to-indigo-950/40 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-2 border-slate-200 dark:border-slate-800 shadow-md rounded-3xl">
           <div className="flex items-center gap-5">
@@ -211,6 +224,7 @@ export const UserHomePage = () => {
           </div>
         </div>
       </main>
+      )}
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MechanicNavbar from '../../components/common/MechanicNavbar';
 import MechMap from '../../components/map/MechMap';
+import { MechanicHomeSkeleton } from '../../components/common/Skeleton';
 import { authService } from '../../services/authService';
 import { emergencyService } from '../../services/emergencyService';
 import { useLocation } from '../../hooks/useLocation';
@@ -30,6 +31,7 @@ import {
 
 export const MechanicHomePage = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const mechanic = authService.getMechanic() || {};
   const [requests, setRequests] = useState([]);
   const [viewRequestModal, setViewRequestModal] = useState(null);
@@ -56,6 +58,10 @@ export const MechanicHomePage = () => {
   useEffect(() => {
     const list = emergencyService.getActiveRequests();
     setRequests(list);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 600);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleAccept = (req) => {
@@ -124,7 +130,10 @@ export const MechanicHomePage = () => {
     <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
       <MechanicNavbar />
 
-      <main className="max-w-5xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10">
+      {loading ? (
+        <MechanicHomeSkeleton />
+      ) : (
+        <main className="max-w-5xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
         {/* Top Greeting & Status Toggle */}
         <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-7 sm:p-10 border-l-4 border-l-indigo-600 dark:border-l-indigo-500 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-2 border-slate-200 shadow-md rounded-3xl">
           <div className="space-y-2">
@@ -460,6 +469,7 @@ export const MechanicHomePage = () => {
           />
         )}
       </main>
+      )}
     </div>
   );
 };

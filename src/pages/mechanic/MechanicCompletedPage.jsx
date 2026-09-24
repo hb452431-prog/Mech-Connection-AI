@@ -1,20 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import MechanicNavbar from '../../components/common/MechanicNavbar';
+import { MechanicCompletedSkeleton } from '../../components/common/Skeleton';
 import { emergencyService } from '../../services/emergencyService';
 import { CheckCircle2, User, Calendar, Wrench, DollarSign } from 'lucide-react';
 
 export const MechanicCompletedPage = () => {
+  const [loading, setLoading] = useState(true);
   const [completedList, setCompletedList] = useState([]);
 
   useEffect(() => {
     setCompletedList(emergencyService.getCompletedRequests());
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 450);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
     <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
       <MechanicNavbar />
 
-      <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10">
+      {loading ? (
+        <MechanicCompletedSkeleton />
+      ) : (
+        <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
         <div className="space-y-2">
           <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
             Completed Assistance
@@ -73,6 +82,7 @@ export const MechanicCompletedPage = () => {
           )}
         </div>
       </main>
+      )}
     </div>
   );
 };

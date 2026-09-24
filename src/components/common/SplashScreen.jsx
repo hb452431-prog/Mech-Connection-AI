@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrandEmblem } from './BrandLogo';
-import { Sparkles, Zap, Navigation, ArrowRight, ShieldCheck, Wrench, Car } from 'lucide-react';
+import { Sparkles, Zap, Navigation, ShieldCheck, Wrench, Car } from 'lucide-react';
 
 export const SplashScreen = ({ onFinish }) => {
   const [progress, setProgress] = useState(0);
@@ -8,37 +8,37 @@ export const SplashScreen = ({ onFinish }) => {
   const [statusText, setStatusText] = useState('Starting Engine...');
 
   useEffect(() => {
-    // Stage 1: Progress simulation
+    // Stage 1: Progress simulation - Reaches 100% in ~1.6s
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           return 100;
         }
-        const increment = prev < 50 ? 5 : 7;
+        const increment = prev < 60 ? 4 : 5;
         const next = Math.min(prev + increment, 100);
 
-        if (next > 25 && next < 60) {
+        if (next > 25 && next < 55) {
           setStatusText('Connecting GPS Roadside Network...');
-        } else if (next >= 60 && next < 90) {
+        } else if (next >= 55 && next < 85) {
           setStatusText('Locating Certified Mechanics...');
-        } else if (next >= 90) {
+        } else if (next >= 85) {
           setStatusText('Ready! Launching MECH-CONNECT-AI...');
         }
 
         return next;
       });
-    }, 40);
+    }, 32);
 
-    // Stage 2: Trigger exit fade
+    // Stage 2: Trigger exit fade at 1.7s
     const exitTimer = setTimeout(() => {
       setPhase('exit');
-    }, 1900);
+    }, 1700);
 
-    // Stage 3: Finish and unmount
+    // Stage 3: Finish and unmount automatically at exactly 2.0 seconds (2000ms)
     const finishTimer = setTimeout(() => {
       if (onFinish) onFinish();
-    }, 2300);
+    }, 2000);
 
     return () => {
       clearInterval(interval);
@@ -47,16 +47,9 @@ export const SplashScreen = ({ onFinish }) => {
     };
   }, [onFinish]);
 
-  const handleSkip = () => {
-    setPhase('exit');
-    setTimeout(() => {
-      if (onFinish) onFinish();
-    }, 250);
-  };
-
   return (
     <div
-      className={`fixed inset-0 z-[99999] h-screen h-[100dvh] w-screen flex flex-col items-center justify-between px-4 py-6 sm:py-8 select-none transition-all duration-500 overflow-hidden ${
+      className={`fixed inset-0 z-[99999] h-screen h-[100dvh] w-screen flex flex-col items-center justify-between px-4 py-6 sm:py-8 select-none transition-all duration-300 overflow-hidden ${
         phase === 'exit'
           ? 'opacity-0 scale-105 pointer-events-none'
           : 'opacity-100 scale-100'
@@ -84,26 +77,22 @@ export const SplashScreen = ({ onFinish }) => {
           }}
         />
 
-        {/* Sonar Radar Pulse Rings (Rapido / Uber Style) */}
+        {/* Sonar Radar Pulse Rings */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 sm:w-80 sm:h-80 rounded-full border border-violet-400/25 animate-ping opacity-40" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full border border-cyan-400/20 animate-ping opacity-30" style={{ animationDelay: '0.5s' }} />
       </div>
 
-      {/* Top Bar with Live Tag & Skip Button */}
+      {/* Top Bar with Live Tag & Status */}
       <div className="w-full max-w-lg flex items-center justify-between relative z-20">
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-violet-200 text-[11px] font-mono font-bold tracking-wider shadow-sm">
+        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-violet-200 text-[11px] font-mono font-bold tracking-wider shadow-sm">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           <span>MECH CONNECT AI</span>
         </div>
 
-        <button
-          type="button"
-          onClick={handleSkip}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-white/90 hover:text-white text-xs font-bold transition-all border border-white/20 backdrop-blur-md shadow-sm"
-        >
-          <span>Skip</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </button>
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 text-cyan-200 text-xs font-mono font-bold border border-white/15 backdrop-blur-md shadow-sm">
+          <Zap className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
+          <span>INITIALIZING</span>
+        </div>
       </div>
 
       {/* Center Main Stage: Rapido-style Animated Violet Logo & Name */}

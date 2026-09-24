@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import UserNavbar from '../../components/common/UserNavbar';
+import { AiHelpSkeleton } from '../../components/common/Skeleton';
 import { aiService } from '../../services/aiService';
 import { SirenLight } from '../../components/common/SirenLight';
 import { 
@@ -23,12 +24,20 @@ import {
 
 export const AiHelpPage = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [typedProblem, setTypedProblem] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
@@ -72,7 +81,10 @@ export const AiHelpPage = () => {
     <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
       <UserNavbar />
 
-      <main className="max-w-2xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10">
+      {loading ? (
+        <AiHelpSkeleton />
+      ) : (
+        <main className="max-w-2xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
         {/* Header */}
         <div className="space-y-2">
           <Link
@@ -312,6 +324,7 @@ export const AiHelpPage = () => {
           </div>
         )}
       </main>
+      )}
     </div>
   );
 };

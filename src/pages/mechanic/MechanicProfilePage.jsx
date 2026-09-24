@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import MechanicNavbar from '../../components/common/MechanicNavbar';
+import { ProfileSkeleton } from '../../components/common/Skeleton';
 import { authService } from '../../services/authService';
 import { Wrench, Phone, Mail, MapPin, User, Edit3, LogOut, Check, ArrowLeft, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export const MechanicProfilePage = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [mechanic, setMechanic] = useState(authService.getMechanic());
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 450);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Form states for editing
   const [garageName, setGarageName] = useState(mechanic.garageName || '');
@@ -41,7 +50,10 @@ export const MechanicProfilePage = () => {
     <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
       <MechanicNavbar />
 
-      <main className="max-w-2xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10">
+      {loading ? (
+        <ProfileSkeleton />
+      ) : (
+        <main className="max-w-2xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
         <div className="space-y-2">
           <Link
             to="/mechanic"
@@ -216,6 +228,7 @@ export const MechanicProfilePage = () => {
           )}
         </div>
       </main>
+      )}
     </div>
   );
 };

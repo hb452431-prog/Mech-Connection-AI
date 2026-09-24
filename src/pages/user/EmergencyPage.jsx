@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import UserNavbar from '../../components/common/UserNavbar';
 import MechMap from '../../components/map/MechMap';
+import { EmergencySkeleton } from '../../components/common/Skeleton';
 import { emergencyService } from '../../services/emergencyService';
 import { authService } from '../../services/authService';
 import { routingService } from '../../services/routingService';
@@ -18,21 +19,21 @@ import {
   CheckCircle2, 
   Clock, 
   Wrench, 
-  Navigation,
-  Car,
-  X,
-  ShieldCheck,
-  Disc,
-  BatteryCharging,
-  Flame,
-  HelpCircle,
-  Truck,
-  Zap,
-  AlertTriangle,
-  RotateCcw,
-  Sparkles,
-  RefreshCw,
-  Send
+  Navigation, 
+  Car, 
+  X, 
+  ShieldCheck, 
+  Disc, 
+  BatteryCharging, 
+  Flame, 
+  HelpCircle, 
+  Truck, 
+  Zap, 
+  AlertTriangle, 
+  RotateCcw, 
+  Sparkles, 
+  RefreshCw, 
+  Send 
 } from 'lucide-react';
 
 export const EmergencyPage = () => {
@@ -41,6 +42,14 @@ export const EmergencyPage = () => {
   const initialGarage = searchParams.get('garage') || '';
   const initialType = searchParams.get('type') || 'Flat Tyre';
   const user = authService.getUser() || {};
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const {
     location: userCoords,
@@ -309,7 +318,10 @@ export const EmergencyPage = () => {
     <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#080D1A] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
       <UserNavbar />
 
-      <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10">
+      {loading ? (
+        <EmergencySkeleton />
+      ) : (
+        <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
         {/* Header */}
         <div className="space-y-3">
           <Link
@@ -718,6 +730,7 @@ export const EmergencyPage = () => {
           />
         )}
       </main>
+      )}
     </div>
   );
 };
