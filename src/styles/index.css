@@ -385,6 +385,117 @@ h1, h2, h3, h4, h5, h6 {
   animation: pulse-radar 2s infinite ease-in-out;
 }
 
+/* Revolving Nut, Bolt & Spanner Orbital Keyframes for MechLoader */
+@keyframes spinOrbital {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinSlow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinReverseSlow {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes spannerWiggle {
+  0%, 100% {
+    transform: rotate(-15deg) scale(1);
+  }
+  50% {
+    transform: rotate(20deg) scale(1.08);
+  }
+}
+
+@keyframes nutSpin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.12);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes boltFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(-15deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(10deg);
+  }
+}
+
+@keyframes wiggleSoft {
+  0%, 100% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}
+
+@keyframes loaderProgress {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-spin-orbital {
+  animation: spinOrbital 4.5s linear infinite;
+}
+
+.animate-spin-slow {
+  animation: spinSlow 12s linear infinite;
+}
+
+.animate-spin-reverse-slow {
+  animation: spinReverseSlow 15s linear infinite;
+}
+
+.animate-spanner-wiggle {
+  animation: spannerWiggle 2.5s ease-in-out infinite;
+}
+
+.animate-nut-spin {
+  animation: nutSpin 3.5s ease-in-out infinite;
+}
+
+.animate-bolt-float {
+  animation: boltFloat 2.8s ease-in-out infinite;
+}
+
+.animate-wiggle-soft {
+  animation: wiggleSoft 2s ease-in-out infinite;
+}
+
+.animate-loader-progress {
+  animation: loaderProgress 1.6s ease-in-out infinite;
+}
+
 /* Skeleton Loading Shimmer Keyframes & Classes */
 @keyframes skeletonShimmer {
   0% {

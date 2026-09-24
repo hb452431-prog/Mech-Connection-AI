@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import UserNavbar from '../../components/common/UserNavbar';
 import { AiHelpSkeleton } from '../../components/common/Skeleton';
+import MechLoader from '../../components/common/MechLoader';
 import { aiService } from '../../services/aiService';
 import { SirenLight } from '../../components/common/SirenLight';
 import { 
@@ -80,6 +81,16 @@ export const AiHelpPage = () => {
   return (
     <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
       <UserNavbar />
+
+      {/* Fullscreen Violet Revolving Nut, Bolt & Spanner Loader during AI Prompt Analysis */}
+      {isAnalyzing && (
+        <MechLoader
+          fullScreen={true}
+          isAi={true}
+          message="AI Vehicle Diagnostic Engine Running..."
+          subMessage="Processing Automotive Neural Diagnostic Protocol"
+        />
+      )}
 
       {loading ? (
         <AiHelpSkeleton />
