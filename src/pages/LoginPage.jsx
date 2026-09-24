@@ -20,7 +20,8 @@ export const LoginPage = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await loginWithEmail(email || (selectedRole === 'mechanic' ? 'dave@rapidrescue.com' : 'alex@example.com'), password || 'password', selectedRole);
+      const defaultPass = selectedRole === 'mechanic' ? 'Mech#MasterKey77' : 'Drive#SecurePass89';
+      await loginWithEmail(email || (selectedRole === 'mechanic' ? 'dave@rapidrescue.com' : 'alex@example.com'), password || defaultPass, selectedRole);
       showToast(`Welcome back to MECH CONNECT AI!`, 'success');
       if (selectedRole === 'mechanic') {
         navigate('/partner-portal');
@@ -139,7 +140,13 @@ export const LoginPage = () => {
             </span>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4 text-xs"
+            autoComplete="off"
+            data-lpignore="true"
+            data-form-type="other"
+          >
             <div>
               <label className="block text-slate-400 font-bold uppercase font-mono mb-1.5">Email Address</label>
               <div className="relative">
@@ -163,6 +170,11 @@ export const LoginPage = () => {
                 <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="password"
+                  autoComplete="new-password"
+                  data-lpignore="true"
+                  data-1p-ignore="true"
+                  data-form-type="other"
+                  spellCheck="false"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"

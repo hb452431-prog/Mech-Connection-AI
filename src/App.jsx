@@ -21,12 +21,27 @@ import EmergencyPage from './pages/user/EmergencyPage';
 import UserProfilePage from './pages/user/UserProfilePage';
 
 export const App = () => {
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => {
+    try {
+      const isRoot = window.location.pathname === '/' || window.location.pathname === '';
+      const splashShown = sessionStorage.getItem('mech_splash_shown');
+      return isRoot && !splashShown;
+    } catch (e) {
+      return false;
+    }
+  });
+
+  const handleSplashFinish = () => {
+    try {
+      sessionStorage.setItem('mech_splash_shown', 'true');
+    } catch (e) {}
+    setShowSplash(false);
+  };
 
   return (
     <>
       {showSplash && (
-        <SplashScreen onFinish={() => setShowSplash(false)} />
+        <SplashScreen onFinish={handleSplashFinish} />
       )}
 
       <Routes>

@@ -23,7 +23,7 @@ export const UserAuthPage = () => {
   const [name, setName] = useState('John Doe');
   const [phone, setPhone] = useState('+1 555-0199');
   const [email, setEmail] = useState('john.doe@example.com');
-  const [password, setPassword] = useState('password123');
+  const [password, setPassword] = useState('Drive#SecurePass89');
   const [vehicleBrand, setVehicleBrand] = useState('Honda');
   const [vehicleModel, setVehicleModel] = useState('Civic');
   const [vehicleNumber, setVehicleNumber] = useState('CA-8XYZ92');
@@ -53,7 +53,7 @@ export const UserAuthPage = () => {
 
   const handleDemoFill = () => {
     setEmail('john.doe@example.com');
-    setPassword('password123');
+    setPassword('Drive#SecurePass89');
     setName('John Doe');
     setPhone('+1 555-0199');
     setVehicleBrand('Honda');
@@ -129,7 +129,7 @@ export const UserAuthPage = () => {
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4 text-xs sm:text-sm">
+          <form onSubmit={handleSubmit} autoComplete="off" spellCheck="false" data-form-type="other" className="space-y-4 text-xs sm:text-sm">
             {isRegister && (
               <>
                 <div>
@@ -137,6 +137,7 @@ export const UserAuthPage = () => {
                   <input
                     type="text"
                     required
+                    autoComplete="off"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. John Doe"
@@ -149,6 +150,7 @@ export const UserAuthPage = () => {
                   <input
                     type="tel"
                     required
+                    autoComplete="off"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+1 555-0199"
@@ -163,6 +165,7 @@ export const UserAuthPage = () => {
               <input
                 type="email"
                 required
+                autoComplete="off"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="john.doe@example.com"
@@ -171,11 +174,16 @@ export const UserAuthPage = () => {
             </div>
 
             <div>
-              <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1.5">Password</label>
+              <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1.5">Security Passcode</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
+                  autoComplete="new-password"
+                  data-lpignore="true"
+                  data-1p-ignore="true"
+                  data-form-type="other"
+                  spellCheck="false"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"

@@ -23,9 +23,10 @@
     <!-- Leaflet CSS for Maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     
-    <!-- Instant Dark/Light Theme Initialization to prevent flash -->
+    <!-- Instant Dark/Light Theme Initialization & SPA Redirect Handler to prevent flash and 404 -->
     <script>
       (function() {
+        // 1. Theme restoration
         try {
           var saved = localStorage.getItem('mech_theme');
           if (saved === 'dark') {
@@ -36,6 +37,20 @@
             document.documentElement.classList.remove('dark');
             var meta = document.querySelector('meta[name="theme-color"]');
             if (meta) meta.setAttribute('content', '#F6F8FC');
+          }
+        } catch (e) {}
+
+        // 2. SPA 404 fallback query decoder (restores path on page refresh)
+        try {
+          var l = window.location;
+          if (l.search && l.search.indexOf('p=') !== -1) {
+            var params = new URLSearchParams(l.search);
+            var path = params.get('p');
+            var query = params.get('q');
+            if (path) {
+              var newPath = '/' + decodeURIComponent(path) + (query ? '?' + decodeURIComponent(query) : '') + l.hash;
+              window.history.replaceState(null, null, newPath);
+            }
           }
         } catch (e) {}
       })();

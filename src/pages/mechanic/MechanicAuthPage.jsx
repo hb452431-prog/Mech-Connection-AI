@@ -26,7 +26,7 @@ export const MechanicAuthPage = () => {
   const [email, setEmail] = useState('david@apexauto.com');
   const [garageAddress, setGarageAddress] = useState('142 Market Street, Downtown');
   const [services, setServices] = useState('Engine Repair, Battery, Brakes, Tyre, 24/7 Roadside');
-  const [password, setPassword] = useState('password123');
+  const [password, setPassword] = useState('Mech#MasterKey77');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -53,7 +53,7 @@ export const MechanicAuthPage = () => {
 
   const handleDemoFill = () => {
     setEmail('david@apexauto.com');
-    setPassword('password123');
+    setPassword('Mech#MasterKey77');
     setGarageName('Apex Auto Care & Diagnostics');
     setMechanicName('David Miller');
     setPhone('+1 555-4321');
@@ -129,7 +129,13 @@ export const MechanicAuthPage = () => {
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4 text-xs sm:text-sm">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4 text-xs sm:text-sm"
+            autoComplete="off"
+            data-lpignore="true"
+            data-form-type="other"
+          >
             {isRegister && (
               <>
                 <div>
@@ -212,6 +218,11 @@ export const MechanicAuthPage = () => {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
+                  autoComplete="new-password"
+                  data-lpignore="true"
+                  data-1p-ignore="true"
+                  data-form-type="other"
+                  spellCheck="false"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
