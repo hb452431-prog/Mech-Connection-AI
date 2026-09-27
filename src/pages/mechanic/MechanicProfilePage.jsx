@@ -14,7 +14,7 @@ export const MechanicProfilePage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 300);
     return () => clearTimeout(timer);
   }, []);
 
@@ -53,7 +53,7 @@ export const MechanicProfilePage = () => {
       {loading ? (
         <ProfileSkeleton />
       ) : (
-        <main className="max-w-2xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
+        <main className="max-w-4xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300">
         <div className="space-y-2">
           <Link
             to="/mechanic"

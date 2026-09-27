@@ -55,7 +55,7 @@ export const FindGaragePage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 300);
     return () => clearTimeout(timer);
   }, []);
 
@@ -122,7 +122,7 @@ export const FindGaragePage = () => {
       {loading ? (
         <FindGarageSkeleton />
       ) : (
-        <main className="max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
+        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
           <div className="space-y-2">
@@ -200,7 +200,7 @@ export const FindGaragePage = () => {
             locationError={locationError?.message}
             onSelectLocation={handleLocationSearchSelect}
             onRequestHelp={handleRequestHelp}
-            height="460px"
+            height="500px"
           />
 
           {/* Quick Helper Bar */}

@@ -61,7 +61,7 @@ export const MechanicRequestsPage = () => {
     setRequests(emergencyService.getActiveRequests());
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 300);
     return () => clearTimeout(timer);
   }, []);
 
@@ -151,7 +151,7 @@ export const MechanicRequestsPage = () => {
       {loading ? (
         <MechanicRequestsSkeleton />
       ) : (
-        <main className="max-w-5xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
+        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white font-heading tracking-tight">

@@ -12,7 +12,7 @@ export const MechanicCompletedPage = () => {
     setCompletedList(emergencyService.getCompletedRequests());
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 300);
     return () => clearTimeout(timer);
   }, []);
 
@@ -23,14 +23,49 @@ export const MechanicCompletedPage = () => {
       {loading ? (
         <MechanicCompletedSkeleton />
       ) : (
-        <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
+        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300">
         <div className="space-y-2">
           <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
-            Completed Assistance
+            Completed Assistance & Earnings
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
-            Log of completed roadside repairs and customer vehicle rescues.
+            Log of completed roadside repairs, billing telemetry, and customer vehicle rescues.
           </p>
+        </div>
+
+        {/* 4-Column Desktop Performance Metric Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="clean-card p-5 sm:p-6 border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl shadow-xs">
+            <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase block">Completed Rescues</span>
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading mt-1">
+              {completedList.length}
+            </div>
+            <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold mt-1 block">● 100% Resolved</span>
+          </div>
+
+          <div className="clean-card p-5 sm:p-6 border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl shadow-xs">
+            <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase block">Total Revenue</span>
+            <div className="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400 font-heading mt-1">
+              ${completedList.length * 49 || 98}.00
+            </div>
+            <span className="text-[11px] text-slate-500 font-mono mt-1 block">Direct Bank Deposit</span>
+          </div>
+
+          <div className="clean-card p-5 sm:p-6 border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl shadow-xs">
+            <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase block">Customer Satisfaction</span>
+            <div className="text-2xl sm:text-3xl font-black text-amber-500 font-heading mt-1">
+              4.9 / 5.0
+            </div>
+            <span className="text-[11px] text-slate-500 font-mono mt-1 block">⭐ Verified Reviews</span>
+          </div>
+
+          <div className="clean-card p-5 sm:p-6 border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl shadow-xs">
+            <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase block">Average Fix Time</span>
+            <div className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-400 font-heading mt-1">
+              24 Mins
+            </div>
+            <span className="text-[11px] text-slate-500 font-mono mt-1 block">Fastest in Sector</span>
+          </div>
         </div>
 
         <div className="space-y-5 pt-6 border-t border-slate-200 dark:border-slate-800">

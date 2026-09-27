@@ -670,3 +670,20 @@ button, a {
     border-radius: 0.875rem;
   }
 }
+
+/* Desktop View Layout Enhancements & Proportions */
+@media (min-width: 1024px) {
+  .leaflet-container {
+    border-radius: 1.25rem;
+  }
+
+  .clean-card {
+    border-radius: 1.5rem;
+  }
+
+  .portal-card-user,
+  .portal-card-mechanic {
+    border-radius: 1.75rem;
+  }
+}
+

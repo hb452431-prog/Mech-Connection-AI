@@ -47,7 +47,7 @@ export const EmergencyPage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 300);
     return () => clearTimeout(timer);
   }, []);
 
@@ -321,7 +321,7 @@ export const EmergencyPage = () => {
       {loading ? (
         <EmergencySkeleton />
       ) : (
-        <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
+        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300">
         {/* Header */}
         <div className="space-y-3">
           <Link

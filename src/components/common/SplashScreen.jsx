@@ -83,15 +83,27 @@ export const SplashScreen = ({ onFinish }) => {
       </div>
 
       {/* Top Bar with Live Tag & Status */}
-      <div className="w-full max-w-lg flex items-center justify-between relative z-20">
+      <div className="w-full max-w-xl flex items-center justify-between relative z-20">
         <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-violet-200 text-[11px] font-mono font-bold tracking-wider shadow-sm">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           <span>MECH CONNECT AI</span>
         </div>
 
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 text-cyan-200 text-xs font-mono font-bold border border-white/15 backdrop-blur-md shadow-sm">
-          <Zap className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
-          <span>INITIALIZING</span>
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 text-cyan-200 text-xs font-mono font-bold border border-white/15 backdrop-blur-md shadow-sm">
+            <Zap className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
+            <span>INITIALIZING</span>
+          </div>
+
+          <button
+            type="button"
+            onClick={onFinish}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/15 hover:bg-white/25 text-white text-xs font-mono font-bold border border-white/25 backdrop-blur-md transition-all cursor-pointer shadow-sm"
+            title="Skip Intro"
+          >
+            <span>Skip</span>
+            <span>→</span>
+          </button>
         </div>
       </div>
 

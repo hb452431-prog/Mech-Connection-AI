@@ -7,17 +7,10 @@ import ThemeToggle from '../../components/common/ThemeToggle';
 import { Car, ArrowLeft, ShieldCheck, Sparkles, Eye, EyeOff, UserCheck } from 'lucide-react';
 
 export const UserAuthPage = () => {
-  const [pageLoading, setPageLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setPageLoading(false);
-    }, 4000);
-    return () => clearTimeout(timer);
-  }, []);
 
   // Form fields
   const [name, setName] = useState('John Doe');

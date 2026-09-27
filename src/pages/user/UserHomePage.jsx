@@ -28,10 +28,10 @@ export const UserHomePage = () => {
   const user = authService.getUser() || {};
 
   useEffect(() => {
-    // Initial portal load telemetry sync simulation (4 seconds)
+    // Fast initial telemetry sync
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 300);
     return () => clearTimeout(timer);
   }, []);
 
@@ -54,9 +54,9 @@ export const UserHomePage = () => {
       {loading ? (
         <UserHomeSkeleton />
       ) : (
-        <main className="max-w-4xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-12 md:py-14 space-y-10 sm:space-y-12 animate-in fade-in duration-300">
+        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
         {/* Top Driver Telemetry Status Banner */}
-        <div className="clean-card p-7 sm:p-9 bg-gradient-to-r from-white via-cyan-50/40 to-indigo-50/30 dark:from-slate-900 dark:via-cyan-950/30 dark:to-indigo-950/40 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-2 border-slate-200 dark:border-slate-800 shadow-md rounded-3xl">
+        <div className="clean-card p-6 sm:p-8 bg-gradient-to-r from-white via-cyan-50/40 to-indigo-50/30 dark:from-slate-900 dark:via-cyan-950/30 dark:to-indigo-950/40 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-2 border-slate-200 dark:border-slate-800 shadow-md rounded-3xl">
           <div className="flex items-center gap-5">
             <div className="w-16 h-16 rounded-3xl bg-cyan-100 dark:bg-cyan-950/80 text-cyan-700 dark:text-cyan-300 flex items-center justify-center flex-shrink-0 font-bold border border-cyan-200 dark:border-cyan-800 shadow-xs">
               <Car className="w-8 h-8" />
@@ -77,15 +77,23 @@ export const UserHomePage = () => {
             </div>
           </div>
 
-          <Link
-            to="/user/profile"
-            className="btn-secondary px-5 py-3 text-xs sm:text-sm font-bold flex items-center gap-2 self-start sm:self-auto rounded-2xl"
-          >
-            <span>Manage Vehicle</span>
-          </Link>
+          <div className="flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-4 px-4 py-2 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-mono">
+              <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
+                <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                24/7 Coverage Active
+              </span>
+            </div>
+            <Link
+              to="/user/profile"
+              className="btn-secondary px-5 py-3 text-xs sm:text-sm font-bold flex items-center gap-2 self-start sm:self-auto rounded-2xl"
+            >
+              <span>Manage Vehicle</span>
+            </Link>
+          </div>
         </div>
 
-        {/* Rapido-Style 1-Tap Quick Roadside Services Bar */}
+        {/* 1-Tap Quick Roadside Services Bar */}
         <div className="space-y-4">
           <div className="flex items-center justify-between px-1">
             <span className="text-xs font-black uppercase tracking-wider font-mono text-slate-500 dark:text-slate-400 flex items-center gap-2">
@@ -93,7 +101,7 @@ export const UserHomePage = () => {
               <span>Instant 1-Tap Roadside Rescue:</span>
             </span>
             <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-bold">
-              ⚡ ~4.2 Mins Avg Arrival
+              ⚡ ~4.2 Mins Avg Arrival • 142 Technicians Online
             </span>
           </div>
 
@@ -105,7 +113,7 @@ export const UserHomePage = () => {
                   key={idx}
                   type="button"
                   onClick={() => handleQuickService(srv.type)}
-                  className="clean-card p-4 sm:p-5 flex flex-col items-center justify-center gap-3 hover:border-amber-400 dark:hover:border-amber-500 hover:scale-105 transition-all text-center group border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl shadow-sm"
+                  className="clean-card p-4 sm:p-5 flex flex-col items-center justify-center gap-3 hover:border-amber-400 dark:hover:border-amber-500 hover:scale-[1.03] transition-all text-center group border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl shadow-sm"
                 >
                   <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
                     <Icon className="w-6 h-6" />
@@ -119,24 +127,59 @@ export const UserHomePage = () => {
           </div>
         </div>
 
-        {/* 2 Main Action Cards (Oversized with Large Buttons) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-7 sm:gap-8">
-          {/* Card 1: Find Nearby Garage */}
-          <div className="clean-card p-7 sm:p-9 flex flex-col justify-between group hover:border-cyan-400 dark:hover:border-cyan-500 hover:shadow-2xl transition-all border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-3xl space-y-6">
-            <div className="space-y-5">
-              <div className="w-16 h-16 rounded-3xl bg-cyan-50 dark:bg-cyan-950/70 text-cyan-600 dark:text-cyan-400 flex items-center justify-center group-hover:scale-105 transition-transform border border-cyan-100 dark:border-cyan-800/60 shadow-xs">
-                <MapPin className="w-8 h-8" />
+        {/* 3 Balanced Primary Action Cards for Desktop & Tablet */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {/* Card 1: Emergency SOS Dispatch */}
+          <div className="clean-card emergency-card-active p-7 sm:p-8 flex flex-col justify-between group hover:shadow-2xl transition-all border-2 border-orange-300 dark:border-orange-800 bg-white dark:bg-slate-900 rounded-3xl space-y-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-950 dark:to-red-950 text-orange-600 dark:text-orange-400 flex items-center justify-center group-hover:scale-105 transition-transform border border-orange-200 dark:border-orange-800 shadow-xs">
+                  <SirenLight size="md" variant="ambulance" animated={true} />
+                </div>
+                <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-orange-700 dark:text-orange-300 bg-orange-50 dark:bg-orange-950/80 px-3 py-1 rounded-full border border-orange-200 dark:border-orange-800">
+                  ⚡ High Priority
+                </span>
               </div>
 
               <div className="space-y-2">
-                <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/80 px-3 py-1 rounded-full border border-cyan-200/60 dark:border-cyan-800">
-                  GPS Live Radar
-                </span>
-                <h2 className="text-2xl font-black text-slate-900 dark:text-white font-heading group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors pt-1">
-                  FIND NEARBY GARAGE
+                <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-heading group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
+                  EMERGENCY SOS RESCUE
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Locate verified repair workshops on the live interactive map with real-time distance and hours.
+                  Stranded or broken down? Dispatch instant emergency beacon with live telemetry to closest mobile mechanics.
+                </p>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <Link
+                to="/user/emergency"
+                className="btn-emergency w-full py-4 text-center text-sm font-black flex items-center justify-center gap-2 rounded-2xl shadow-md"
+              >
+                <span>REQUEST EMERGENCY SOS</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Card 2: Find Nearby Garage */}
+          <div className="clean-card p-7 sm:p-8 flex flex-col justify-between group hover:border-cyan-400 dark:hover:border-cyan-500 hover:shadow-2xl transition-all border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-3xl space-y-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="w-16 h-16 rounded-3xl bg-cyan-50 dark:bg-cyan-950/70 text-cyan-600 dark:text-cyan-400 flex items-center justify-center group-hover:scale-105 transition-transform border border-cyan-100 dark:border-cyan-800/60 shadow-xs">
+                  <MapPin className="w-8 h-8" />
+                </div>
+                <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/80 px-3 py-1 rounded-full border border-cyan-200/60 dark:border-cyan-800">
+                  Live Radar Grid
+                </span>
+              </div>
+
+              <div className="space-y-2">
+                <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-heading group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                  FIND NEARBY GARAGES
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Browse certified workshops on the interactive map with real-time distance, operating hours, and service dispatch.
                 </p>
               </div>
             </div>
@@ -144,31 +187,33 @@ export const UserHomePage = () => {
             <div className="pt-2">
               <Link
                 to="/user/garages"
-                className="btn-primary w-full py-4 text-center text-sm sm:text-base font-black flex items-center justify-center gap-2 rounded-2xl"
+                className="btn-primary w-full py-4 text-center text-sm font-black flex items-center justify-center gap-2 rounded-2xl"
               >
-                <MapPin className="w-5 h-5" />
-                <span>EXPLORE GARAGES ON MAP</span>
+                <MapPin className="w-4 h-4" />
+                <span>EXPLORE ON MAP</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
 
-          {/* Card 2: AI Vehicle Help */}
-          <div className="clean-card p-7 sm:p-9 flex flex-col justify-between group hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-2xl transition-all border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-3xl space-y-6">
-            <div className="space-y-5">
-              <div className="w-16 h-16 rounded-3xl bg-amber-50 dark:bg-amber-950/70 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:scale-105 transition-transform border border-amber-100 dark:border-amber-800/60 shadow-xs">
-                <Sparkles className="w-8 h-8" />
+          {/* Card 3: AI Vehicle Help */}
+          <div className="clean-card p-7 sm:p-8 flex flex-col justify-between group hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-2xl transition-all border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-3xl space-y-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="w-16 h-16 rounded-3xl bg-amber-50 dark:bg-amber-950/70 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:scale-105 transition-transform border border-amber-100 dark:border-amber-800/60 shadow-xs">
+                  <Sparkles className="w-8 h-8" />
+                </div>
+                <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/80 px-3 py-1 rounded-full border border-amber-200/60 dark:border-amber-800">
+                  Neural Diagnostic
+                </span>
               </div>
 
               <div className="space-y-2">
-                <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/80 px-3 py-1 rounded-full border border-amber-200/60 dark:border-amber-800">
-                  Instant AI Diagnostic
-                </span>
-                <h2 className="text-2xl font-black text-slate-900 dark:text-white font-heading group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors pt-1">
+                <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-heading group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                   AI VEHICLE DIAGNOSIS
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Describe symptoms or upload a dashboard photo to get instant step-by-step diagnostic solutions.
+                  Describe symptoms, strange sounds, or upload dashboard photos to generate instant step-by-step diagnostic advice.
                 </p>
               </div>
             </div>
@@ -176,51 +221,40 @@ export const UserHomePage = () => {
             <div className="pt-2">
               <Link
                 to="/user/ai-help"
-                className="btn-rapido w-full py-4 text-center text-sm sm:text-base font-black flex items-center justify-center gap-2 rounded-2xl"
+                className="btn-rapido w-full py-4 text-center text-sm font-black flex items-center justify-center gap-2 rounded-2xl"
               >
-                <Sparkles className="w-5 h-5" />
-                <span>GET INSTANT AI HELP</span>
+                <Sparkles className="w-4 h-4" />
+                <span>GET INSTANT AI SCAN</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
         </div>
 
-        {/* HIGH-IMPACT EMERGENCY HELP & SIREN BEACON SECTION */}
-        <div className="clean-card emergency-card-active p-8 sm:p-10 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden border-2 border-orange-300 dark:border-orange-800">
-          <div className="flex items-center gap-5 text-center sm:text-left relative z-10">
-            {/* Animated Siren Light Beacon */}
-            <div className="relative flex-shrink-0">
-              <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-950 dark:to-red-950 border-2 border-orange-300 dark:border-orange-700 flex items-center justify-center shadow-inner relative">
-                <SirenLight size="lg" variant="ambulance" hasWaves={true} animated={true} />
-              </div>
+        {/* Desktop Automotive Safety & Telemetry Support Footer */}
+        <div className="clean-card p-6 sm:p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+          <div className="flex items-center gap-4 text-center md:text-left">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 flex items-center justify-center flex-shrink-0">
+              <PhoneCall className="w-6 h-6" />
             </div>
-
-            <div className="space-y-1">
-              <div className="flex items-center justify-center sm:justify-start gap-2 mb-1.5">
-                <SirenBadge text="Immediate Breakdown Rescue" liveStatus="24/7 Ready" size="xs" />
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading tracking-tight flex items-center justify-center sm:justify-start gap-2">
-                <span>EMERGENCY SOS</span>
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md leading-relaxed">
-                Send an instant high-priority GPS rescue signal to nearby mobile mechanics.
+            <div>
+              <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white font-heading">
+                24/7 Roadside Driver Emergency Helpline
+              </h4>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Direct phone dispatcher available across all zones for severe highway situations.
               </p>
             </div>
           </div>
 
-          <div className="relative z-10 w-full sm:w-auto flex flex-col items-center sm:items-end gap-2 flex-shrink-0">
-            <Link
-              to="/user/emergency"
-              className="btn-emergency w-full sm:w-auto px-8 py-5 text-center text-sm sm:text-base font-black uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl group whitespace-nowrap rounded-2xl"
+          <div className="flex items-center gap-3">
+            <a
+              href="tel:18005556324"
+              className="px-5 py-3 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-mono font-bold text-xs border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition-colors flex items-center gap-2 shadow-xs"
             >
-              <SirenLight size="sm" variant="sticker" animated={true} />
-              <span className="drop-shadow-xs font-black">REQUEST EMERGENCY MECHANIC</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <span className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1 font-mono">
-              ⚡ Avg response: <strong className="text-orange-700 dark:text-orange-400 font-bold">~4.2 mins</strong>
-            </span>
+              <PhoneCall className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <span>+1 (800) 555-MECH</span>
+            </a>
           </div>
         </div>
       </main>

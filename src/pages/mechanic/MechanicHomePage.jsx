@@ -60,7 +60,7 @@ export const MechanicHomePage = () => {
     setRequests(list);
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 300);
     return () => clearTimeout(timer);
   }, []);
 
@@ -133,7 +133,7 @@ export const MechanicHomePage = () => {
       {loading ? (
         <MechanicHomeSkeleton />
       ) : (
-        <main className="max-w-5xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 md:py-14 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
+        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
         {/* Top Greeting & Status Toggle */}
         <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-7 sm:p-10 border-l-4 border-l-indigo-600 dark:border-l-indigo-500 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-2 border-slate-200 shadow-md rounded-3xl">
           <div className="space-y-2">
@@ -205,7 +205,7 @@ export const MechanicHomePage = () => {
               const target = requests.find((r) => r.id === g.id);
               if (target) setViewRequestModal(target);
             }}
-            height="320px"
+            height="440px"
           />
         </div>
 
@@ -232,7 +232,7 @@ export const MechanicHomePage = () => {
               <p className="text-xs text-slate-400 dark:text-slate-500">New driver breakdown alerts will stream in real-time.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {requests.map((req) => (
                 <div 
                   key={req.id} 

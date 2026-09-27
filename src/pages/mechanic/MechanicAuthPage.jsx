@@ -7,17 +7,10 @@ import ThemeToggle from '../../components/common/ThemeToggle';
 import { Wrench, ArrowLeft, CheckCircle2, ShieldCheck, Eye, EyeOff, Sparkles, Building2 } from 'lucide-react';
 
 export const MechanicAuthPage = () => {
-  const [pageLoading, setPageLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setPageLoading(false);
-    }, 4000);
-    return () => clearTimeout(timer);
-  }, []);
 
   // Form states
   const [garageName, setGarageName] = useState('Apex Auto Care & Diagnostics');

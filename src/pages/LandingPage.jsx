@@ -26,10 +26,10 @@ export const LandingPage = () => {
       </div>
 
       {/* Cybernetic Ambient Glow Background */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[550px] bg-gradient-to-b from-indigo-500/15 via-cyan-500/10 to-transparent blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[550px] bg-gradient-to-b from-indigo-500/15 via-cyan-500/10 to-transparent blur-3xl pointer-events-none -z-10" />
 
       {/* Top Brand Header */}
-      <header className="w-full max-w-4xl text-center space-y-6 pt-4">
+      <header className="w-full max-w-5xl text-center space-y-6 pt-4">
         <div className="flex justify-center mb-2">
           <BrandLogo size="lg" clickable={false} />
         </div>
@@ -60,7 +60,7 @@ export const LandingPage = () => {
       </header>
 
       {/* Main Dual Portal Selection Area (Oversized & High-Impact) */}
-      <section className="w-full max-w-4xl my-8 sm:my-12 space-y-6">
+      <section className="w-full max-w-6xl my-8 sm:my-12 space-y-6">
         <div className="flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono px-2">
           <span className="flex items-center gap-2">
             <Cpu className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -69,9 +69,9 @@ export const LandingPage = () => {
           <span className="text-indigo-600 dark:text-indigo-400 font-bold">Choose Role</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-7 sm:gap-9">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
           {/* Option 1: USER / DRIVER PORTAL */}
-          <div className="portal-card-user p-8 sm:p-10 flex flex-col justify-between group text-left shadow-lg border-2 border-cyan-300 dark:border-cyan-800/80 rounded-3xl space-y-8">
+          <div className="portal-card-user p-8 sm:p-10 lg:p-12 flex flex-col justify-between group text-left shadow-lg border-2 border-cyan-300 dark:border-cyan-800/80 rounded-3xl space-y-8">
             <div className="space-y-5">
               <div className="flex items-start justify-between">
                 <div className="w-18 h-18 rounded-3xl bg-cyan-100 dark:bg-cyan-950/80 text-cyan-600 dark:text-cyan-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform shadow-xs border border-cyan-200 dark:border-cyan-800">
@@ -83,7 +83,7 @@ export const LandingPage = () => {
               </div>
 
               <div className="space-y-2">
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white font-heading group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
                   USER / DRIVER PORTAL
                 </h2>
                 <div className="flex flex-wrap gap-2.5 pt-2">
@@ -112,7 +112,7 @@ export const LandingPage = () => {
           </div>
 
           {/* Option 2: MECHANIC / GARAGE PARTNER PORTAL */}
-          <div className="portal-card-mechanic p-8 sm:p-10 flex flex-col justify-between group text-left shadow-lg border-2 border-indigo-300 dark:border-indigo-800/80 rounded-3xl space-y-8">
+          <div className="portal-card-mechanic p-8 sm:p-10 lg:p-12 flex flex-col justify-between group text-left shadow-lg border-2 border-indigo-300 dark:border-indigo-800/80 rounded-3xl space-y-8">
             <div className="space-y-5">
               <div className="flex items-start justify-between">
                 <div className="w-18 h-18 rounded-3xl bg-indigo-100 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform shadow-xs border border-indigo-200 dark:border-indigo-800">
@@ -124,7 +124,7 @@ export const LandingPage = () => {
               </div>
 
               <div className="space-y-2">
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white font-heading group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                   MECHANIC PORTAL
                 </h2>
                 <div className="flex flex-wrap gap-2.5 pt-2">
@@ -155,12 +155,12 @@ export const LandingPage = () => {
       </section>
 
       {/* Official Platform Video Showcase */}
-      <div className="w-full my-8 sm:my-14">
+      <div className="w-full max-w-6xl my-8 sm:my-14">
         <AboutWebsiteVideo />
       </div>
 
       {/* Trust Highlights & Footer */}
-      <footer className="w-full max-w-3xl text-center space-y-6 pt-10 sm:pt-14 mt-12 sm:mt-16 border-t border-slate-200 dark:border-slate-800">
+      <footer className="w-full max-w-6xl text-center space-y-6 pt-10 sm:pt-14 mt-12 sm:mt-16 border-t border-slate-200 dark:border-slate-800">
         <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-bold">
           <span className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
