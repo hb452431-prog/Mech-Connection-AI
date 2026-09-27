@@ -22,10 +22,12 @@ import {
   X,
   RefreshCw
 } from 'lucide-react';
+import { useNetwork } from '../../context/NetworkContext';
 
 export const AiHelpPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const { isSlowNetwork, isOnline } = useNetwork();
   const [typedProblem, setTypedProblem] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -39,6 +41,8 @@ export const AiHelpPage = () => {
     }, 300);
     return () => clearTimeout(timer);
   }, []);
+
+  const showSkeleton = loading || isSlowNetwork || !isOnline;
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
@@ -96,7 +100,7 @@ export const AiHelpPage = () => {
         />
       )}
 
-      {loading ? (
+      {showSkeleton ? (
         <AiHelpSkeleton />
       ) : (
         <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">

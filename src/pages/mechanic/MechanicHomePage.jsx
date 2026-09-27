@@ -28,10 +28,12 @@ import {
   FileText,
   X
 } from 'lucide-react';
+import { useNetwork } from '../../context/NetworkContext';
 
 export const MechanicHomePage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const { isSlowNetwork, isOnline: isNetworkOnline } = useNetwork();
   const mechanic = authService.getMechanic() || {};
   const [requests, setRequests] = useState([]);
   const [viewRequestModal, setViewRequestModal] = useState(null);
@@ -63,6 +65,8 @@ export const MechanicHomePage = () => {
     }, 300);
     return () => clearTimeout(timer);
   }, []);
+
+  const showSkeleton = loading || isSlowNetwork || !isNetworkOnline;
 
   const handleAccept = (req) => {
     const mechLat = mechanicLocation?.lat || 37.7749;
@@ -134,7 +138,7 @@ export const MechanicHomePage = () => {
       <div className="mesh-aurora-bg" />
       <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
-      {loading ? (
+      {showSkeleton ? (
         <MechanicHomeSkeleton />
       ) : (
         <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">

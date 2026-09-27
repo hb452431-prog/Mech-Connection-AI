@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import SplashScreen from './components/common/SplashScreen';
+import NetworkBanner from './components/common/NetworkBanner';
 
 // Landing Page
 import LandingPage from './pages/LandingPage';
@@ -70,6 +71,9 @@ export const App = () => {
         {/* Catch-all fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+
+      {/* Floating Low Network Monitor & Simulation Controller */}
+      <NetworkBanner />
     </>
   );
 };

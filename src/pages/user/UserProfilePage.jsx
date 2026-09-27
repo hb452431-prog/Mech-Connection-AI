@@ -3,11 +3,13 @@ import { useNavigate, Link } from 'react-router-dom';
 import UserNavbar from '../../components/common/UserNavbar';
 import { ProfileSkeleton } from '../../components/common/Skeleton';
 import { authService } from '../../services/authService';
+import { useNetwork } from '../../context/NetworkContext';
 import { User, Phone, Mail, Car, Edit3, LogOut, Check, ArrowLeft, ShieldCheck, Key } from 'lucide-react';
 
 export const UserProfilePage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const { isSlowNetwork, isOnline } = useNetwork();
   const [user, setUser] = useState(authService.getUser() || {});
   const [isEditing, setIsEditing] = useState(false);
 
@@ -17,6 +19,8 @@ export const UserProfilePage = () => {
     }, 300);
     return () => clearTimeout(timer);
   }, []);
+
+  const showSkeleton = loading || isSlowNetwork || !isOnline;
 
   // Edit form states
   const [name, setName] = useState(user.name || '');
@@ -54,7 +58,7 @@ export const UserProfilePage = () => {
       <div className="mesh-aurora-bg" />
       <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
-      {loading ? (
+      {showSkeleton ? (
         <ProfileSkeleton />
       ) : (
         <main className="max-w-4xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">

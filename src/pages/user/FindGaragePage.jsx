@@ -25,10 +25,12 @@ import {
   Sparkles
 } from 'lucide-react';
 import { SirenBadge, SirenLight } from '../../components/common/SirenLight';
+import { useNetwork } from '../../context/NetworkContext';
 
 export const FindGaragePage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const { isSlowNetwork, isOnline } = useNetwork();
   const {
     location: userLocation,
     accuracy,
@@ -58,6 +60,8 @@ export const FindGaragePage = () => {
     }, 300);
     return () => clearTimeout(timer);
   }, []);
+
+  const showSkeleton = loading || isSlowNetwork || !isOnline;
 
   // When user location is available or manual coordinates change, generate nearby garages dynamically
   useEffect(() => {
@@ -123,7 +127,7 @@ export const FindGaragePage = () => {
       <div className="mesh-aurora-bg" />
       <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
-      {loading ? (
+      {showSkeleton ? (
         <FindGarageSkeleton />
       ) : (
         <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">

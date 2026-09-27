@@ -35,6 +35,7 @@ import {
   RefreshCw, 
   Send 
 } from 'lucide-react';
+import { useNetwork } from '../../context/NetworkContext';
 
 export const EmergencyPage = () => {
   const [searchParams] = useSearchParams();
@@ -43,6 +44,7 @@ export const EmergencyPage = () => {
   const initialType = searchParams.get('type') || 'Flat Tyre';
   const user = authService.getUser() || {};
   const [loading, setLoading] = useState(true);
+  const { isSlowNetwork, isOnline } = useNetwork();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -50,6 +52,8 @@ export const EmergencyPage = () => {
     }, 300);
     return () => clearTimeout(timer);
   }, []);
+
+  const showSkeleton = loading || isSlowNetwork || !isOnline;
 
   const {
     location: userCoords,
@@ -322,7 +326,7 @@ export const EmergencyPage = () => {
       <div className="mesh-aurora-bg" />
       <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
-      {loading ? (
+      {showSkeleton ? (
         <EmergencySkeleton />
       ) : (
         <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">

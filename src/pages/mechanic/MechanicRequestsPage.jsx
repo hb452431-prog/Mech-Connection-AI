@@ -25,10 +25,12 @@ import {
   ShieldCheck,
   RotateCcw
 } from 'lucide-react';
+import { useNetwork } from '../../context/NetworkContext';
 
 export const MechanicRequestsPage = () => {
   const mechanic = authService.getMechanic() || {};
   const [loading, setLoading] = useState(true);
+  const { isSlowNetwork, isOnline } = useNetwork();
   const [requests, setRequests] = useState([]);
   const [navigatingReq, setNavigatingReq] = useState(null);
   const [routeCoordinates, setRouteCoordinates] = useState(null);
@@ -64,6 +66,8 @@ export const MechanicRequestsPage = () => {
     }, 300);
     return () => clearTimeout(timer);
   }, []);
+
+  const showSkeleton = loading || isSlowNetwork || !isOnline;
 
   const handleAccept = (reqId) => {
     emergencyService.acceptRequest(reqId, {
@@ -152,7 +156,7 @@ export const MechanicRequestsPage = () => {
       <div className="mesh-aurora-bg" />
       <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
-      {loading ? (
+      {showSkeleton ? (
         <MechanicRequestsSkeleton />
       ) : (
         <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">

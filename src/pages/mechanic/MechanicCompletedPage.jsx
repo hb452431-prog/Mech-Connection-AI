@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import MechanicNavbar from '../../components/common/MechanicNavbar';
 import { MechanicCompletedSkeleton } from '../../components/common/Skeleton';
 import { emergencyService } from '../../services/emergencyService';
+import { useNetwork } from '../../context/NetworkContext';
 import { CheckCircle2, User, Calendar, Wrench, DollarSign } from 'lucide-react';
 
 export const MechanicCompletedPage = () => {
   const [loading, setLoading] = useState(true);
+  const { isSlowNetwork, isOnline } = useNetwork();
   const [completedList, setCompletedList] = useState([]);
 
   useEffect(() => {
@@ -16,6 +18,8 @@ export const MechanicCompletedPage = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const showSkeleton = loading || isSlowNetwork || !isOnline;
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070B14] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200 relative overflow-hidden">
       <MechanicNavbar />
@@ -24,7 +28,7 @@ export const MechanicCompletedPage = () => {
       <div className="mesh-aurora-bg" />
       <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
-      {loading ? (
+      {showSkeleton ? (
         <MechanicCompletedSkeleton />
       ) : (
         <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">

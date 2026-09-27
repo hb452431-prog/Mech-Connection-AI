@@ -3,11 +3,13 @@ import { useNavigate, Link } from 'react-router-dom';
 import { BrandLogo } from '../../components/common/BrandLogo';
 import { AuthSkeleton } from '../../components/common/Skeleton';
 import { authService } from '../../services/authService';
+import { useNetwork } from '../../context/NetworkContext';
 import ThemeToggle from '../../components/common/ThemeToggle';
 import { Wrench, ArrowLeft, CheckCircle2, ShieldCheck, Eye, EyeOff, Sparkles, Building2 } from 'lucide-react';
 
 export const MechanicAuthPage = () => {
   const [pageLoading, setPageLoading] = useState(false);
+  const { isSlowNetwork, isOnline } = useNetwork();
   const [isRegister, setIsRegister] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -54,7 +56,7 @@ export const MechanicAuthPage = () => {
     setServices('Engine Repair, Battery, Brakes, Tyre, 24/7 Roadside');
   };
 
-  if (pageLoading) {
+  if (pageLoading || isSlowNetwork || !isOnline) {
     return <AuthSkeleton />;
   }
 

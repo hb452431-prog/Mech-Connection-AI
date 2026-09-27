@@ -22,10 +22,12 @@ import {
   Activity
 } from 'lucide-react';
 import { SirenLight, SirenBadge } from '../../components/common/SirenLight';
+import { useNetwork } from '../../context/NetworkContext';
 
 export const UserHomePage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const { isSlowNetwork, isOnline } = useNetwork();
   const user = authService.getUser() || {};
 
   useEffect(() => {
@@ -35,6 +37,8 @@ export const UserHomePage = () => {
     }, 300);
     return () => clearTimeout(timer);
   }, []);
+
+  const showSkeleton = loading || isSlowNetwork || !isOnline;
 
   const quickServices = [
     { 
@@ -96,7 +100,7 @@ export const UserHomePage = () => {
       <div className="mesh-aurora-bg" />
       <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
-      {loading ? (
+      {showSkeleton ? (
         <UserHomeSkeleton />
       ) : (
         <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">
