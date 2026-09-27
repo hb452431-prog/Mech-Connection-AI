@@ -59,13 +59,17 @@ export const MechanicAuthPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col justify-center items-center px-4 py-8 relative transition-colors duration-200 animate-in fade-in duration-300">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070B14] text-slate-900 dark:text-slate-100 flex flex-col justify-center items-center px-4 py-8 relative transition-colors duration-200 animate-in fade-in duration-300 overflow-hidden">
+      {/* Cybernetic Ambient Aurora Background */}
+      <div className="mesh-aurora-bg" />
+      <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
+
       {/* Top right Theme Toggle */}
       <div className="absolute top-4 right-4 z-20">
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-md space-y-6">
+      <div className="w-full max-w-md space-y-6 relative z-10">
         {/* Back Link */}
         <Link
           to="/"
@@ -84,7 +88,7 @@ export const MechanicAuthPage = () => {
             <Wrench className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
             Mechanic & Garage Portal
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading">
+          <h1 className="text-2xl sm:text-3xl font-black text-gradient-hero font-heading">
             {isRegister ? 'Register Workshop' : 'Mechanic Partner Login'}
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto">
@@ -95,7 +99,7 @@ export const MechanicAuthPage = () => {
         </div>
 
         {/* Auth Card */}
-        <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl border-2 border-slate-200 dark:border-slate-800 rounded-3xl">
+        <div className="clean-card bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl p-6 sm:p-8 space-y-6 shadow-glass-card dark:shadow-glass-dark border-2 border-slate-200/90 dark:border-slate-800/90 rounded-3xl">
           {/* Tab Switcher */}
           <div className="grid grid-cols-2 gap-1.5 p-1.5 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200/50 dark:border-slate-700/50">
             <button

@@ -151,8 +151,11 @@ export const AboutWebsiteVideo = () => {
   return (
     <section className="w-full max-w-6xl mx-auto my-6 sm:my-10 px-4 sm:px-6" id="about-website-video">
       {/* Section Header */}
-      <div className="text-center mb-6 sm:mb-8">
-        <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
+      <div className="text-center mb-6 sm:mb-8 space-y-2">
+        <span className="text-xs font-mono font-bold uppercase tracking-widest text-brand-blue dark:text-brand-cyan-light bg-blue-50 dark:bg-blue-950/60 px-3.5 py-1 rounded-full border border-blue-200/80 dark:border-blue-800/80">
+          Interactive Architecture
+        </span>
+        <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-gradient-hero font-heading tracking-tight">
           How MECH CONNECT AI Works
         </h2>
       </div>
@@ -161,7 +164,7 @@ export const AboutWebsiteVideo = () => {
       <div 
         ref={containerRef}
         onMouseMove={handleMouseMove}
-        className={`relative rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 border-2 border-slate-200 dark:border-slate-800 shadow-2xl transition-all group ${
+        className={`relative rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 border-2 border-slate-200/90 dark:border-slate-800/90 hover:border-blue-500/40 dark:hover:border-blue-500/50 shadow-2xl transition-all group ${
           isFullscreen ? 'fixed inset-0 z-50 rounded-none h-screen flex flex-col justify-between' : ''
         }`}
       >
@@ -182,7 +185,7 @@ export const AboutWebsiteVideo = () => {
           {!isPlaying && (
             <button
               onClick={togglePlay}
-              className="absolute inset-0 m-auto w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center shadow-2xl shadow-amber-500/50 backdrop-blur-sm transition-transform transform hover:scale-110 z-10"
+              className="absolute inset-0 m-auto w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 flex items-center justify-center shadow-2xl shadow-amber-500/50 backdrop-blur-sm transition-transform transform hover:scale-110 z-10"
               aria-label="Play Video"
             >
               <Play className="w-10 h-10 sm:w-12 sm:h-12 ml-1 fill-current" />
@@ -212,7 +215,7 @@ export const AboutWebsiteVideo = () => {
               onClick={handleSeek}
             >
               <div 
-                className="h-full bg-gradient-to-r from-amber-400 via-indigo-500 to-indigo-400 relative"
+                className="h-full bg-gradient-to-r from-blue-600 via-cyan-400 to-emerald-400 relative"
                 style={{ width: `${progressPercentage}%` }}
               >
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-white rounded-full shadow-md transform scale-0 group-hover/bar:scale-100 transition-transform"></div>

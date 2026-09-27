@@ -17,15 +17,19 @@ export const MechanicCompletedPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070B14] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200 relative overflow-hidden">
       <MechanicNavbar />
+
+      {/* Cybernetic Ambient Aurora Background */}
+      <div className="mesh-aurora-bg" />
+      <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
       {loading ? (
         <MechanicCompletedSkeleton />
       ) : (
-        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300">
+        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">
         <div className="space-y-2">
-          <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
+          <h1 className="text-2xl sm:text-4xl font-black text-gradient-hero font-heading tracking-tight">
             Completed Assistance & Earnings
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
@@ -35,7 +39,7 @@ export const MechanicCompletedPage = () => {
 
         {/* 4-Column Desktop Performance Metric Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          <div className="clean-card p-5 sm:p-6 border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl shadow-xs">
+          <div className="clean-card p-5 sm:p-6 border-2 border-slate-200/90 dark:border-slate-800/90 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-glass-card dark:shadow-glass-dark hover:border-blue-400 dark:hover:border-blue-500 transition-all">
             <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase block">Completed Rescues</span>
             <div className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-heading mt-1">
               {completedList.length}
@@ -43,7 +47,7 @@ export const MechanicCompletedPage = () => {
             <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold mt-1 block">● 100% Resolved</span>
           </div>
 
-          <div className="clean-card p-5 sm:p-6 border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl shadow-xs">
+          <div className="clean-card p-5 sm:p-6 border-2 border-slate-200/90 dark:border-slate-800/90 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-glass-card dark:shadow-glass-dark hover:border-emerald-400 dark:hover:border-emerald-500 transition-all">
             <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase block">Total Revenue</span>
             <div className="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400 font-heading mt-1">
               ${completedList.length * 49 || 98}.00
@@ -51,7 +55,7 @@ export const MechanicCompletedPage = () => {
             <span className="text-[11px] text-slate-500 font-mono mt-1 block">Direct Bank Deposit</span>
           </div>
 
-          <div className="clean-card p-5 sm:p-6 border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl shadow-xs">
+          <div className="clean-card p-5 sm:p-6 border-2 border-slate-200/90 dark:border-slate-800/90 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-glass-card dark:shadow-glass-dark hover:border-amber-400 dark:hover:border-amber-500 transition-all">
             <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase block">Customer Satisfaction</span>
             <div className="text-2xl sm:text-3xl font-black text-amber-500 font-heading mt-1">
               4.9 / 5.0
@@ -59,7 +63,7 @@ export const MechanicCompletedPage = () => {
             <span className="text-[11px] text-slate-500 font-mono mt-1 block">⭐ Verified Reviews</span>
           </div>
 
-          <div className="clean-card p-5 sm:p-6 border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl shadow-xs">
+          <div className="clean-card p-5 sm:p-6 border-2 border-slate-200/90 dark:border-slate-800/90 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-glass-card dark:shadow-glass-dark hover:border-indigo-400 dark:hover:border-indigo-500 transition-all">
             <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase block">Average Fix Time</span>
             <div className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-400 font-heading mt-1">
               24 Mins

@@ -47,22 +47,26 @@ export const UserProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070B14] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200 relative overflow-hidden">
       <UserNavbar />
+
+      {/* Cybernetic Ambient Aurora Background */}
+      <div className="mesh-aurora-bg" />
+      <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
       {loading ? (
         <ProfileSkeleton />
       ) : (
-        <main className="max-w-4xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300">
+        <main className="max-w-4xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">
         <div className="space-y-2">
           <Link
             to="/user"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors mb-2"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors mb-2"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
-          <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
+          <h1 className="text-2xl sm:text-4xl font-black text-gradient-hero font-heading tracking-tight">
             Driver Profile
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
@@ -71,7 +75,7 @@ export const UserProfilePage = () => {
         </div>
 
         {/* Profile Card */}
-        <div className="clean-card p-7 sm:p-10 space-y-7 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm rounded-3xl">
+        <div className="clean-card p-7 sm:p-10 space-y-7 border-slate-200/90 dark:border-slate-800/90 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-glass-card dark:shadow-glass-dark rounded-3xl">
           {isEditing ? (
             <form onSubmit={handleSave} className="space-y-5 text-xs">
               <div>

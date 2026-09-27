@@ -6,7 +6,7 @@
     <link rel="alternate icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#F6F8FC" />
+    <meta name="theme-color" content="#F8FAFC" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -32,11 +32,11 @@
           if (saved === 'dark') {
             document.documentElement.classList.add('dark');
             var meta = document.querySelector('meta[name="theme-color"]');
-            if (meta) meta.setAttribute('content', '#0B1120');
+            if (meta) meta.setAttribute('content', '#070B14');
           } else {
             document.documentElement.classList.remove('dark');
             var meta = document.querySelector('meta[name="theme-color"]');
-            if (meta) meta.setAttribute('content', '#F6F8FC');
+            if (meta) meta.setAttribute('content', '#F8FAFC');
           }
         } catch (e) {}
 
@@ -56,7 +56,7 @@
       })();
     </script>
   </head>
-  <body class="bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 antialiased selection:bg-indigo-500 selection:text-white transition-colors duration-200">
+  <body class="bg-[#F8FAFC] dark:bg-[#070B14] text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-600 selection:text-white transition-colors duration-200">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

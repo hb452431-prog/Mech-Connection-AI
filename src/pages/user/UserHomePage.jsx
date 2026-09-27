@@ -18,7 +18,8 @@ import {
   Disc,
   Truck,
   KeyRound,
-  Flame
+  Flame,
+  Activity
 } from 'lucide-react';
 import { SirenLight, SirenBadge } from '../../components/common/SirenLight';
 
@@ -36,11 +37,51 @@ export const UserHomePage = () => {
   }, []);
 
   const quickServices = [
-    { label: 'Flat Tyre', icon: Disc, type: 'Flat Tyre' },
-    { label: 'Battery Jump', icon: BatteryCharging, type: 'Battery Problem' },
-    { label: 'Engine Stall', icon: Flame, type: 'Engine Problem' },
-    { label: 'Towing Rescue', icon: Truck, type: 'Vehicle Breakdown' },
-    { label: 'Lockout Aid', icon: KeyRound, type: 'Other' }
+    { 
+      label: 'Flat Tyre', 
+      icon: Disc, 
+      type: 'Flat Tyre',
+      bgLight: 'bg-cyan-50 dark:bg-cyan-950/60',
+      textLight: 'text-cyan-600 dark:text-cyan-400',
+      hoverBg: 'group-hover:bg-cyan-500 group-hover:text-white',
+      borderHover: 'hover:border-cyan-400 dark:hover:border-cyan-500'
+    },
+    { 
+      label: 'Battery Jump', 
+      icon: BatteryCharging, 
+      type: 'Battery Problem',
+      bgLight: 'bg-amber-50 dark:bg-amber-950/60',
+      textLight: 'text-amber-600 dark:text-amber-400',
+      hoverBg: 'group-hover:bg-amber-500 group-hover:text-slate-950',
+      borderHover: 'hover:border-amber-400 dark:hover:border-amber-500'
+    },
+    { 
+      label: 'Engine Stall', 
+      icon: Flame, 
+      type: 'Engine Problem',
+      bgLight: 'bg-orange-50 dark:bg-orange-950/60',
+      textLight: 'text-orange-600 dark:text-orange-400',
+      hoverBg: 'group-hover:bg-orange-500 group-hover:text-white',
+      borderHover: 'hover:border-orange-400 dark:hover:border-orange-500'
+    },
+    { 
+      label: 'Towing Rescue', 
+      icon: Truck, 
+      type: 'Vehicle Breakdown',
+      bgLight: 'bg-blue-50 dark:bg-blue-950/60',
+      textLight: 'text-blue-600 dark:text-blue-400',
+      hoverBg: 'group-hover:bg-blue-600 group-hover:text-white',
+      borderHover: 'hover:border-blue-400 dark:hover:border-blue-500'
+    },
+    { 
+      label: 'Lockout Aid', 
+      icon: KeyRound, 
+      type: 'Other',
+      bgLight: 'bg-emerald-50 dark:bg-emerald-950/60',
+      textLight: 'text-emerald-600 dark:text-emerald-400',
+      hoverBg: 'group-hover:bg-emerald-500 group-hover:text-white',
+      borderHover: 'hover:border-emerald-400 dark:hover:border-emerald-500'
+    }
   ];
 
   const handleQuickService = (type) => {
@@ -48,17 +89,21 @@ export const UserHomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#080D1A] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070B14] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200 relative overflow-hidden">
       <UserNavbar />
+
+      {/* Cybernetic Ambient Aurora Background */}
+      <div className="mesh-aurora-bg" />
+      <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
       {loading ? (
         <UserHomeSkeleton />
       ) : (
-        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
+        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">
         {/* Top Driver Telemetry Status Banner */}
-        <div className="clean-card p-6 sm:p-8 bg-gradient-to-r from-white via-cyan-50/40 to-indigo-50/30 dark:from-slate-900 dark:via-cyan-950/30 dark:to-indigo-950/40 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-2 border-slate-200 dark:border-slate-800 shadow-md rounded-3xl">
-          <div className="flex items-center gap-5">
-            <div className="w-16 h-16 rounded-3xl bg-cyan-100 dark:bg-cyan-950/80 text-cyan-700 dark:text-cyan-300 flex items-center justify-center flex-shrink-0 font-bold border border-cyan-200 dark:border-cyan-800 shadow-xs">
+        <div className="clean-card p-6 sm:p-8 bg-gradient-to-r from-white via-blue-50/40 to-cyan-50/40 dark:from-[#0B1222] dark:via-blue-950/40 dark:to-cyan-950/40 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-2 border-slate-200/90 dark:border-slate-800/90 shadow-glass-card dark:shadow-glass-dark rounded-3xl relative overflow-hidden">
+          <div className="flex items-center gap-5 relative z-10">
+            <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white flex items-center justify-center flex-shrink-0 font-bold shadow-glow-blue border border-white/20">
               <Car className="w-8 h-8" />
             </div>
             <div className="space-y-1">
@@ -66,7 +111,7 @@ export const UserHomePage = () => {
                 <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-heading">
                   Hello, {user.name || 'Driver'}
                 </h2>
-                <span className="px-3 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-xs font-bold font-mono flex items-center gap-1.5 border border-emerald-200 dark:border-emerald-800">
+                <span className="px-3 py-0.5 rounded-full bg-emerald-100/90 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-xs font-bold font-mono flex items-center gap-1.5 border border-emerald-300/80 dark:border-emerald-800 shadow-xs">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   Vehicle Ready
                 </span>
@@ -77,16 +122,16 @@ export const UserHomePage = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="hidden lg:flex items-center gap-4 px-4 py-2 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-mono">
-              <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
+          <div className="flex items-center gap-3 relative z-10">
+            <div className="hidden lg:flex items-center gap-4 px-4 py-2 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-mono shadow-xs">
+              <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-bold">
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
                 24/7 Coverage Active
               </span>
             </div>
             <Link
               to="/user/profile"
-              className="btn-secondary px-5 py-3 text-xs sm:text-sm font-bold flex items-center gap-2 self-start sm:self-auto rounded-2xl"
+              className="btn-secondary px-5 py-3 text-xs sm:text-sm font-bold flex items-center gap-2 self-start sm:self-auto rounded-2xl shadow-xs"
             >
               <span>Manage Vehicle</span>
             </Link>
@@ -96,12 +141,13 @@ export const UserHomePage = () => {
         {/* 1-Tap Quick Roadside Services Bar */}
         <div className="space-y-4">
           <div className="flex items-center justify-between px-1">
-            <span className="text-xs font-black uppercase tracking-wider font-mono text-slate-500 dark:text-slate-400 flex items-center gap-2">
+            <span className="text-xs font-black uppercase tracking-wider font-mono text-slate-600 dark:text-slate-400 flex items-center gap-2">
               <Zap className="w-4 h-4 text-amber-500" />
               <span>Instant 1-Tap Roadside Rescue:</span>
             </span>
-            <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-bold">
-              ⚡ ~4.2 Mins Avg Arrival • 142 Technicians Online
+            <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+              <Activity className="w-3.5 h-3.5 animate-pulse" />
+              ~4.2 Mins Avg Arrival • 142 Technicians Online
             </span>
           </div>
 
@@ -113,9 +159,9 @@ export const UserHomePage = () => {
                   key={idx}
                   type="button"
                   onClick={() => handleQuickService(srv.type)}
-                  className="clean-card p-4 sm:p-5 flex flex-col items-center justify-center gap-3 hover:border-amber-400 dark:hover:border-amber-500 hover:scale-[1.03] transition-all text-center group border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl shadow-sm"
+                  className={`clean-card p-4 sm:p-5 flex flex-col items-center justify-center gap-3 ${srv.borderHover} hover:scale-[1.03] transition-all text-center group border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0B1222] rounded-2xl shadow-sm`}
                 >
-                  <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
+                  <div className={`w-12 h-12 rounded-2xl ${srv.bgLight} ${srv.textLight} flex items-center justify-center ${srv.hoverBg} transition-all duration-200 shadow-xs`}>
                     <Icon className="w-6 h-6" />
                   </div>
                   <span className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-200 font-heading">
@@ -130,13 +176,13 @@ export const UserHomePage = () => {
         {/* 3 Balanced Primary Action Cards for Desktop & Tablet */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Card 1: Emergency SOS Dispatch */}
-          <div className="clean-card emergency-card-active p-7 sm:p-8 flex flex-col justify-between group hover:shadow-2xl transition-all border-2 border-orange-300 dark:border-orange-800 bg-white dark:bg-slate-900 rounded-3xl space-y-6">
+          <div className="clean-card emergency-card-active p-7 sm:p-8 flex flex-col justify-between group hover:shadow-2xl transition-all border-2 border-orange-300 dark:border-orange-800 rounded-3xl space-y-6 relative overflow-hidden">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-950 dark:to-red-950 text-orange-600 dark:text-orange-400 flex items-center justify-center group-hover:scale-105 transition-transform border border-orange-200 dark:border-orange-800 shadow-xs">
+                <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-orange-500 to-red-600 text-white flex items-center justify-center group-hover:scale-105 transition-transform shadow-glow-emergency border border-white/20">
                   <SirenLight size="md" variant="ambulance" animated={true} />
                 </div>
-                <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-orange-700 dark:text-orange-300 bg-orange-50 dark:bg-orange-950/80 px-3 py-1 rounded-full border border-orange-200 dark:border-orange-800">
+                <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-orange-700 dark:text-orange-300 bg-orange-100/90 dark:bg-orange-950/80 px-3 py-1 rounded-full border border-orange-300/80 dark:border-orange-800 shadow-xs">
                   ⚡ High Priority
                 </span>
               </div>
@@ -163,13 +209,13 @@ export const UserHomePage = () => {
           </div>
 
           {/* Card 2: Find Nearby Garage */}
-          <div className="clean-card p-7 sm:p-8 flex flex-col justify-between group hover:border-cyan-400 dark:hover:border-cyan-500 hover:shadow-2xl transition-all border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-3xl space-y-6">
+          <div className="portal-card-user p-7 sm:p-8 flex flex-col justify-between group hover:shadow-2xl transition-all border-2 border-cyan-300/80 dark:border-cyan-700/60 rounded-3xl space-y-6 relative overflow-hidden">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <div className="w-16 h-16 rounded-3xl bg-cyan-50 dark:bg-cyan-950/70 text-cyan-600 dark:text-cyan-400 flex items-center justify-center group-hover:scale-105 transition-transform border border-cyan-100 dark:border-cyan-800/60 shadow-xs">
+                <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center group-hover:scale-105 transition-transform shadow-glow-cyan border border-white/20">
                   <MapPin className="w-8 h-8" />
                 </div>
-                <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/80 px-3 py-1 rounded-full border border-cyan-200/60 dark:border-cyan-800">
+                <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-cyan-700 dark:text-cyan-300 bg-cyan-100/90 dark:bg-cyan-950/80 px-3 py-1 rounded-full border border-cyan-300/80 dark:border-cyan-800 shadow-xs">
                   Live Radar Grid
                 </span>
               </div>
@@ -187,7 +233,7 @@ export const UserHomePage = () => {
             <div className="pt-2">
               <Link
                 to="/user/garages"
-                className="btn-primary w-full py-4 text-center text-sm font-black flex items-center justify-center gap-2 rounded-2xl"
+                className="btn-primary bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 w-full py-4 text-center text-sm font-black flex items-center justify-center gap-2 rounded-2xl shadow-glow-blue"
               >
                 <MapPin className="w-4 h-4" />
                 <span>EXPLORE ON MAP</span>
@@ -197,19 +243,19 @@ export const UserHomePage = () => {
           </div>
 
           {/* Card 3: AI Vehicle Help */}
-          <div className="clean-card p-7 sm:p-8 flex flex-col justify-between group hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-2xl transition-all border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-3xl space-y-6">
+          <div className="portal-card-mechanic p-7 sm:p-8 flex flex-col justify-between group hover:shadow-2xl transition-all border-2 border-indigo-300/80 dark:border-indigo-700/60 rounded-3xl space-y-6 relative overflow-hidden">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <div className="w-16 h-16 rounded-3xl bg-amber-50 dark:bg-amber-950/70 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:scale-105 transition-transform border border-amber-100 dark:border-amber-800/60 shadow-xs">
+                <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-indigo-600 to-blue-600 text-white flex items-center justify-center group-hover:scale-105 transition-transform shadow-glow-indigo border border-white/20">
                   <Sparkles className="w-8 h-8" />
                 </div>
-                <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/80 px-3 py-1 rounded-full border border-amber-200/60 dark:border-amber-800">
+                <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-indigo-700 dark:text-indigo-300 bg-indigo-100/90 dark:bg-indigo-950/80 px-3 py-1 rounded-full border border-indigo-300/80 dark:border-indigo-800 shadow-xs">
                   Neural Diagnostic
                 </span>
               </div>
 
               <div className="space-y-2">
-                <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-heading group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-heading group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                   AI VEHICLE DIAGNOSIS
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
@@ -232,9 +278,9 @@ export const UserHomePage = () => {
         </div>
 
         {/* Desktop Automotive Safety & Telemetry Support Footer */}
-        <div className="clean-card p-6 sm:p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+        <div className="clean-card p-6 sm:p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-slate-200/90 dark:border-slate-800/90 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl shadow-glass-card dark:shadow-glass-dark">
           <div className="flex items-center gap-4 text-center md:text-left">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-cyan-400 flex items-center justify-center flex-shrink-0 shadow-xs">
               <PhoneCall className="w-6 h-6" />
             </div>
             <div>
@@ -250,9 +296,9 @@ export const UserHomePage = () => {
           <div className="flex items-center gap-3">
             <a
               href="tel:18005556324"
-              className="px-5 py-3 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-mono font-bold text-xs border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition-colors flex items-center gap-2 shadow-xs"
+              className="px-5 py-3 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-mono font-bold text-xs border border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-cyan-400 transition-colors flex items-center gap-2 shadow-xs"
             >
-              <PhoneCall className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <PhoneCall className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
               <span>+1 (800) 555-MECH</span>
             </a>
           </div>
@@ -264,4 +310,3 @@ export const UserHomePage = () => {
 };
 
 export default UserHomePage;
-

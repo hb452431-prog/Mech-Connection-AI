@@ -79,8 +79,12 @@ export const AiHelpPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070B14] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200 relative overflow-hidden">
       <UserNavbar />
+
+      {/* Cybernetic Ambient Aurora Background */}
+      <div className="mesh-aurora-bg" />
+      <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
       {/* Fullscreen Violet Revolving Nut, Bolt & Spanner Loader during AI Prompt Analysis */}
       {isAnalyzing && (
@@ -95,22 +99,22 @@ export const AiHelpPage = () => {
       {loading ? (
         <AiHelpSkeleton />
       ) : (
-        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300">
+        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">
         {/* Header */}
         <div className="space-y-2">
           <Link
             to="/user"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors mb-2"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors mb-2"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
           <div className="flex items-center gap-3.5 pt-1">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 flex items-center justify-center border border-indigo-200 dark:border-indigo-800 shadow-2xs">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-600 to-blue-600 text-white flex items-center justify-center border border-white/20 shadow-glow-indigo">
               <Sparkles className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
+              <h1 className="text-2xl sm:text-4xl font-black text-gradient-hero font-heading tracking-tight">
                 AI Vehicle Diagnostic Assistant
               </h1>
             </div>
@@ -124,7 +128,7 @@ export const AiHelpPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Input Form */}
           <div className="lg:col-span-6 space-y-6">
-            <div className="clean-card p-6 sm:p-8 space-y-6 border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm rounded-3xl">
+            <div className="clean-card p-6 sm:p-8 space-y-6 border-2 border-slate-200/90 dark:border-slate-800/90 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-glass-card dark:shadow-glass-dark rounded-3xl">
               <form onSubmit={handleAnalyze} className="space-y-6">
                 {/* 1. Type the problem */}
                 <div className="space-y-3">
@@ -165,7 +169,7 @@ export const AiHelpPage = () => {
                           key={idx}
                           type="button"
                           onClick={() => handleQuickChip(sample)}
-                          className="text-xs sm:text-sm font-bold p-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-amber-950/60 hover:text-amber-800 dark:hover:text-amber-300 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-all text-left"
+                          className="text-xs sm:text-sm font-bold p-3 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 hover:bg-blue-50 dark:hover:bg-blue-950/60 hover:text-blue-700 dark:hover:text-cyan-300 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-700 transition-all text-left shadow-2xs"
                         >
                           💡 {sample}
                         </button>
@@ -182,7 +186,7 @@ export const AiHelpPage = () => {
 
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                     <label className="btn-secondary px-5 py-3.5 text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer shadow-xs rounded-xl">
-                      <Upload className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                      <Upload className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
                       <span>{imageFile ? 'Change Photo' : 'Upload Warning Light / Engine Photo'}</span>
                       <input
                         type="file"
@@ -193,7 +197,7 @@ export const AiHelpPage = () => {
                     </label>
 
                     {imageFile && (
-                      <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                      <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs">
                         <span className="text-xs text-slate-700 dark:text-slate-300 font-medium truncate max-w-xs">
                           📎 {imageFile.name}
                         </span>
@@ -210,7 +214,7 @@ export const AiHelpPage = () => {
                   </div>
 
                   {imagePreview && (
-                    <div className="mt-3 relative w-44 h-32 rounded-2xl overflow-hidden border-2 border-indigo-300 dark:border-indigo-800 shadow-md group">
+                    <div className="mt-3 relative w-44 h-32 rounded-2xl overflow-hidden border-2 border-blue-400 dark:border-cyan-600 shadow-md group">
                       <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                       <button
                         type="button"
@@ -228,11 +232,11 @@ export const AiHelpPage = () => {
                   <button
                     type="submit"
                     disabled={isAnalyzing || (!typedProblem.trim() && !imageFile)}
-                    className="w-full btn-rapido py-4 sm:py-5 text-base sm:text-lg font-black shadow-lg flex items-center justify-center gap-3 disabled:opacity-50"
+                    className="w-full btn-primary bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:via-indigo-500 hover:to-cyan-400 text-white py-4 sm:py-5 text-base sm:text-lg font-black shadow-glow-blue flex items-center justify-center gap-3 disabled:opacity-50"
                   >
                     {isAnalyzing ? (
                       <>
-                        <Sparkles className="w-5 h-5 animate-spin text-slate-950" />
+                        <Sparkles className="w-5 h-5 animate-spin text-white" />
                         <span>ANALYZING DIAGNOSTICS WITH AI ENGINE...</span>
                       </>
                     ) : (

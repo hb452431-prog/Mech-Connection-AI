@@ -6,39 +6,48 @@
   --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  --bg-app: #F6F8FC;
+  --bg-app: #F8FAFC;
   --bg-card: #FFFFFF;
-  --text-main: #0F172A;
+  --text-main: #0B132B;
   --text-muted: #64748B;
   --border-color: #E2E8F0;
 
-  --primary: #4F46E5;
-  --primary-hover: #4338CA;
-  --primary-light: #EEF2FF;
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-light: #EFF6FF;
+
+  --cyan: #06B6D4;
+  --cyan-light: #ECFEFF;
 
   --emergency: #EA580C;
   --emergency-hover: #C2410C;
   --emergency-light: #FFF7ED;
 
-  --success: #16A34A;
-  --success-light: #DCFCE7;
+  --success: #10B981;
+  --success-light: #ECFDF5;
 }
 
 /* Dark Mode CSS Tokens */
 .dark {
-  --bg-app: #0B1120;
-  --bg-card: #0F172A;
+  --bg-app: #070B14;
+  --bg-card: #0B1222;
   --text-main: #F8FAFC;
   --text-muted: #94A3B8;
   --border-color: #1E293B;
 
-  --primary: #6366F1;
-  --primary-hover: #4F46E5;
-  --primary-light: rgba(99, 102, 241, 0.15);
+  --primary: #3B82F6;
+  --primary-hover: #2563EB;
+  --primary-light: rgba(37, 99, 235, 0.15);
+
+  --cyan: #22D3EE;
+  --cyan-light: rgba(34, 211, 238, 0.15);
 
   --emergency: #F97316;
   --emergency-hover: #EA580C;
   --emergency-light: rgba(249, 115, 22, 0.15);
+
+  --success: #10B981;
+  --success-light: rgba(16, 185, 129, 0.15);
 }
 
 * {
@@ -74,15 +83,19 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Unique Automotive AI Glass Panels */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.05);
 }
 
 .dark .glass-panel {
-  background: rgba(15, 23, 42, 0.82);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(30, 41, 59, 0.85);
+  background: rgba(11, 18, 34, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(30, 41, 59, 0.8);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
 }
 
 /* Polished Card & Container Styles */
@@ -91,120 +104,126 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid #E2E8F0;
   border-radius: 1.5rem;
   padding: 1.75rem;
-  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03), 0 2px 4px -2px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark .clean-card {
-  background-color: #0F172A;
+  background: linear-gradient(180deg, #0D1629 0%, #0B1222 100%);
   border-color: #1E293B;
-  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .clean-card:hover {
-  box-shadow: 0 12px 24px -4px rgba(79, 70, 229, 0.08), 0 4px 8px -4px rgba(15, 23, 42, 0.04);
+  border-color: #CBD5E1;
+  box-shadow: 0 14px 28px -4px rgba(37, 99, 235, 0.07), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
 }
 
 .dark .clean-card:hover {
-  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.6), 0 0 1px rgba(255, 255, 255, 0.1);
+  border-color: #334155;
+  box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.7), 0 0 20px rgba(37, 99, 235, 0.1);
 }
 
 /* Unique Portal Selection Card Styling */
 .portal-card-mechanic {
   position: relative;
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-  border: 2px solid #e2e8f0;
-  border-radius: 1.5rem;
+  background: linear-gradient(145deg, #FFFFFF 0%, #F5F3FF 60%, #EEF2FF 100%);
+  border: 2px solid #C7D2FE;
+  border-radius: 1.75rem;
   padding: 2rem;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
+  box-shadow: 0 10px 30px -5px rgba(79, 70, 229, 0.08);
 }
 
 .dark .portal-card-mechanic {
-  background: linear-gradient(135deg, #0f172a 0%, #131d36 100%);
-  border-color: #1e293b;
+  background: linear-gradient(145deg, #0B1426 0%, #15183E 60%, #1C194D 100%);
+  border-color: #2F3369;
+  box-shadow: 0 14px 40px -5px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(129, 140, 248, 0.15);
 }
 
 .portal-card-mechanic:hover {
-  border-color: #6366f1;
-  transform: translateY(-3px);
-  box-shadow: 0 16px 36px -4px rgba(99, 102, 241, 0.25), 0 0 24px rgba(99, 102, 241, 0.12);
+  border-color: #6366F1;
+  transform: translateY(-4px);
+  box-shadow: 0 20px 45px -8px rgba(99, 102, 241, 0.3), 0 0 30px rgba(99, 102, 241, 0.15);
 }
 
 .dark .portal-card-mechanic:hover {
-  border-color: #818cf8;
-  box-shadow: 0 16px 38px -4px rgba(99, 102, 241, 0.35), 0 0 28px rgba(99, 102, 241, 0.18);
+  border-color: #818CF8;
+  box-shadow: 0 20px 48px -8px rgba(99, 102, 241, 0.4), 0 0 35px rgba(129, 140, 248, 0.25);
 }
 
 .portal-card-user {
   position: relative;
-  background: linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%);
-  border: 2px solid #e2e8f0;
-  border-radius: 1.5rem;
+  background: linear-gradient(145deg, #FFFFFF 0%, #F0FDFA 60%, #E0F2FE 100%);
+  border: 2px solid #BAE6FD;
+  border-radius: 1.75rem;
   padding: 2rem;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
+  box-shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.08);
 }
 
 .dark .portal-card-user {
-  background: linear-gradient(135deg, #0f172a 0%, #0c2033 100%);
-  border-color: #1e293b;
+  background: linear-gradient(145deg, #0B1426 0%, #071D2E 60%, #04253A 100%);
+  border-color: #0E486D;
+  box-shadow: 0 14px 40px -5px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(34, 211, 238, 0.15);
 }
 
 .portal-card-user:hover {
-  border-color: #06b6d4;
-  transform: translateY(-3px);
-  box-shadow: 0 16px 36px -4px rgba(6, 182, 212, 0.25), 0 0 24px rgba(6, 182, 212, 0.12);
+  border-color: #06B6D4;
+  transform: translateY(-4px);
+  box-shadow: 0 20px 45px -8px rgba(6, 182, 212, 0.3), 0 0 30px rgba(6, 182, 212, 0.15);
 }
 
 .dark .portal-card-user:hover {
-  border-color: #22d3ee;
-  box-shadow: 0 16px 38px -4px rgba(6, 182, 212, 0.35), 0 0 28px rgba(6, 182, 212, 0.18);
+  border-color: #22D3EE;
+  box-shadow: 0 20px 48px -8px rgba(6, 182, 212, 0.4), 0 0 35px rgba(34, 211, 238, 0.25);
 }
 
 .clean-input {
   background-color: #FFFFFF;
-  border: 1px solid #CBD5E1;
-  color: #0F172A;
+  border: 1.5px solid #CBD5E1;
+  color: #0B132B;
   border-radius: 1rem;
   padding: 0.875rem 1.125rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .dark .clean-input {
-  background-color: #1E293B;
-  border-color: #334155;
+  background-color: #10192D;
+  border-color: #22355A;
   color: #F8FAFC;
 }
 
 .clean-input:focus {
   outline: none;
-  border-color: #4F46E5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
 }
 
 .dark .clean-input:focus {
-  border-color: #6366F1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  border-color: #38BDF8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
 }
 
-/* Interactive Action Buttons - Upgraded for High-Impact Rapido-Style Mobility Experience */
+/* Interactive Action Buttons - Harmonized Automotive Luxury Aesthetic */
 .btn-primary {
-  background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%);
+  background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 50%, #4F46E5 100%);
   color: #FFFFFF;
   font-weight: 800;
   border-radius: 1.125rem;
   padding: 0.875rem 1.5rem;
-  border: 1px solid rgba(129, 140, 248, 0.4);
-  box-shadow: 0 4px 14px -1px rgba(79, 70, 229, 0.4);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 18px -2px rgba(37, 99, 235, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   letter-spacing: -0.01em;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #6366F1 0%, #4338CA 100%);
+  background: linear-gradient(135deg, #2563EB 0%, #3B82F6 50%, #6366F1 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px 0px rgba(79, 70, 229, 0.55);
+  box-shadow: 0 10px 25px -2px rgba(37, 99, 235, 0.6), 0 0 16px rgba(59, 130, 246, 0.35);
 }
 
 .btn-primary:active {
@@ -238,13 +257,13 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-emergency {
   position: relative;
-  background: linear-gradient(135deg, #F97316 0%, #EA580C 50%, #DC2626 100%);
+  background: linear-gradient(135deg, #EF4444 0%, #EA580C 50%, #F59E0B 100%);
   color: #FFFFFF;
   font-weight: 900;
   border-radius: 1.125rem;
   padding: 1rem 1.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  box-shadow: 0 6px 18px 0px rgba(234, 88, 12, 0.45), 0 0 0 1px rgba(220, 38, 38, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 6px 20px -1px rgba(234, 88, 12, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   letter-spacing: 0.02em;
@@ -322,23 +341,91 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Emergency Rescue Glowing Card */
 .emergency-card-active {
-  background: linear-gradient(135deg, rgba(255, 247, 237, 0.95) 0%, #FFFFFF 50%, rgba(254, 242, 242, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(255, 247, 237, 0.98) 0%, #FFFFFF 50%, rgba(254, 242, 242, 0.98) 100%);
   border: 2px solid #FDBA74;
-  box-shadow: 0 8px 25px -4px rgba(234, 88, 12, 0.18), 0 4px 10px -2px rgba(220, 38, 38, 0.08);
+  box-shadow: 0 10px 30px -4px rgba(234, 88, 12, 0.16), 0 4px 10px -2px rgba(220, 38, 38, 0.08);
   position: relative;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark .emergency-card-active {
-  background: linear-gradient(135deg, rgba(67, 20, 7, 0.35) 0%, #0F172A 50%, rgba(30, 27, 75, 0.35) 100%);
+  background: linear-gradient(135deg, rgba(80, 24, 8, 0.45) 0%, #0E1626 50%, rgba(55, 20, 30, 0.4) 100%);
   border-color: #EA580C;
-  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.6), 0 0 20px rgba(234, 88, 12, 0.15);
+  box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.65), 0 0 24px rgba(234, 88, 12, 0.2);
 }
 
 .emergency-card-active:hover {
-  border-color: #F97316;
-  box-shadow: 0 14px 35px -4px rgba(234, 88, 12, 0.28), 0 0 20px rgba(249, 115, 22, 0.2);
+  border-color: #FB923C;
+  box-shadow: 0 18px 40px -4px rgba(234, 88, 12, 0.3), 0 0 28px rgba(249, 115, 22, 0.25);
   transform: translateY(-2px);
+}
+
+/* Luxury Automotive Gradient Text Typography */
+.text-gradient-hero {
+  background: linear-gradient(135deg, #0B132B 0%, #1D4ED8 50%, #4338CA 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark .text-gradient-hero {
+  background: linear-gradient(135deg, #FFFFFF 0%, #BAE6FD 50%, #C7D2FE 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-brand {
+  background: linear-gradient(135deg, #0284C7 0%, #06B6D4 50%, #10B981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark .text-gradient-brand {
+  background: linear-gradient(135deg, #38BDF8 0%, #22D3EE 50%, #34D399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-emergency {
+  background: linear-gradient(135deg, #DC2626 0%, #EA580C 50%, #F59E0B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark .text-gradient-emergency {
+  background: linear-gradient(135deg, #F87171 0%, #FB923C 50%, #FCD34D 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Ambient Cyber Mesh Aurora Backgrounds */
+.mesh-aurora-bg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 90rem;
+  height: 620px;
+  background: radial-gradient(circle at 50% 15%, rgba(37, 99, 235, 0.12) 0%, rgba(6, 182, 212, 0.08) 35%, transparent 70%);
+  pointer-events: none;
+  filter: blur(60px);
+  z-index: 0;
+}
+
+.dark .mesh-aurora-bg {
+  background: radial-gradient(circle at 50% 15%, rgba(59, 130, 246, 0.18) 0%, rgba(6, 182, 212, 0.12) 35%, rgba(129, 140, 248, 0.08) 60%, transparent 75%);
+}
+
+/* Subtle Automotive Cyber Grid Pattern */
+.bg-cyber-grid {
+  background-size: 32px 32px;
+  background-image: linear-gradient(to right, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+}
+
+.dark .bg-cyber-grid {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
 }
 
 /* Animations */

@@ -42,7 +42,7 @@ export const ThemeProvider = ({ children }) => {
       metaThemeColor.name = 'theme-color';
       document.head.appendChild(metaThemeColor);
     }
-    metaThemeColor.setAttribute('content', theme === 'dark' ? '#0B1120' : '#F6F8FC');
+    metaThemeColor.setAttribute('content', theme === 'dark' ? '#070B14' : '#F8FAFC');
   }, [theme]);
 
   const toggleTheme = () => {

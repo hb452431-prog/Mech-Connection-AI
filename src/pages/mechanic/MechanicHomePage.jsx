@@ -127,23 +127,27 @@ export const MechanicHomePage = () => {
   }, [requests, mechanicLocation]);
 
   return (
-    <div className="min-h-screen bg-[#F6F8FC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070B14] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200 relative overflow-hidden">
       <MechanicNavbar />
+
+      {/* Cybernetic Ambient Aurora Background */}
+      <div className="mesh-aurora-bg" />
+      <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
       {loading ? (
         <MechanicHomeSkeleton />
       ) : (
-        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300">
+        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">
         {/* Top Greeting & Status Toggle */}
-        <div className="clean-card dark:bg-slate-900 dark:border-slate-800 p-7 sm:p-10 border-l-4 border-l-indigo-600 dark:border-l-indigo-500 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-2 border-slate-200 shadow-md rounded-3xl">
+        <div className="clean-card bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-10 border-l-4 border-l-indigo-600 dark:border-l-indigo-500 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-2 border-slate-200/90 dark:border-slate-800/90 shadow-glass-card dark:shadow-glass-dark rounded-3xl">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white font-heading tracking-tight">
+              <h1 className="text-2xl sm:text-4xl font-black text-gradient-hero font-heading tracking-tight">
                 Welcome, {mechanic.mechanicName || 'Mechanic'}
               </h1>
               <span className={`px-3.5 py-1.5 rounded-full text-xs font-bold font-mono flex items-center gap-2 ${
                 isOnline 
-                  ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800' 
+                  ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 shadow-xs' 
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
               }`}>
                 <span className={`w-2.5 h-2.5 rounded-full ${isOnline ? 'bg-emerald-600 animate-pulse' : 'bg-slate-400'}`} />
@@ -160,7 +164,7 @@ export const MechanicHomePage = () => {
             onClick={() => setIsOnline(!isOnline)}
             className={`px-7 py-4 rounded-2xl text-xs sm:text-sm font-black uppercase tracking-wider flex items-center gap-2.5 transition-all self-start sm:self-auto shadow-md cursor-pointer ${
               isOnline
-                ? 'bg-emerald-500 text-slate-950 border border-emerald-400 hover:bg-emerald-400'
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 border border-emerald-400 hover:from-emerald-400 hover:to-teal-400 shadow-glow-emerald'
                 : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'
             }`}
           >
