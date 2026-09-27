@@ -58,13 +58,10 @@ export const LandingPage = () => {
         </div>
 
         {/* Hero Headline */}
-        <div className="pt-2 space-y-3">
+        <div className="pt-2">
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-gradient-hero font-heading tracking-tight leading-tight">
             Next-Gen Vehicle Intelligence & Rapid Rescue
           </h1>
-          <p className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 font-medium max-w-2xl mx-auto">
-            Instant roadside mechanic dispatch, AI-powered multi-system diagnostics, and transparent certified garage connectivity.
-          </p>
         </div>
       </header>
 
