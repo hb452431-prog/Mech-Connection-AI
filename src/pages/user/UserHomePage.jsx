@@ -219,8 +219,8 @@ export const UserHomePage = () => {
                 <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center group-hover:scale-105 transition-transform shadow-glow-cyan border border-white/20">
                   <MapPin className="w-8 h-8" />
                 </div>
-                <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-cyan-700 dark:text-cyan-300 bg-cyan-100/90 dark:bg-cyan-950/80 px-3 py-1 rounded-full border border-cyan-300/80 dark:border-cyan-800 shadow-xs">
-                  Live Radar Grid
+                <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-cyan-700 dark:text-cyan-300 bg-cyan-100/90 dark:bg-cyan-950/80 px-3 py-1 rounded-full border border-cyan-300/80 dark:border-cyan-800 shadow-xs flex items-center gap-1">
+                  <span>🏍️ Rapid Bike Dispatch</span>
                 </span>
               </div>
 
@@ -229,7 +229,7 @@ export const UserHomePage = () => {
                   FIND NEARBY GARAGES
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Browse certified workshops on the interactive map with real-time distance, operating hours, and service dispatch.
+                  Browse certified workshops on the interactive map with rapid mobile bike mechanic dispatch, live distance radar, and roadside tools.
                 </p>
               </div>
             </div>

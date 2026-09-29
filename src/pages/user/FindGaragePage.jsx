@@ -26,10 +26,12 @@ import {
 } from 'lucide-react';
 import { SirenBadge, SirenLight } from '../../components/common/SirenLight';
 import { useNetwork } from '../../context/NetworkContext';
+import MechanicBikeDispatchLoader from '../../components/garage/MechanicBikeDispatchLoader';
 
 export const FindGaragePage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [showBikeDispatchLoader, setShowBikeDispatchLoader] = useState(true);
   const { isSlowNetwork, isOnline } = useNetwork();
   const {
     location: userLocation,
@@ -57,7 +59,7 @@ export const FindGaragePage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 300);
+    }, 400);
     return () => clearTimeout(timer);
   }, []);
 
@@ -127,7 +129,19 @@ export const FindGaragePage = () => {
       <div className="mesh-aurora-bg" />
       <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
-      {showSkeleton ? (
+      {showBikeDispatchLoader ? (
+        <MechanicBikeDispatchLoader
+          onFinish={() => {
+            setShowBikeDispatchLoader(false);
+            setLoading(false);
+          }}
+          userCoordinates={
+            userLocation?.lat
+              ? { lat: userLocation.lat, lng: userLocation.lng }
+              : { lat: 19.0760, lng: 72.8777 }
+          }
+        />
+      ) : showSkeleton ? (
         <FindGarageSkeleton />
       ) : (
         <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">
@@ -154,32 +168,44 @@ export const FindGaragePage = () => {
             </p>
           </div>
 
-          {/* Filter Pills */}
-          <div className="flex items-center gap-2 self-start sm:self-auto bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-2 rounded-2xl border-2 border-slate-200/90 dark:border-slate-800/90 shadow-glass-card dark:shadow-glass-dark text-xs sm:text-sm font-black">
+          {/* Action & Filter Pills */}
+          <div className="flex flex-wrap items-center gap-2.5 self-start sm:self-auto">
             <button
-              onClick={() => setFilter('all')}
-              className={`px-4 py-2.5 rounded-xl transition-all ${
-                filter === 'all' ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-glow-blue' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-              }`}
+              type="button"
+              onClick={() => setShowBikeDispatchLoader(true)}
+              className="px-3.5 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-black text-xs transition-all shadow-glow-blue flex items-center gap-2 active:scale-95 cursor-pointer"
+              title="Re-run Live Mechanic Bike Dispatch Radar"
             >
-              All ({garages.length})
+              <span className="text-sm">🏍️</span>
+              <span className="font-extrabold tracking-wide">LIVE BIKE DISPATCH</span>
             </button>
-            <button
-              onClick={() => setFilter('closest')}
-              className={`px-4 py-2.5 rounded-xl transition-all ${
-                filter === 'closest' ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-glow-blue' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-              }`}
-            >
-              &lt; 3 km
-            </button>
-            <button
-              onClick={() => setFilter('247')}
-              className={`px-4 py-2.5 rounded-xl transition-all ${
-                filter === '247' ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-glow-emergency' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-              }`}
-            >
-              24/7 Roadside
-            </button>
+
+            <div className="flex items-center gap-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-1.5 rounded-2xl border-2 border-slate-200/90 dark:border-slate-800/90 shadow-glass-card dark:shadow-glass-dark text-xs sm:text-sm font-black">
+              <button
+                onClick={() => setFilter('all')}
+                className={`px-3.5 py-2 rounded-xl transition-all ${
+                  filter === 'all' ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-glow-blue' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                All ({garages.length})
+              </button>
+              <button
+                onClick={() => setFilter('closest')}
+                className={`px-3.5 py-2 rounded-xl transition-all ${
+                  filter === 'closest' ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-glow-blue' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                &lt; 3 km
+              </button>
+              <button
+                onClick={() => setFilter('247')}
+                className={`px-3.5 py-2 rounded-xl transition-all ${
+                  filter === '247' ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-glow-emergency' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                24/7 Roadside
+              </button>
+            </div>
           </div>
         </div>
 
