@@ -336,67 +336,16 @@ export const FindGarageSkeleton = () => {
 
       <SkeletonTelemetryBar />
 
-      {/* Large Interactive Map Skeleton with Mechanic Bike Traveling to Stranded Vehicle */}
-      <div className="relative w-full h-[460px] rounded-3xl bg-slate-900 border-2 border-slate-700/80 overflow-hidden flex flex-col justify-between p-6">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0A1226] via-[#0E1A38] to-[#111827] pointer-events-none" />
-        
-        {/* Top Radar Status Pill */}
-        <div className="relative z-10 flex items-center justify-between">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-950/80 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-bold">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-            <span>DISPATCHING RAPID BIKE MECHANIC</span>
+      {/* Large Interactive Map Skeleton */}
+      <div className="relative w-full h-[460px] rounded-3xl bg-slate-100 dark:bg-slate-800/80 border-2 border-slate-200 dark:border-slate-800 overflow-hidden flex items-center justify-center">
+        <div className="absolute inset-0 skeleton-shimmer opacity-40" />
+        <div className="relative z-10 flex flex-col items-center gap-3 text-slate-400 dark:text-slate-500">
+          <div className="w-16 h-16 rounded-full bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center animate-pulse">
+            <MapPin className="w-8 h-8 text-blue-600 animate-bounce" />
           </div>
-          <span className="text-xs font-mono font-bold text-amber-400 bg-amber-500/10 px-3 py-1.5 rounded-full border border-amber-500/20">
-            CONNECTING GARAGE NETWORK
+          <span className="text-xs font-mono font-bold tracking-wider uppercase text-slate-600 dark:text-slate-300">
+            Mapping Nearby Garages & Mechanics...
           </span>
-        </div>
-
-        {/* Center Animated Road & Bike Scene */}
-        <div className="relative z-10 my-auto w-full max-w-2xl mx-auto h-44 flex flex-col justify-end">
-          {/* Road */}
-          <div className="relative w-full h-14 bg-slate-950 border-t-2 border-slate-700 rounded-xl overflow-hidden flex items-center">
-            {/* Moving Road Lines */}
-            <div 
-              className="absolute inset-0"
-              style={{
-                backgroundImage: 'repeating-linear-gradient(90deg, #F8FAFC 0, #F8FAFC 35px, transparent 35px, transparent 75px)',
-                backgroundSize: '75px 100%',
-                animation: 'roadLinesScroll 0.5s linear infinite'
-              }}
-            />
-
-            {/* Mechanic Riding Bike with Tools (Animated moving across road) */}
-            <div 
-              className="absolute bottom-2 flex items-center gap-1.5 bike-suspension-bounce"
-              style={{
-                animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
-              }}
-            >
-              <div className="text-3xl filter drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">🏍️</div>
-              <span className="text-xl">🔧</span>
-              <span className="text-[10px] font-mono font-extrabold text-cyan-300 bg-slate-900/90 px-2 py-0.5 rounded-full border border-cyan-400/40">
-                RAPID SERVICE
-              </span>
-            </div>
-
-            {/* Stranded User Car with Hazard Lights (Stationed on the right) */}
-            <div className="absolute right-4 bottom-2 flex items-center gap-2">
-              <span className="text-xs font-mono font-extrabold text-amber-300 bg-amber-950/80 px-2 py-0.5 rounded-full border border-amber-500/40 hazard-light-blink">
-                ⚠️ USER CAR
-              </span>
-              <div className="text-3xl filter drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]">🚗</div>
-              <div className="w-2.5 h-2.5 rounded-full bg-amber-400 hazard-light-blink" />
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Status text */}
-        <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-mono text-slate-400 border-t border-slate-800 pt-3">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Certified Mechanic en route with rapid diagnostics toolkit...</span>
-          </div>
-          <span className="text-cyan-400 font-bold">ETA: 3 Mins • Distance: 1.8 km</span>
         </div>
       </div>
 

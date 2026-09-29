@@ -929,4 +929,19 @@ button, a {
   animation: headlightFlicker 0.2s ease-in-out infinite;
 }
 
+@keyframes svgRoadDash {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -80;
+  }
+}
+
+.svg-road-dash {
+  animation: svgRoadDash 0.45s linear infinite;
+  will-change: stroke-dashoffset;
+}
+
+
 
