@@ -9,11 +9,13 @@ import {
   Radio, 
   Sparkles
 } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 /**
  * MechanicBikeDispatchLoader
  * 
- * Simple, unique, and error-free loading experience for the "Nearby Garages" portal.
+ * Adaptive Dark/Light Mode loading experience for the "Nearby Garages" & "Mechanic Portal" maps.
+ * Automatically adapts between a sleek dark-mode cyber scene and a bright, crisp daytime scene.
  * Features an integrated 100% SVG scene where a mobile mechanic riding a service bike
  * with emergency tools travels directly on the road towards the user's broken-down vehicle.
  */
@@ -27,6 +29,15 @@ export const MechanicBikeDispatchLoader = ({
   const [progress, setProgress] = useState(0);
   const [phase, setPhase] = useState('riding'); // 'riding' | 'arrived' | 'exiting'
   const isFinishedRef = useRef(false);
+
+  // Read current website theme (Dark vs Light)
+  let isDark = true;
+  try {
+    const themeContext = useTheme();
+    isDark = themeContext.isDark;
+  } catch (e) {
+    isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
+  }
 
   // Remaining distance in km (from 2.4 km down to 0.0 km)
   const remainingDistance = Math.max(0, ((100 - progress) / 100 * 2.4)).toFixed(1);
@@ -84,18 +95,30 @@ export const MechanicBikeDispatchLoader = ({
         phase === 'exiting' ? 'opacity-0 scale-[1.02] pointer-events-none' : 'opacity-100 scale-100'
       }`}
       style={{
-        background: 'radial-gradient(ellipse at 50% 30%, #0D1B36 0%, #081022 55%, #030712 100%)'
+        background: isDark
+          ? 'radial-gradient(ellipse at 50% 30%, #0D1B36 0%, #081022 55%, #030712 100%)'
+          : 'radial-gradient(ellipse at 50% 25%, #EFF6FF 0%, #F1F5F9 55%, #E2E8F0 100%)'
       }}
     >
-      {/* Background ambient lighting */}
+      {/* Background ambient lighting (Dark vs Light mode) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[550px] h-[300px] bg-blue-600/15 rounded-full blur-[100px]" />
-        <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-cyan-500/10 rounded-full blur-[80px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-amber-500/10 rounded-full blur-[80px]" />
+        <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[550px] h-[300px] rounded-full blur-[100px] transition-colors duration-300 ${
+          isDark ? 'bg-blue-600/15' : 'bg-blue-400/20'
+        }`} />
+        <div className={`absolute top-1/3 left-1/4 w-72 h-72 rounded-full blur-[80px] transition-colors duration-300 ${
+          isDark ? 'bg-cyan-500/10' : 'bg-cyan-400/20'
+        }`} />
+        <div className={`absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full blur-[80px] transition-colors duration-300 ${
+          isDark ? 'bg-amber-500/10' : 'bg-amber-300/25'
+        }`} />
       </div>
 
-      {/* Main Unified Dispatch Card */}
-      <div className="relative z-10 w-full max-w-3xl flex flex-col rounded-3xl bg-slate-900/90 border border-slate-700/80 shadow-[0_20px_60px_rgba(0,0,0,0.85)] backdrop-blur-xl overflow-hidden p-4 sm:p-6 space-y-4">
+      {/* Main Unified Dispatch Card (Adaptive Theme) */}
+      <div className={`relative z-10 w-full max-w-3xl flex flex-col rounded-3xl backdrop-blur-xl overflow-hidden p-4 sm:p-6 space-y-4 transition-all duration-300 ${
+        isDark 
+          ? 'bg-slate-900/90 border border-slate-700/80 shadow-[0_20px_60px_rgba(0,0,0,0.85)] text-white' 
+          : 'bg-white/95 border border-slate-200/90 shadow-[0_20px_50px_rgba(15,23,42,0.12)] text-slate-900'
+      }`}>
         
         {/* Card Header: Brand & Live Telemetry Badge (No Skip Buttons) */}
         <div className="flex items-center justify-between gap-3">
@@ -105,15 +128,21 @@ export const MechanicBikeDispatchLoader = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-black text-white tracking-wide uppercase font-heading">
+                <span className={`text-xs sm:text-sm font-black tracking-wide uppercase font-heading ${
+                  isDark ? 'text-white' : 'text-slate-900'
+                }`}>
                   MECH CONNECT AI
                 </span>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold transition-colors ${
+                  isDark 
+                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/30' 
+                    : 'bg-blue-50 text-blue-700 border border-blue-200 shadow-xs'
+                }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full animate-ping ${isDark ? 'bg-cyan-400' : 'bg-blue-600'}`} />
                   {portalType === 'mechanic' ? 'MECHANIC RADAR' : 'NEARBY GARAGES'}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 font-medium">
+              <p className={`text-[11px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                 {portalType === 'mechanic'
                   ? 'Connecting Live Area Radar & active driver breakdown SOS signals'
                   : 'Locating closest certified workshops & mobile mechanics'}
@@ -122,33 +151,61 @@ export const MechanicBikeDispatchLoader = ({
           </div>
 
           {/* Active Dispatch Badge */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 text-xs font-mono font-bold shadow-xs">
-            <Zap className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
+          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-bold shadow-xs transition-colors ${
+            isDark 
+              ? 'bg-cyan-500/15 border border-cyan-400/30 text-cyan-300' 
+              : 'bg-blue-50 border border-blue-200 text-blue-700'
+          }`}>
+            <Zap className={`w-3.5 h-3.5 ${isDark ? 'text-amber-300 fill-amber-300' : 'text-amber-500 fill-amber-500'}`} />
             <span>{portalType === 'mechanic' ? 'RADAR ACTIVE' : 'DISPATCH ACTIVE'}</span>
           </div>
         </div>
 
-        {/* 100% UNIFIED SVG CINEMATIC SCENE */}
+        {/* 100% UNIFIED SVG CINEMATIC SCENE (Light vs Dark Adaptive) */}
         {/* Road surface is at Y = 240. Tires of both the car and bike roll directly on Y = 240 with zero floating! */}
-        <div className="relative w-full aspect-[2/1] sm:aspect-[2.2/1] rounded-2xl overflow-hidden border border-slate-700/70 bg-[#070D1E] shadow-inner">
+        <div className={`relative w-full aspect-[2/1] sm:aspect-[2.2/1] rounded-2xl overflow-hidden border shadow-inner transition-colors duration-300 ${
+          isDark 
+            ? 'border-slate-700/70 bg-[#070D1E]' 
+            : 'border-slate-300/80 bg-[#EBF5FF]'
+        }`}>
           <svg 
             className="w-full h-full"
             viewBox="0 0 900 340"
             preserveAspectRatio="xMidYMid meet"
           >
             <defs>
-              {/* Sky Background Gradient */}
+              {/* Sky Background Gradient (Adaptive) */}
               <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#0B162C" />
-                <stop offset="50%" stopColor="#0F2042" />
-                <stop offset="100%" stopColor="#142A58" />
+                {isDark ? (
+                  <>
+                    <stop offset="0%" stopColor="#0B162C" />
+                    <stop offset="50%" stopColor="#0F2042" />
+                    <stop offset="100%" stopColor="#142A58" />
+                  </>
+                ) : (
+                  <>
+                    <stop offset="0%" stopColor="#7DD3FC" />
+                    <stop offset="45%" stopColor="#BAE6FD" />
+                    <stop offset="100%" stopColor="#F0F9FF" />
+                  </>
+                )}
               </linearGradient>
 
-              {/* Road Gradient */}
+              {/* Road Gradient (Adaptive) */}
               <linearGradient id="roadGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#1E293B" />
-                <stop offset="25%" stopColor="#0F172A" />
-                <stop offset="100%" stopColor="#080C16" />
+                {isDark ? (
+                  <>
+                    <stop offset="0%" stopColor="#1E293B" />
+                    <stop offset="25%" stopColor="#0F172A" />
+                    <stop offset="100%" stopColor="#080C16" />
+                  </>
+                ) : (
+                  <>
+                    <stop offset="0%" stopColor="#475569" />
+                    <stop offset="30%" stopColor="#334155" />
+                    <stop offset="100%" stopColor="#1E293B" />
+                  </>
+                )}
               </linearGradient>
 
               {/* Chrome Gradient for Tools */}
@@ -167,9 +224,19 @@ export const MechanicBikeDispatchLoader = ({
 
               {/* Car Body Gradient */}
               <linearGradient id="carPaint" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#475569" />
-                <stop offset="50%" stopColor="#334155" />
-                <stop offset="100%" stopColor="#1E293B" />
+                {isDark ? (
+                  <>
+                    <stop offset="0%" stopColor="#475569" />
+                    <stop offset="50%" stopColor="#334155" />
+                    <stop offset="100%" stopColor="#1E293B" />
+                  </>
+                ) : (
+                  <>
+                    <stop offset="0%" stopColor="#334155" />
+                    <stop offset="50%" stopColor="#1E293B" />
+                    <stop offset="100%" stopColor="#0F172A" />
+                  </>
+                )}
               </linearGradient>
 
               {/* Headlight Beam Gradient */}
@@ -180,11 +247,28 @@ export const MechanicBikeDispatchLoader = ({
               </linearGradient>
             </defs>
 
-            {/* 1. SKY & CITY HORIZON */}
+            {/* 1. SKY & HORIZON */}
             <rect x="0" y="0" width="900" height="240" fill="url(#skyGrad)" />
 
+            {/* Daytime Sun & Clouds for Light Mode */}
+            {!isDark && (
+              <g>
+                {/* Morning Sun */}
+                <g transform="translate(130, 52)">
+                  <circle cx="0" cy="0" r="26" fill="#FEF08A" opacity="0.4" />
+                  <circle cx="0" cy="0" r="18" fill="#FDE047" opacity="0.95" />
+                  <circle cx="0" cy="0" r="12" fill="#FFFFFF" opacity="0.6" />
+                </g>
+                {/* Soft Daytime Clouds */}
+                <g fill="#FFFFFF" opacity="0.75">
+                  <path d="M 640,65 C 650,55 675,55 685,65 C 695,60 715,65 720,75 L 630,75 Z" />
+                  <path d="M 320,50 C 330,42 350,42 358,50 C 365,46 380,50 385,58 L 310,58 Z" opacity="0.6" />
+                </g>
+              </g>
+            )}
+
             {/* Distant City Silhouette */}
-            <g fill="#0B132B" opacity="0.45">
+            <g fill={isDark ? "#0B132B" : "#94A3B8"} opacity={isDark ? "0.45" : "0.35"}>
               <rect x="30" y="115" width="40" height="125" />
               <rect x="75" y="85" width="50" height="155" />
               <rect x="135" y="135" width="35" height="105" />
@@ -201,19 +285,23 @@ export const MechanicBikeDispatchLoader = ({
               <rect x="800" y="70" width="60" height="170" />
             </g>
 
-            {/* Twinkling skyline window lights */}
-            <circle cx="100" cy="115" r="1.5" fill="#FDE047" opacity="0.8" />
-            <circle cx="270" cy="95" r="1.5" fill="#38BDF8" opacity="0.9" />
-            <circle cx="450" cy="85" r="1.5" fill="#FDE047" opacity="0.8" />
-            <circle cx="700" cy="105" r="1.5" fill="#38BDF8" opacity="0.8" />
-            <circle cx="830" cy="95" r="1.5" fill="#FDE047" opacity="0.9" />
+            {/* Twinkling skyline window lights (Dark Mode) */}
+            {isDark && (
+              <g>
+                <circle cx="100" cy="115" r="1.5" fill="#FDE047" opacity="0.8" />
+                <circle cx="270" cy="95" r="1.5" fill="#38BDF8" opacity="0.9" />
+                <circle cx="450" cy="85" r="1.5" fill="#FDE047" opacity="0.8" />
+                <circle cx="700" cy="105" r="1.5" fill="#38BDF8" opacity="0.8" />
+                <circle cx="830" cy="95" r="1.5" fill="#FDE047" opacity="0.9" />
+              </g>
+            )}
 
             {/* 2. THE ROAD (Asphalt: Y = 240 to 340) */}
             <rect x="0" y="240" width="900" height="100" fill="url(#roadGrad)" />
             
             {/* Road shoulder hazard curb line */}
-            <rect x="0" y="236" width="900" height="4" fill="#F59E0B" opacity="0.85" />
-            <line x1="0" y1="240" x2="900" y2="240" stroke="#475569" strokeWidth="2" />
+            <rect x="0" y="236" width="900" height="4" fill="#F59E0B" opacity="0.9" />
+            <line x1="0" y1="240" x2="900" y2="240" stroke={isDark ? "#475569" : "#64748B"} strokeWidth="2" />
 
             {/* Continuous animated moving dashed road center-line */}
             <line 
@@ -227,7 +315,7 @@ export const MechanicBikeDispatchLoader = ({
               className="svg-road-dash"
             />
 
-            {/* Road bottom cyan guide line */}
+            {/* Road bottom guide line */}
             <line x1="0" y1="332" x2="900" y2="332" stroke="#06B6D4" strokeWidth="1.5" opacity="0.4" />
 
             {/* 3. USER'S STRANDED VEHICLE (Stationed at X = 670, resting firmly on road surface Y = 240) */}
@@ -251,7 +339,7 @@ export const MechanicBikeDispatchLoader = ({
               <path 
                 d="M 5,-14 C 10,-32 30,-36 52,-38 L 74,-58 C 88,-70 132,-70 146,-58 L 162,-40 C 175,-38 182,-30 185,-14 L 182,-6 L 5,-6 Z" 
                 fill="url(#carPaint)" 
-                stroke="#475569" 
+                stroke={isDark ? "#475569" : "#1E293B"} 
                 strokeWidth="1.5" 
               />
 
@@ -295,14 +383,31 @@ export const MechanicBikeDispatchLoader = ({
                 <circle cx="11" cy="-35" r="4" fill="#38BDF8" opacity="0.6" className="animate-pulse" />
               </g>
 
-              {/* Holographic GPS Breakdown Pin */}
+              {/* Holographic GPS Breakdown Pin (Theme-Aware) */}
               <g transform="translate(95, -95)">
                 <circle cx="0" cy="0" r="14" fill="none" stroke="#22D3EE" strokeWidth="1.8" className="beacon-radar-ping" />
                 <circle cx="0" cy="0" r="24" fill="none" stroke="#06B6D4" strokeWidth="1.2" className="beacon-radar-ping" style={{ animationDelay: '0.4s' }} />
                 <path d="M 0,12 C -6,3 -6,0 -6,-5 C -6,-10 -2,-13 0,-13 C 2,-13 6,-10 6,-5 C 6,0 6,3 0,12 Z" fill="#06B6D4" stroke="#FFF" strokeWidth="1" />
                 <circle cx="0" cy="-5" r="2.5" fill="#FFF" />
-                <rect x="-46" y="-32" width="92" height="17" rx="8" fill="#0B132B" stroke="#22D3EE" strokeWidth="1" />
-                <text x="0" y="-20" textAnchor="middle" fill="#38BDF8" fontSize="8" fontWeight="bold" fontFamily="monospace">
+                <rect 
+                  x="-46" 
+                  y="-32" 
+                  width="92" 
+                  height="17" 
+                  rx="8" 
+                  fill={isDark ? "#0B132B" : "#FFFFFF"} 
+                  stroke={isDark ? "#22D3EE" : "#0284C7"} 
+                  strokeWidth="1.2" 
+                />
+                <text 
+                  x="0" 
+                  y="-20" 
+                  textAnchor="middle" 
+                  fill={isDark ? "#38BDF8" : "#0284C7"} 
+                  fontSize="8" 
+                  fontWeight="bold" 
+                  fontFamily="monospace"
+                >
                   {portalType === 'mechanic' ? '📍 DRIVER SOS' : '📍 YOUR CAR'}
                 </text>
               </g>
@@ -455,10 +560,27 @@ export const MechanicBikeDispatchLoader = ({
                 </g>
               </g>
 
-              {/* Status Pill Floating Above Bike */}
+              {/* Status Pill Floating Above Bike (Theme-Aware) */}
               <g transform="translate(42, -98)">
-                <rect x="-42" y="-10" width="84" height="17" rx="8" fill="#0B132B" stroke="#38BDF8" strokeWidth="1" />
-                <text x="0" y="2" textAnchor="middle" fill="#38BDF8" fontSize="7.5" fontWeight="bold" fontFamily="monospace">
+                <rect 
+                  x="-42" 
+                  y="-10" 
+                  width="84" 
+                  height="17" 
+                  rx="8" 
+                  fill={isDark ? "#0B132B" : "#FFFFFF"} 
+                  stroke={isDark ? "#38BDF8" : "#0284C7"} 
+                  strokeWidth="1.2" 
+                />
+                <text 
+                  x="0" 
+                  y="2" 
+                  textAnchor="middle" 
+                  fill={isDark ? "#38BDF8" : "#0284C7"} 
+                  fontSize="7.5" 
+                  fontWeight="bold" 
+                  fontFamily="monospace"
+                >
                   {phase === 'arrived' ? "✅ ARRIVED!" : (portalType === 'mechanic' ? "MECHANIC UNIT ⚡" : "RAPID BIKE ⚡")}
                 </text>
               </g>
@@ -466,36 +588,52 @@ export const MechanicBikeDispatchLoader = ({
           </svg>
         </div>
 
-        {/* Dynamic Status & Distance Counter */}
+        {/* Dynamic Status & Distance Counter (Adaptive Theme) */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2 px-1">
           <div className="flex items-center gap-2">
             <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500" />
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                isDark ? 'bg-cyan-400' : 'bg-blue-600'
+              }`} />
+              <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
+                isDark ? 'bg-cyan-500' : 'bg-blue-600'
+              }`} />
             </span>
-            <span className="text-xs sm:text-sm font-semibold text-slate-200">
+            <span className={`text-xs sm:text-sm font-bold ${
+              isDark ? 'text-slate-200' : 'text-slate-800'
+            }`}>
               {getStatusMessage()}
             </span>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono font-bold text-cyan-300 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">
-            <Clock className="w-3.5 h-3.5 text-cyan-400" />
+          <div className={`flex items-center gap-2 text-xs font-mono font-bold px-3 py-1 rounded-full border transition-colors ${
+            isDark 
+              ? 'text-cyan-300 bg-slate-800/80 border-slate-700' 
+              : 'text-blue-700 bg-slate-100 border-slate-200 shadow-xs'
+          }`}>
+            <Clock className={`w-3.5 h-3.5 ${isDark ? 'text-cyan-400' : 'text-blue-600'}`} />
             <span>DISTANCE: {remainingDistance} KM</span>
           </div>
         </div>
 
-        {/* Glowing Progress Bar */}
+        {/* Glowing Progress Bar (Adaptive Theme) */}
         <div className="space-y-1.5 pt-1">
-          <div className="w-full h-2.5 rounded-full bg-slate-800 border border-slate-700 overflow-hidden relative p-0.5">
+          <div className={`w-full h-2.5 rounded-full border overflow-hidden relative p-0.5 transition-colors ${
+            isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-200 border-slate-300'
+          }`}>
             <div 
               className="h-full rounded-full bg-gradient-to-r from-blue-600 via-cyan-400 to-emerald-400 transition-all duration-75 relative shadow-[0_0_12px_rgba(6,182,212,0.8)]"
               style={{ width: `${progress}%` }}
             />
           </div>
 
-          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 px-1">
-            <span>{portalType === 'mechanic' ? 'Live Area Radar Telemetry' : 'Fast-Response Mobile Workshop'}</span>
-            <span className="font-bold text-cyan-400">{progress}%</span>
+          <div className="flex items-center justify-between text-[11px] font-mono px-1">
+            <span className={isDark ? 'text-slate-400' : 'text-slate-500 font-semibold'}>
+              {portalType === 'mechanic' ? 'Live Area Radar Telemetry' : 'Fast-Response Mobile Workshop'}
+            </span>
+            <span className={`font-black ${isDark ? 'text-cyan-400' : 'text-blue-600'}`}>
+              {progress}%
+            </span>
           </div>
         </div>
 
