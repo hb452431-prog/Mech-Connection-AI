@@ -802,20 +802,6 @@ button, a {
   will-change: transform;
 }
 
-@keyframes bikeSuspensionBounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-3.5px) rotate(-0.4deg);
-  }
-}
-
-.bike-suspension-bounce {
-  animation: bikeSuspensionBounce 0.16s ease-in-out infinite;
-  will-change: transform;
-}
-
 @keyframes hazardLightBlink {
   0%, 46% {
     opacity: 1;

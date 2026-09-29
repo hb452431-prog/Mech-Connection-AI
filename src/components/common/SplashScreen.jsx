@@ -94,16 +94,6 @@ export const SplashScreen = ({ onFinish }) => {
             <Zap className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
             <span>INITIALIZING</span>
           </div>
-
-          <button
-            type="button"
-            onClick={onFinish}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/15 hover:bg-white/25 text-white text-xs font-mono font-bold border border-white/25 backdrop-blur-md transition-all cursor-pointer shadow-sm"
-            title="Skip Intro"
-          >
-            <span>Skip</span>
-            <span>→</span>
-          </button>
         </div>
       </div>
 
