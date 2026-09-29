@@ -37,7 +37,7 @@ export const NetworkBanner = () => {
     >
       {/* Expanded Control Card */}
       {expanded && (
-        <div className="mb-2 p-4 w-72 sm:w-80 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-2 border-slate-200 dark:border-slate-800 shadow-glass-card dark:shadow-glass-dark text-slate-800 dark:text-slate-200 space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
+        <div className="mb-2 p-4 w-72 sm:w-80 max-w-[calc(100vw-2rem)] rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-2 border-slate-200 dark:border-slate-800 shadow-glass-card dark:shadow-glass-dark text-slate-800 dark:text-slate-200 space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
             <div className="flex items-center gap-2">
               <Activity className="w-4 h-4 text-blue-600 dark:text-cyan-400" />

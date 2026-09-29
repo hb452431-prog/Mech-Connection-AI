@@ -105,7 +105,7 @@ export const UserHomePage = () => {
       ) : (
         <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">
         {/* Top Driver Telemetry Status Banner */}
-        <div className="clean-card p-6 sm:p-8 bg-gradient-to-r from-white via-blue-50/40 to-cyan-50/40 dark:from-[#0B1222] dark:via-blue-950/40 dark:to-cyan-950/40 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-2 border-slate-200/90 dark:border-slate-800/90 shadow-glass-card dark:shadow-glass-dark rounded-3xl relative overflow-hidden">
+        <div className="clean-card p-4 sm:p-6 md:p-8 bg-gradient-to-r from-white via-blue-50/40 to-cyan-50/40 dark:from-[#0B1222] dark:via-blue-950/40 dark:to-cyan-950/40 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-2 border-slate-200/90 dark:border-slate-800/90 shadow-glass-card dark:shadow-glass-dark rounded-3xl relative overflow-hidden">
           <div className="flex items-center gap-5 relative z-10">
             <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white flex items-center justify-center flex-shrink-0 font-bold shadow-glow-blue border border-white/20">
               <Car className="w-8 h-8" />
@@ -155,7 +155,7 @@ export const UserHomePage = () => {
             </span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3.5 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
             {quickServices.map((srv, idx) => {
               const Icon = srv.icon;
               return (
@@ -163,10 +163,12 @@ export const UserHomePage = () => {
                   key={idx}
                   type="button"
                   onClick={() => handleQuickService(srv.type)}
-                  className={`clean-card p-4 sm:p-5 flex flex-col items-center justify-center gap-3 ${srv.borderHover} hover:scale-[1.03] transition-all text-center group border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0B1222] rounded-2xl shadow-sm`}
+                  className={`clean-card p-3 sm:p-5 flex flex-col items-center justify-center gap-2.5 sm:gap-3 ${srv.borderHover} hover:scale-[1.03] transition-all text-center group border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0B1222] rounded-2xl shadow-sm ${
+                    idx === 4 ? 'col-span-2 sm:col-span-1 lg:col-span-1' : ''
+                  }`}
                 >
-                  <div className={`w-12 h-12 rounded-2xl ${srv.bgLight} ${srv.textLight} flex items-center justify-center ${srv.hoverBg} transition-all duration-200 shadow-xs`}>
-                    <Icon className="w-6 h-6" />
+                  <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl ${srv.bgLight} ${srv.textLight} flex items-center justify-center ${srv.hoverBg} transition-all duration-200 shadow-xs`}>
+                    <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <span className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-200 font-heading">
                     {srv.label}

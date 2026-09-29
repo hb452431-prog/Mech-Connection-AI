@@ -251,7 +251,7 @@ export const MechanicHomePage = () => {
               const target = requests.find((r) => r.id === g.id);
               if (target) setViewRequestModal(target);
             }}
-            height="440px"
+            height="clamp(320px, 45vh, 460px)"
           />
         </div>
 

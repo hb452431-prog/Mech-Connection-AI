@@ -101,7 +101,7 @@ export const MechanicAuthPage = () => {
         </div>
 
         {/* Auth Card */}
-        <div className="clean-card bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl p-6 sm:p-8 space-y-6 shadow-glass-card dark:shadow-glass-dark border-2 border-slate-200/90 dark:border-slate-800/90 rounded-3xl">
+        <div className="clean-card bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl p-5 sm:p-8 space-y-6 shadow-glass-card dark:shadow-glass-dark border-2 border-slate-200/90 dark:border-slate-800/90 rounded-3xl">
           {/* Tab Switcher */}
           <div className="grid grid-cols-2 gap-1.5 p-1.5 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200/50 dark:border-slate-700/50">
             <button

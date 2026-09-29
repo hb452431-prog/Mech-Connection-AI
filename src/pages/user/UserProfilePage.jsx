@@ -79,7 +79,7 @@ export const UserProfilePage = () => {
         </div>
 
         {/* Profile Card */}
-        <div className="clean-card p-7 sm:p-10 space-y-7 border-slate-200/90 dark:border-slate-800/90 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-glass-card dark:shadow-glass-dark rounded-3xl">
+        <div className="clean-card p-4 sm:p-7 md:p-10 space-y-6 sm:space-y-7 border-slate-200/90 dark:border-slate-800/90 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-glass-card dark:shadow-glass-dark rounded-3xl">
           {isEditing ? (
             <form onSubmit={handleSave} className="space-y-5 text-xs">
               <div>

@@ -387,10 +387,10 @@ export const MechanicRequestsPage = () => {
                 className="rounded-2xl overflow-hidden shadow-inner border border-slate-200 dark:border-slate-700"
               />
 
-              <div className="flex items-center justify-between pt-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-2">
                 <a
                   href={`tel:${navigatingReq.userPhone || '+15550199'}`}
-                  className="btn-secondary py-2.5 px-4 text-xs font-bold flex items-center gap-1.5 rounded-xl"
+                  className="btn-secondary py-3 px-4 text-xs font-bold flex items-center justify-center gap-1.5 rounded-xl"
                 >
                   <Phone className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                   Call Driver ({navigatingReq.userName.split(' ')[0]})
@@ -399,7 +399,7 @@ export const MechanicRequestsPage = () => {
                 <button
                   type="button"
                   onClick={() => handleComplete(navigatingReq.id)}
-                  className="py-2.5 px-5 text-xs font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs"
+                  className="py-3 px-5 text-xs font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs flex items-center justify-center"
                 >
                   Mark as Completed
                 </button>

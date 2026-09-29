@@ -180,10 +180,10 @@ export const FindGaragePage = () => {
               <span className="font-extrabold tracking-wide">LIVE BIKE DISPATCH</span>
             </button>
 
-            <div className="flex items-center gap-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-1.5 rounded-2xl border-2 border-slate-200/90 dark:border-slate-800/90 shadow-glass-card dark:shadow-glass-dark text-xs sm:text-sm font-black">
+            <div className="flex items-center gap-1 sm:gap-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-1.5 rounded-2xl border-2 border-slate-200/90 dark:border-slate-800/90 shadow-glass-card dark:shadow-glass-dark text-xs sm:text-sm font-black">
               <button
                 onClick={() => setFilter('all')}
-                className={`px-3.5 py-2 rounded-xl transition-all ${
+                className={`px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl transition-all ${
                   filter === 'all' ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-glow-blue' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
@@ -191,7 +191,7 @@ export const FindGaragePage = () => {
               </button>
               <button
                 onClick={() => setFilter('closest')}
-                className={`px-3.5 py-2 rounded-xl transition-all ${
+                className={`px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl transition-all ${
                   filter === 'closest' ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-glow-blue' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
@@ -199,7 +199,7 @@ export const FindGaragePage = () => {
               </button>
               <button
                 onClick={() => setFilter('247')}
-                className={`px-3.5 py-2 rounded-xl transition-all ${
+                className={`px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl transition-all ${
                   filter === '247' ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-glow-emergency' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
@@ -234,7 +234,7 @@ export const FindGaragePage = () => {
             locationError={locationError?.message}
             onSelectLocation={handleLocationSearchSelect}
             onRequestHelp={handleRequestHelp}
-            height="500px"
+            height="clamp(340px, 48vh, 500px)"
           />
 
           {/* Quick Helper Bar */}

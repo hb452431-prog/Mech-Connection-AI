@@ -372,7 +372,7 @@ export const EmergencyPage = () => {
 
         {/* 1. FORM STAGE (Comprehensive Driver Breakdown Intake) */}
         {stage === 'FORM' && (
-          <div className="clean-card emergency-card-active p-7 sm:p-10 space-y-8 sm:space-y-9 shadow-xl rounded-3xl border-2 border-orange-200 dark:border-orange-900/60 bg-white dark:bg-slate-900">
+          <div className="clean-card emergency-card-active p-4 sm:p-7 md:p-10 space-y-6 sm:space-y-9 shadow-xl rounded-3xl border-2 border-orange-200 dark:border-orange-900/60 bg-white dark:bg-slate-900">
             
             {/* STEP 1: VEHICLE TYPE SELECTOR (Rapido Style) */}
             <div className="space-y-4">
@@ -386,7 +386,7 @@ export const EmergencyPage = () => {
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
                 {vehicleTypeOptions.map((opt) => {
                   const isSelected = vehicleType.includes(opt.label.split('/')[0].trim());
                   return (
@@ -394,7 +394,7 @@ export const EmergencyPage = () => {
                       key={opt.id}
                       type="button"
                       onClick={() => setVehicleType(`${opt.icon} ${opt.label}`)}
-                      className={`p-4 sm:p-5 rounded-2xl border-2 text-left transition-all flex flex-col justify-between gap-3 ${
+                      className={`p-3 sm:p-4 md:p-5 rounded-2xl border-2 text-left transition-all flex flex-col justify-between gap-2.5 sm:gap-3 ${
                         isSelected
                           ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/60 text-slate-900 dark:text-white ring-2 ring-amber-400/40 shadow-md scale-[1.02]'
                           : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700'
@@ -555,7 +555,7 @@ export const EmergencyPage = () => {
                 type="button"
                 onClick={handleConfirmSend}
                 disabled={isSubmitting}
-                className="w-full btn-emergency py-5 sm:py-6 text-base sm:text-lg font-black uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl group cursor-pointer"
+                className="w-full btn-emergency py-4 sm:py-5 md:py-6 text-xs sm:text-base md:text-lg font-black uppercase tracking-wide flex items-center justify-center gap-2 sm:gap-3 shadow-xl group cursor-pointer text-center"
               >
                 <SirenLight size="sm" variant="sticker" animated={true} />
                 <span className="drop-shadow-xs font-black">
@@ -657,7 +657,7 @@ export const EmergencyPage = () => {
                   distance: liveDistance,
                   eta: liveETA
                 }}
-                height="400px"
+                height="clamp(300px, 42vh, 420px)"
               />
 
               {/* Simulation Controls Toolbar */}

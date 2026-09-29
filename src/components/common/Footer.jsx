@@ -22,25 +22,25 @@ export const Footer = () => {
       <div className="absolute bottom-0 right-1/4 w-96 h-48 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Emergency Hotline Banner */}
-      <div className="border-b border-slate-800 bg-gradient-to-r from-navy-900 via-slate-900 to-navy-900 py-8">
+      <div className="border-b border-slate-800 bg-gradient-to-r from-navy-900 via-slate-900 to-navy-900 py-6 sm:py-8">
         <div className="container-custom flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-4 text-center md:text-left">
             <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 flex-shrink-0 animate-pulse">
               <PhoneCall className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-lg font-bold text-white font-heading">
+              <h4 className="text-base sm:text-lg font-bold text-white font-heading">
                 Stranded on the road right now?
               </h4>
-              <p className="text-sm text-slate-400">
+              <p className="text-xs sm:text-sm text-slate-400">
                 1-Tap AI Emergency Dispatch coordinates nearby mobile units with 4.2 min avg arrival.
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 w-full sm:w-auto justify-center">
             <Link
               to="/sos"
-              className="btn-emergency-glow px-6 py-3 rounded-xl text-sm font-black uppercase tracking-wider flex items-center gap-2"
+              className="btn-emergency-glow px-6 py-3 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider flex items-center justify-center gap-2 w-full sm:w-auto"
             >
               Request 1-Tap SOS
               <ArrowRight className="w-4 h-4" />
@@ -49,7 +49,7 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="container-custom py-16">
+      <div className="container-custom py-10 sm:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Col 1: Brand Info */}
           <div className="lg:col-span-2 space-y-4">

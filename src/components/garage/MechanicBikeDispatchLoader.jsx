@@ -114,7 +114,7 @@ export const MechanicBikeDispatchLoader = ({
       </div>
 
       {/* Main Unified Dispatch Card (Adaptive Theme) */}
-      <div className={`relative z-10 w-full max-w-3xl flex flex-col rounded-3xl backdrop-blur-xl overflow-hidden p-4 sm:p-6 space-y-4 transition-all duration-300 ${
+      <div className={`relative z-10 w-full max-w-3xl max-h-[96dvh] overflow-y-auto flex flex-col rounded-3xl backdrop-blur-xl p-4 sm:p-6 space-y-4 transition-all duration-300 ${
         isDark 
           ? 'bg-slate-900/90 border border-slate-700/80 shadow-[0_20px_60px_rgba(0,0,0,0.85)] text-white' 
           : 'bg-white/95 border border-slate-200/90 shadow-[0_20px_50px_rgba(15,23,42,0.12)] text-slate-900'

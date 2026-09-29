@@ -719,6 +719,30 @@ button, a {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Container Custom Utility for Consistent Mobile, Tablet & Desktop Widths */
+.container-custom {
+  width: 100%;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-custom {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-custom {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
 @media (max-width: 640px) {
   /* Prevent horizontal overflow on mobile screens */
   html, body, #root {
@@ -727,6 +751,18 @@ button, a {
     max-width: 100%;
     min-height: 100%;
     min-height: 100dvh;
+  }
+
+  /* Prevent iOS Safari auto-zoom on input focus */
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="search"],
+  select,
+  textarea {
+    font-size: 16px !important;
   }
 
   /* Responsive card padding on mobile phones to maximize content visibility */
@@ -738,7 +774,7 @@ button, a {
   .portal-card-user,
   .portal-card-mechanic {
     border-radius: 1.25rem;
-    padding: 1.5rem;
+    padding: 1.25rem;
   }
 
   .clean-input {
@@ -756,9 +792,17 @@ button, a {
   .leaflet-container {
     border-radius: 0.875rem;
   }
+
+  /* Accessible mobile touch targets */
+  .btn-primary, .btn-secondary, .btn-emergency, .btn-rapido {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
-/* Desktop View Layout Enhancements & Proportions */
+/* Desktop & Ultra-wide View Layout Enhancements & Proportions */
 @media (min-width: 1024px) {
   .leaflet-container {
     border-radius: 1.25rem;
@@ -771,6 +815,12 @@ button, a {
   .portal-card-user,
   .portal-card-mechanic {
     border-radius: 1.75rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container-custom {
+    max-width: 88rem;
   }
 }
 

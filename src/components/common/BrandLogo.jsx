@@ -149,10 +149,10 @@ export const BrandEmblem = ({ size = 44, className = '' }) => (
 
 export const BrandLogo = ({ size = 'md', clickable = true, className = '', showSubtitle = true, layout = 'auto' }) => {
   const sizeMap = {
-    sm: { icon: 34, text: 'text-base', subText: 'text-[9px]', badge: 'text-[9px]' },
-    md: { icon: 44, text: 'text-xl', subText: 'text-[11px]', badge: 'text-[10px]' },
-    lg: { icon: 110, text: 'text-3xl', subText: 'text-xs', badge: 'text-xs' },
-    xl: { icon: 140, text: 'text-4xl', subText: 'text-sm', badge: 'text-sm' }
+    sm: { icon: 32, text: 'text-sm sm:text-base', subText: 'hidden sm:block text-[9px]', badge: 'text-[9px]' },
+    md: { icon: 42, text: 'text-base sm:text-xl', subText: 'hidden sm:block text-[10px] sm:text-[11px]', badge: 'text-[10px]' },
+    lg: { icon: 110, text: 'text-2xl sm:text-3xl', subText: 'text-xs', badge: 'text-xs' },
+    xl: { icon: 140, text: 'text-3xl sm:text-4xl', subText: 'text-sm', badge: 'text-sm' }
   };
 
   const currentSize = sizeMap[size] || sizeMap.md;
@@ -166,7 +166,9 @@ export const BrandLogo = ({ size = 'md', clickable = true, className = '', showS
       viewBox="0 0 200 200"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="flex-shrink-0 drop-shadow-xs transition-transform duration-300 group-hover:scale-105"
+      className={`flex-shrink-0 drop-shadow-xs transition-transform duration-300 group-hover:scale-105 ${
+        size === 'md' ? 'w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11' : ''
+      }`}
     >
       <defs>
         <linearGradient id="emblemBorder" x1="0%" y1="0%" x2="100%" y2="100%">

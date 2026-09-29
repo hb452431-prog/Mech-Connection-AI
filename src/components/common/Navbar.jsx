@@ -17,6 +17,7 @@ import {
   Sparkles,
   ShieldCheck,
   ChevronDown
+} from 'lucide-react';
 import { SirenLight } from './SirenLight';
 import ThemeToggle from './ThemeToggle';
 

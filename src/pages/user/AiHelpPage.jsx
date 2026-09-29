@@ -132,7 +132,7 @@ export const AiHelpPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Input Form */}
           <div className="lg:col-span-6 space-y-6">
-            <div className="clean-card p-6 sm:p-8 space-y-6 border-2 border-slate-200/90 dark:border-slate-800/90 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-glass-card dark:shadow-glass-dark rounded-3xl">
+            <div className="clean-card p-4 sm:p-6 md:p-8 space-y-6 border-2 border-slate-200/90 dark:border-slate-800/90 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-glass-card dark:shadow-glass-dark rounded-3xl">
               <form onSubmit={handleAnalyze} className="space-y-6">
                 {/* 1. Type the problem */}
                 <div className="space-y-3">
@@ -258,16 +258,16 @@ export const AiHelpPage = () => {
           {/* Right Column: AI Results or Ready State Placeholder */}
           <div className="lg:col-span-6 space-y-6">
             {analysisResult ? (
-              <div className="clean-card p-6 sm:p-8 space-y-6 border-l-4 border-l-amber-500 animate-in fade-in duration-200 shadow-xl bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 rounded-3xl">
+              <div className="clean-card p-4 sm:p-6 md:p-8 space-y-6 border-l-4 border-l-amber-500 animate-in fade-in duration-200 shadow-xl bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 rounded-3xl">
                 {/* Header with Problem & Category Badge */}
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-2.5">
                     <span className="text-xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 font-mono flex items-center gap-2">
                       <Zap className="w-4 h-4 text-amber-500" />
                       Diagnosis Result
                     </span>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                       <button
                         type="button"
                         onClick={handleCopyReport}

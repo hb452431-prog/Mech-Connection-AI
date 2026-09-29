@@ -128,8 +128,8 @@ export const LocationPermissionModal = ({
   const showLoading = loading || isActivating;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="clean-card dark:bg-slate-900 dark:border-slate-800 max-w-lg w-full p-5 sm:p-7 shadow-2xl space-y-5 relative overflow-hidden max-h-[92vh] overflow-y-auto">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="clean-card dark:bg-slate-900 dark:border-slate-800 max-w-lg w-full p-4 sm:p-7 shadow-2xl space-y-5 relative overflow-hidden max-h-[90dvh] overflow-y-auto">
         {/* Ambient glow */}
         <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-3xl pointer-events-none -mr-12 -mt-12" />
 

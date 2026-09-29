@@ -78,9 +78,9 @@ export const LandingPage = () => {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
           {/* Option 1: USER / DRIVER PORTAL */}
-          <div className="portal-card-user p-8 sm:p-10 lg:p-12 flex flex-col justify-between group text-left border-2 border-cyan-300/80 dark:border-cyan-700/60 rounded-3xl space-y-8 relative overflow-hidden">
+          <div className="portal-card-user p-5 sm:p-8 lg:p-12 flex flex-col justify-between group text-left border-2 border-cyan-300/80 dark:border-cyan-700/60 rounded-3xl space-y-6 sm:space-y-8 relative overflow-hidden">
             {/* Top Right Decorative Ambient Sheen */}
             <div className="absolute -top-12 -right-12 w-40 h-40 bg-cyan-400/20 dark:bg-cyan-500/15 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform" />
 
@@ -124,7 +124,7 @@ export const LandingPage = () => {
           </div>
 
           {/* Option 2: MECHANIC / GARAGE PARTNER PORTAL */}
-          <div className="portal-card-mechanic p-8 sm:p-10 lg:p-12 flex flex-col justify-between group text-left border-2 border-indigo-300/80 dark:border-indigo-700/60 rounded-3xl space-y-8 relative overflow-hidden">
+          <div className="portal-card-mechanic p-5 sm:p-8 lg:p-12 flex flex-col justify-between group text-left border-2 border-indigo-300/80 dark:border-indigo-700/60 rounded-3xl space-y-6 sm:space-y-8 relative overflow-hidden">
             {/* Top Right Decorative Ambient Sheen */}
             <div className="absolute -top-12 -right-12 w-40 h-40 bg-indigo-400/20 dark:bg-indigo-500/15 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform" />
 

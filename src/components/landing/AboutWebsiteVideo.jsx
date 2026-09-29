@@ -223,36 +223,36 @@ export const AboutWebsiteVideo = () => {
             </div>
 
             {/* Bottom Controls Row */}
-            <div className="flex items-center justify-between text-xs text-slate-300">
+            <div className="flex items-center justify-between text-xs text-slate-300 gap-2">
               {/* Left Actions: Play, Restart, Volume, Time */}
-              <div className="flex items-center gap-3.5">
+              <div className="flex items-center gap-1.5 sm:gap-3.5">
                 <button
                   onClick={togglePlay}
-                  className="w-9 h-9 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center transition-all shadow-md shadow-amber-500/30"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center transition-all shadow-md shadow-amber-500/30 flex-shrink-0"
                   title={isPlaying ? 'Pause' : 'Play'}
                 >
-                  {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 ml-0.5 fill-current" />}
+                  {isPlaying ? <Pause className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" /> : <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-0.5 fill-current" />}
                 </button>
 
                 <button
                   onClick={handleRestart}
-                  className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+                  className="p-1.5 sm:p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors hidden sm:flex"
                   title="Replay Video"
                 >
-                  <RotateCcw className="w-4 h-4" />
+                  <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
 
                 {/* Volume Control */}
-                <div className="flex items-center gap-2 group/vol">
+                <div className="flex items-center gap-1 sm:gap-2 group/vol">
                   <button
                     onClick={toggleMute}
-                    className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+                    className="p-1.5 sm:p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
                     title={isMuted ? 'Unmute' : 'Mute'}
                   >
                     {isMuted || volume === 0 ? (
-                      <VolumeX className="w-4 h-4 text-rose-400" />
+                      <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-400" />
                     ) : (
-                      <Volume2 className="w-4 h-4 text-slate-300" />
+                      <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-300" />
                     )}
                   </button>
                   <input
@@ -262,23 +262,23 @@ export const AboutWebsiteVideo = () => {
                     step="0.05"
                     value={isMuted ? 0 : volume}
                     onChange={handleVolumeChange}
-                    className="w-20 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-400 hidden sm:inline-block"
+                    className="w-16 sm:w-20 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-400 hidden md:inline-block"
                   />
                 </div>
 
                 {/* Time Display */}
-                <div className="font-mono text-xs text-slate-300 pl-1 font-bold">
+                <div className="font-mono text-[10px] sm:text-xs text-slate-300 pl-0.5 sm:pl-1 font-bold whitespace-nowrap">
                   <span>{formatTime(currentTime)}</span>
-                  <span className="text-slate-500 mx-1.5">/</span>
+                  <span className="text-slate-500 mx-1">/</span>
                   <span className="text-slate-400">{formatTime(duration)}</span>
                 </div>
               </div>
 
               {/* Right Actions: Speed, Fullscreen */}
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
                 <button
                   onClick={handleSpeedChange}
-                  className="px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700/80 text-xs font-mono font-bold text-slate-300 hover:text-white transition-colors"
+                  className="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg bg-slate-900 border border-slate-700/80 text-[10px] sm:text-xs font-mono font-bold text-slate-300 hover:text-white transition-colors"
                   title="Playback Speed"
                 >
                   {playbackSpeed}x
@@ -286,10 +286,10 @@ export const AboutWebsiteVideo = () => {
 
                 <button
                   onClick={toggleFullscreen}
-                  className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+                  className="p-1.5 sm:p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
                   title="Toggle Fullscreen"
                 >
-                  {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+                  {isFullscreen ? <Minimize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
                 </button>
               </div>
             </div>
