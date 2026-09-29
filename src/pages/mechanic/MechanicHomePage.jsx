@@ -29,10 +29,12 @@ import {
   X
 } from 'lucide-react';
 import { useNetwork } from '../../context/NetworkContext';
+import MechanicBikeDispatchLoader from '../../components/garage/MechanicBikeDispatchLoader';
 
 export const MechanicHomePage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [showDispatchLoader, setShowDispatchLoader] = useState(true);
   const { isSlowNetwork, isOnline: isNetworkOnline } = useNetwork();
   const mechanic = authService.getMechanic() || {};
   const [requests, setRequests] = useState([]);
@@ -138,7 +140,21 @@ export const MechanicHomePage = () => {
       <div className="mesh-aurora-bg" />
       <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
-      {showSkeleton ? (
+      {showDispatchLoader ? (
+        <MechanicBikeDispatchLoader
+          portalType="mechanic"
+          mechanicName={mechanic.mechanicName || mechanic.name || "Rahul Sharma"}
+          onFinish={() => {
+            setShowDispatchLoader(false);
+            setLoading(false);
+          }}
+          userCoordinates={
+            mechanicLocation?.lat
+              ? { lat: mechanicLocation.lat, lng: mechanicLocation.lng }
+              : { lat: 37.7749, lng: -122.4194 }
+          }
+        />
+      ) : showSkeleton ? (
         <MechanicHomeSkeleton />
       ) : (
         <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">
@@ -163,18 +179,30 @@ export const MechanicHomePage = () => {
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setIsOnline(!isOnline)}
-            className={`px-7 py-4 rounded-2xl text-xs sm:text-sm font-black uppercase tracking-wider flex items-center gap-2.5 transition-all self-start sm:self-auto shadow-md cursor-pointer ${
-              isOnline
-                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 border border-emerald-400 hover:from-emerald-400 hover:to-teal-400 shadow-glow-emerald'
-                : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'
-            }`}
-          >
-            <Radio className="w-4 h-4" />
-            <span>{isOnline ? 'Go Offline' : 'Go Online'}</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-2.5 self-start sm:self-auto">
+            <button
+              type="button"
+              onClick={() => setShowDispatchLoader(true)}
+              className="px-4 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-glow-blue border border-blue-400/40 transition-all cursor-pointer active:scale-95"
+              title="Re-run Live Dispatch Radar Simulation"
+            >
+              <span className="text-sm">🏍️</span>
+              <span className="font-extrabold tracking-wide">LIVE RADAR DISPATCH</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsOnline(!isOnline)}
+              className={`px-7 py-3.5 rounded-2xl text-xs sm:text-sm font-black uppercase tracking-wider flex items-center gap-2.5 transition-all shadow-md cursor-pointer ${
+                isOnline
+                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 border border-emerald-400 hover:from-emerald-400 hover:to-teal-400 shadow-glow-emerald'
+                  : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700'
+              }`}
+            >
+              <Radio className="w-4 h-4" />
+              <span>{isOnline ? 'Go Offline' : 'Go Online'}</span>
+            </button>
+          </div>
         </div>
 
         {/* Garage / Mobile Mechanic Unit Telemetry Status Bar */}
@@ -200,9 +228,19 @@ export const MechanicHomePage = () => {
               <Navigation className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               <span>Live Area Radar Map</span>
             </h2>
-            <span className="text-xs font-mono text-slate-400 dark:text-slate-500 font-bold">
-              {requests.length} Driver SOS Signals Active
-            </span>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setShowDispatchLoader(true)}
+                className="text-[11px] font-mono font-bold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer"
+                title="Re-run Dispatch Radar"
+              >
+                <span>🏍️ Dispatch Radar</span>
+              </button>
+              <span className="text-xs font-mono text-slate-400 dark:text-slate-500 font-bold">
+                {requests.length} Driver SOS Signals Active
+              </span>
+            </div>
           </div>
 
           <MechMap

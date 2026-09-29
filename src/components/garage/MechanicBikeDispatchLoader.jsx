@@ -20,7 +20,9 @@ import {
 export const MechanicBikeDispatchLoader = ({ 
   onFinish, 
   duration = 2400,
-  userCoordinates = { lat: 19.0760, lng: 72.8777 }
+  userCoordinates = { lat: 19.0760, lng: 72.8777 },
+  portalType = "user", // "user" | "mechanic"
+  mechanicName = "Suresh"
 }) => {
   const [progress, setProgress] = useState(0);
   const [phase, setPhase] = useState('riding'); // 'riding' | 'arrived' | 'exiting'
@@ -31,6 +33,12 @@ export const MechanicBikeDispatchLoader = ({
 
   // Dynamic status message based on travel progression
   const getStatusMessage = () => {
+    if (portalType === 'mechanic') {
+      if (progress < 25) return "Initializing Live Area Radar & GPS telemetry...";
+      if (progress < 60) return `Mechanic ${mechanicName} on Service Bike online with roadside tools...`;
+      if (progress < 88) return "Scanning urban sectors for stranded driver SOS beacons...";
+      return "SOS beacons synchronized! Opening Live Area Radar map...";
+    }
     if (progress < 25) return "Scanning nearby garages & active mobile mechanics...";
     if (progress < 60) return "Mechanic Suresh dispatched on Rapid Service Bike...";
     if (progress < 88) return "Traveling via expressway with emergency roadside tools...";
@@ -102,11 +110,13 @@ export const MechanicBikeDispatchLoader = ({
                 </span>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-                  NEARBY GARAGES
+                  {portalType === 'mechanic' ? 'MECHANIC RADAR' : 'NEARBY GARAGES'}
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 font-medium">
-                Locating closest certified workshops & mobile mechanics
+                {portalType === 'mechanic'
+                  ? 'Connecting Live Area Radar & active driver breakdown SOS signals'
+                  : 'Locating closest certified workshops & mobile mechanics'}
               </p>
             </div>
           </div>
@@ -114,7 +124,7 @@ export const MechanicBikeDispatchLoader = ({
           {/* Active Dispatch Badge */}
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 text-xs font-mono font-bold shadow-xs">
             <Zap className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
-            <span>DISPATCH ACTIVE</span>
+            <span>{portalType === 'mechanic' ? 'RADAR ACTIVE' : 'DISPATCH ACTIVE'}</span>
           </div>
         </div>
 
@@ -293,7 +303,7 @@ export const MechanicBikeDispatchLoader = ({
                 <circle cx="0" cy="-5" r="2.5" fill="#FFF" />
                 <rect x="-46" y="-32" width="92" height="17" rx="8" fill="#0B132B" stroke="#22D3EE" strokeWidth="1" />
                 <text x="0" y="-20" textAnchor="middle" fill="#38BDF8" fontSize="8" fontWeight="bold" fontFamily="monospace">
-                  📍 YOUR CAR
+                  {portalType === 'mechanic' ? '📍 DRIVER SOS' : '📍 YOUR CAR'}
                 </text>
               </g>
             </g>
@@ -449,7 +459,7 @@ export const MechanicBikeDispatchLoader = ({
               <g transform="translate(42, -98)">
                 <rect x="-42" y="-10" width="84" height="17" rx="8" fill="#0B132B" stroke="#38BDF8" strokeWidth="1" />
                 <text x="0" y="2" textAnchor="middle" fill="#38BDF8" fontSize="7.5" fontWeight="bold" fontFamily="monospace">
-                  {phase === 'arrived' ? "✅ ARRIVED!" : "RAPID BIKE ⚡"}
+                  {phase === 'arrived' ? "✅ ARRIVED!" : (portalType === 'mechanic' ? "MECHANIC UNIT ⚡" : "RAPID BIKE ⚡")}
                 </text>
               </g>
             </g>
@@ -484,7 +494,7 @@ export const MechanicBikeDispatchLoader = ({
           </div>
 
           <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 px-1">
-            <span>Fast-Response Mobile Workshop</span>
+            <span>{portalType === 'mechanic' ? 'Live Area Radar Telemetry' : 'Fast-Response Mobile Workshop'}</span>
             <span className="font-bold text-cyan-400">{progress}%</span>
           </div>
         </div>
