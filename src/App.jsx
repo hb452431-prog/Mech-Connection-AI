@@ -21,6 +21,16 @@ import AiHelpPage from './pages/user/AiHelpPage';
 import EmergencyPage from './pages/user/EmergencyPage';
 import UserProfilePage from './pages/user/UserProfilePage';
 
+// Additional Platform Pages & Feature Routes
+import DiagnosticsPage from './pages/DiagnosticsPage';
+import MechanicsPage from './pages/MechanicsPage';
+import CostEstimatorPage from './pages/CostEstimatorPage';
+import DashboardPage from './pages/DashboardPage';
+import PartnerPortalPage from './pages/PartnerPortalPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import SosPage from './pages/SosPage';
+
 export const App = () => {
   const [showSplash, setShowSplash] = useState(() => {
     try {
@@ -66,7 +76,17 @@ export const App = () => {
 
         {/* Global Emergency SOS Route Aliases */}
         <Route path="/emergency" element={<EmergencyPage />} />
-        <Route path="/sos" element={<EmergencyPage />} />
+        <Route path="/sos" element={<SosPage />} />
+
+        {/* Diagnostic & Mechanic Explorer Routes */}
+        <Route path="/diagnose" element={<DiagnosticsPage />} />
+        <Route path="/diagnostics" element={<DiagnosticsPage />} />
+        <Route path="/mechanics" element={<MechanicsPage />} />
+        <Route path="/cost-estimator" element={<CostEstimatorPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/partner-portal" element={<PartnerPortalPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
         {/* Catch-all fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -24,6 +24,8 @@ import {
 import { mechanicService } from '../services/mechanicService';
 import { MOCK_MECHANICS, MOCK_VEHICLES } from '../services/mockData';
 import { useToast } from '../context/ToastContext';
+import UserNavbar from '../components/common/UserNavbar';
+import Footer from '../components/common/Footer';
 
 // Custom Map Marker Icon
 const mechanicShopIcon = L.divIcon({
@@ -116,8 +118,14 @@ export const MechanicsPage = () => {
   };
 
   return (
-    <div className="py-10 bg-navy-950 min-h-screen">
-      <div className="container-custom">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070B14] text-slate-900 dark:text-slate-100 flex flex-col items-center pb-20 transition-colors duration-200 relative overflow-hidden">
+      <UserNavbar />
+
+      {/* Cybernetic Ambient Aurora Background */}
+      <div className="mesh-aurora-bg" />
+      <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
+
+      <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">
         {/* Top Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
@@ -596,7 +604,9 @@ export const MechanicsPage = () => {
             </div>
           </div>
         )}
-      </div>
+      </main>
+
+      <Footer />
     </div>
   );
 };

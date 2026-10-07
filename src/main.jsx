@@ -4,15 +4,23 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { ThemeProvider } from './context/ThemeContext';
 import { NetworkProvider } from './context/NetworkContext';
+import { AuthProvider } from './context/AuthContext';
+import { ToastProvider } from './context/ToastContext';
+import ToastContainer from './components/common/ToastContainer';
 import './styles/index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ThemeProvider>
       <NetworkProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <AuthProvider>
+          <ToastProvider>
+            <BrowserRouter>
+              <App />
+              <ToastContainer />
+            </BrowserRouter>
+          </ToastProvider>
+        </AuthProvider>
       </NetworkProvider>
     </ThemeProvider>
   </React.StrictMode>

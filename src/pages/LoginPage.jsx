@@ -62,7 +62,7 @@ export const LoginPage = () => {
       {/* Background ambient glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[350px] bg-cyan-600/10 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="container-custom max-w-md relative z-10 px-4">
+      <div className="container-custom max-w-md mx-auto self-center relative z-10 px-4">
         <div className="glass-panel-glow rounded-3xl p-6 sm:p-8 border-cyan-500/30 space-y-6">
           <div className="text-center space-y-2">
             <div className="flex justify-center mb-2">

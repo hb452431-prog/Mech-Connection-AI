@@ -29,6 +29,8 @@ import { MOCK_EMERGENCY_SERVICES } from '../services/mockData';
 import { useToast } from '../context/ToastContext';
 import { useLocation } from '../hooks/useLocation';
 import LocationPermissionModal from '../components/common/LocationPermissionModal';
+import UserNavbar from '../components/common/UserNavbar';
+import Footer from '../components/common/Footer';
 
 // Custom Leaflet Icons using SVG
 const userPinIcon = L.divIcon({
@@ -169,8 +171,9 @@ export const SosPage = () => {
   };
 
   return (
-    <div className="py-10 bg-navy-950 min-h-screen">
-      <div className="container-custom">
+    <div className="min-h-screen flex flex-col items-center bg-navy-950 text-slate-100">
+      <UserNavbar />
+      <main className="flex-1 w-full max-w-7xl mx-auto self-center px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Top Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
@@ -611,7 +614,8 @@ export const SosPage = () => {
           deviceInfo={deviceInfo}
           loading={isLocHookLoading}
         />
-      )}
+      </main>
+      <Footer />
     </div>
   );
 };

@@ -71,7 +71,7 @@ export const UserAuthPage = () => {
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-md space-y-6 relative z-10">
+      <div className="w-full max-w-md mx-auto self-center space-y-6 relative z-10">
         {/* Back Link */}
         <Link
           to="/"

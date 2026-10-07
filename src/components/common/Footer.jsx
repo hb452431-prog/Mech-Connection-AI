@@ -16,14 +16,14 @@ import {
 
 export const Footer = () => {
   return (
-    <footer className="border-t border-slate-800/80 bg-navy-950 relative overflow-hidden">
+    <footer className="border-t border-slate-800/80 bg-navy-950 w-full self-stretch relative overflow-hidden">
       {/* Glow background accent */}
       <div className="absolute top-0 left-1/4 w-96 h-48 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-96 h-48 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Emergency Hotline Banner */}
-      <div className="border-b border-slate-800 bg-gradient-to-r from-navy-900 via-slate-900 to-navy-900 py-6 sm:py-8">
-        <div className="container-custom flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="border-b border-slate-800 bg-gradient-to-r from-navy-900 via-slate-900 to-navy-900 py-6 sm:py-8 w-full">
+        <div className="container-custom mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-4 text-center md:text-left">
             <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 flex-shrink-0 animate-pulse">
               <PhoneCall className="w-6 h-6" />
@@ -49,7 +49,7 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="container-custom py-10 sm:py-16">
+      <div className="container-custom mx-auto py-10 sm:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Col 1: Brand Info */}
           <div className="lg:col-span-2 space-y-4">

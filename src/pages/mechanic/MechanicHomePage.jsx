@@ -133,7 +133,7 @@ export const MechanicHomePage = () => {
   }, [requests, mechanicLocation]);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070B14] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200 relative overflow-hidden">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070B14] text-slate-900 dark:text-slate-100 flex flex-col items-center pb-28 sm:pb-32 md:pb-16 transition-colors duration-200 relative overflow-hidden">
       <MechanicNavbar />
 
       {/* Cybernetic Ambient Aurora Background */}
@@ -157,7 +157,7 @@ export const MechanicHomePage = () => {
       ) : showSkeleton ? (
         <MechanicHomeSkeleton />
       ) : (
-        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">
+        <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">
         {/* Top Greeting & Status Toggle */}
         <div className="clean-card bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-10 border-l-4 border-l-indigo-600 dark:border-l-indigo-500 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-2 border-slate-200/90 dark:border-slate-800/90 shadow-glass-card dark:shadow-glass-dark rounded-3xl">
           <div className="space-y-2">

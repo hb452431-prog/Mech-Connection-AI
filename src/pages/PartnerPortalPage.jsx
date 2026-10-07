@@ -23,6 +23,8 @@ import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet'
 import L from 'leaflet';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import MechanicNavbar from '../components/common/MechanicNavbar';
+import Footer from '../components/common/Footer';
 
 const mechanicVanIcon = L.divIcon({
   className: 'custom-partner-van',
@@ -101,8 +103,9 @@ export const PartnerPortalPage = () => {
   };
 
   return (
-    <div className="py-10 bg-navy-950 min-h-screen">
-      <div className="container-custom space-y-8">
+    <div className="min-h-screen flex flex-col items-center bg-navy-950 text-slate-100">
+      <MechanicNavbar />
+      <main className="flex-1 w-full max-w-7xl mx-auto self-center px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Partner Header */}
         <div className="glass-panel-glow rounded-3xl p-6 sm:p-8 border-amber-500/30 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
@@ -357,7 +360,8 @@ export const PartnerPortalPage = () => {
             ))}
           </div>
         </div>
-      </div>
+      </main>
+      <Footer />
     </div>
   );
 };

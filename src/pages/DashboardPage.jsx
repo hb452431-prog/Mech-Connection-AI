@@ -26,6 +26,8 @@ import { vehicleService } from '../services/vehicleService';
 import { mechanicService } from '../services/mechanicService';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import UserNavbar from '../components/common/UserNavbar';
+import Footer from '../components/common/Footer';
 
 export const DashboardPage = () => {
   const { currentUser } = useAuth();
@@ -117,8 +119,9 @@ export const DashboardPage = () => {
   };
 
   return (
-    <div className="py-10 bg-navy-950 min-h-screen">
-      <div className="container-custom space-y-8">
+    <div className="min-h-screen flex flex-col items-center bg-navy-950 text-slate-100">
+      <UserNavbar />
+      <main className="flex-1 w-full max-w-7xl mx-auto self-center px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Top User Greeting Banner */}
         <div className="glass-panel-glow rounded-3xl p-6 sm:p-8 border-cyan-500/30 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
@@ -532,7 +535,8 @@ export const DashboardPage = () => {
             </div>
           </div>
         )}
-      </div>
+      </main>
+      <Footer />
     </div>
   );
 };

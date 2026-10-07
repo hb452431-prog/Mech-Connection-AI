@@ -50,7 +50,7 @@ export const Navbar = () => {
     <header className="sticky top-0 z-40 w-full border-b border-white/10 dark:border-slate-800 bg-navy-950/80 dark:bg-slate-950/90 backdrop-blur-xl">
       {/* Top micro alert strip */}
       <div className="bg-gradient-to-r from-navy-900 via-cyan-950/50 to-navy-900 border-b border-cyan-500/10 py-1 px-4 text-xs">
-        <div className="container-custom flex items-center justify-between text-slate-300">
+        <div className="container-custom mx-auto self-center flex items-center justify-between text-slate-300">
           <div className="flex items-center gap-2">
             <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="font-medium text-emerald-400">1,420+ Certified Mechanics Online</span>
@@ -66,7 +66,7 @@ export const Navbar = () => {
         </div>
       </div>
 
-      <div className="container-custom flex h-16 items-center justify-between px-4 sm:px-6">
+      <div className="container-custom mx-auto self-center flex h-16 items-center justify-between px-4 sm:px-6">
         {/* Brand Logo */}
         <BrandLogo size="md" />
 

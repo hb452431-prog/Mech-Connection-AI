@@ -66,7 +66,7 @@ export const LandingPage = () => {
       </header>
 
       {/* Main Dual Portal Selection Area (Oversized & High-Impact) */}
-      <section className="w-full max-w-6xl my-8 sm:my-12 space-y-6 relative z-10">
+      <section className="w-full max-w-6xl mx-auto my-8 sm:my-12 space-y-6 relative z-10 self-center">
         <div className="flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono px-2">
           <span className="flex items-center gap-2">
             <Cpu className="w-4 h-4 text-brand-blue dark:text-brand-cyan-light" />
@@ -170,12 +170,12 @@ export const LandingPage = () => {
       </section>
 
       {/* Official Platform Video Showcase with Luminous Ambient Rim */}
-      <div className="w-full max-w-6xl my-8 sm:my-14 relative z-10">
+      <div className="w-full max-w-6xl mx-auto my-8 sm:my-14 relative z-10 self-center">
         <AboutWebsiteVideo />
       </div>
 
       {/* Trust Highlights & Footer */}
-      <footer className="w-full max-w-6xl text-center space-y-6 pt-10 sm:pt-14 mt-12 sm:mt-16 border-t border-slate-200/80 dark:border-slate-800/80 relative z-10">
+      <footer className="w-full max-w-6xl mx-auto text-center space-y-6 pt-10 sm:pt-14 mt-12 sm:mt-16 border-t border-slate-200/80 dark:border-slate-800/80 relative z-10 self-center">
         <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs sm:text-sm font-bold">
           <span className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/80 shadow-xs">
             <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />

@@ -122,7 +122,7 @@ export const FindGaragePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070B14] text-slate-900 dark:text-slate-100 flex flex-col pb-28 sm:pb-32 md:pb-16 transition-colors duration-200 relative overflow-hidden">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070B14] text-slate-900 dark:text-slate-100 flex flex-col items-center pb-28 sm:pb-32 md:pb-16 transition-colors duration-200 relative overflow-hidden">
       <UserNavbar />
 
       {/* Cybernetic Ambient Aurora Background */}
@@ -144,7 +144,7 @@ export const FindGaragePage = () => {
       ) : showSkeleton ? (
         <FindGarageSkeleton />
       ) : (
-        <main className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">
+        <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
           <div className="space-y-2">

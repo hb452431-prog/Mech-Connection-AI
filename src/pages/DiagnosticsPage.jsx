@@ -28,6 +28,8 @@ import {
 import { aiDiagnosticService } from '../services/aiDiagnosticService';
 import { MOCK_ACOUSTIC_SAMPLES, MOCK_WARNING_LIGHTS, MOCK_OBD_CODES } from '../services/mockData';
 import { useToast } from '../context/ToastContext';
+import UserNavbar from '../components/common/UserNavbar';
+import Footer from '../components/common/Footer';
 
 export const DiagnosticsPage = () => {
   const [searchParams] = useSearchParams();
@@ -177,8 +179,14 @@ export const DiagnosticsPage = () => {
   );
 
   return (
-    <div className="py-10 bg-navy-950 min-h-screen">
-      <div className="container-custom">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070B14] text-slate-900 dark:text-slate-100 flex flex-col items-center pb-20 transition-colors duration-200 relative overflow-hidden">
+      <UserNavbar />
+
+      {/* Cybernetic Ambient Aurora Background */}
+      <div className="mesh-aurora-bg" />
+      <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
+
+      <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">
         {/* Page Top Header */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
           <div>
@@ -595,7 +603,9 @@ export const DiagnosticsPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </main>
+
+      <Footer />
     </div>
   );
 };
