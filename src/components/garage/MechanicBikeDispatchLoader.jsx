@@ -91,9 +91,9 @@ export const MechanicBikeDispatchLoader = ({
 
   return (
     <div 
-      className={`fixed inset-0 z-[99999] h-screen h-[100dvh] w-screen flex flex-col items-center justify-center p-3 sm:p-6 select-none overflow-hidden transition-all duration-300 ${
+      className={`fixed inset-0 z-[99999] h-screen h-[100dvh] w-screen flex flex-col justify-between select-none overflow-hidden transition-all duration-300 ${
         phase === 'exiting' ? 'opacity-0 scale-[1.02] pointer-events-none' : 'opacity-100 scale-100'
-      }`}
+      } ${isDark ? 'text-white' : 'text-slate-900'}`}
       style={{
         background: isDark
           ? 'radial-gradient(ellipse at 50% 30%, #0D1B36 0%, #081022 55%, #030712 100%)'
@@ -102,56 +102,61 @@ export const MechanicBikeDispatchLoader = ({
     >
       {/* Background ambient lighting (Dark vs Light mode) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[550px] h-[300px] rounded-full blur-[100px] transition-colors duration-300 ${
+        <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[650px] h-[350px] rounded-full blur-[120px] transition-colors duration-300 ${
           isDark ? 'bg-blue-600/15' : 'bg-blue-400/20'
         }`} />
-        <div className={`absolute top-1/3 left-1/4 w-72 h-72 rounded-full blur-[80px] transition-colors duration-300 ${
+        <div className={`absolute top-1/3 left-1/4 w-96 h-96 rounded-full blur-[100px] transition-colors duration-300 ${
           isDark ? 'bg-cyan-500/10' : 'bg-cyan-400/20'
         }`} />
-        <div className={`absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full blur-[80px] transition-colors duration-300 ${
+        <div className={`absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-[100px] transition-colors duration-300 ${
           isDark ? 'bg-amber-500/10' : 'bg-amber-300/25'
         }`} />
       </div>
 
-      {/* Main Unified Dispatch Card (Adaptive Theme) */}
-      <div className={`relative z-10 w-full max-w-3xl max-h-[96dvh] overflow-y-auto flex flex-col rounded-3xl backdrop-blur-xl p-4 sm:p-6 space-y-4 transition-all duration-300 ${
+      {/* 1. Full-Screen Top Navigation / Telemetry Header */}
+      <header className={`relative z-10 w-full px-4 sm:px-8 lg:px-12 py-3.5 sm:py-4.5 border-b backdrop-blur-xl shrink-0 flex items-center justify-between transition-colors duration-300 ${
         isDark 
-          ? 'bg-slate-900/90 border border-slate-700/80 shadow-[0_20px_60px_rgba(0,0,0,0.85)] text-white' 
-          : 'bg-white/95 border border-slate-200/90 shadow-[0_20px_50px_rgba(15,23,42,0.12)] text-slate-900'
+          ? 'border-slate-800/80 bg-slate-950/40 text-white' 
+          : 'border-slate-200/80 bg-white/60 text-slate-900 shadow-xs'
       }`}>
-        
-        {/* Card Header: Brand & Live Telemetry Badge (No Skip Buttons) */}
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center text-white shadow-glow-blue border border-white/20">
-              <Radio className="w-4 h-4 animate-pulse" />
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center text-white shadow-glow-blue border border-white/20 shrink-0">
+            <Radio className="w-5 h-5 animate-pulse" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+              <span className={`text-sm sm:text-base font-black tracking-wider uppercase font-heading ${
+                isDark ? 'text-white' : 'text-slate-900'
+              }`}>
+                MECH CONNECT AI
+              </span>
+              <span className={`inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-mono font-bold transition-colors ${
+                isDark 
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/30' 
+                  : 'bg-blue-50 text-blue-700 border border-blue-200 shadow-xs'
+              }`}>
+                <span className={`w-1.5 h-1.5 rounded-full animate-ping ${isDark ? 'bg-cyan-400' : 'bg-blue-600'}`} />
+                {portalType === 'mechanic' ? 'MECHANIC RADAR' : 'NEARBY GARAGES'}
+              </span>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className={`text-xs sm:text-sm font-black tracking-wide uppercase font-heading ${
-                  isDark ? 'text-white' : 'text-slate-900'
-                }`}>
-                  MECH CONNECT AI
-                </span>
-                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold transition-colors ${
-                  isDark 
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/30' 
-                    : 'bg-blue-50 text-blue-700 border border-blue-200 shadow-xs'
-                }`}>
-                  <span className={`w-1.5 h-1.5 rounded-full animate-ping ${isDark ? 'bg-cyan-400' : 'bg-blue-600'}`} />
-                  {portalType === 'mechanic' ? 'MECHANIC RADAR' : 'NEARBY GARAGES'}
-                </span>
-              </div>
-              <p className={`text-[11px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                {portalType === 'mechanic'
-                  ? 'Connecting Live Area Radar & active driver breakdown SOS signals'
-                  : 'Locating closest certified workshops & mobile mechanics'}
-              </p>
-            </div>
+            <p className={`text-xs font-medium line-clamp-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              {portalType === 'mechanic'
+                ? 'Connecting Live Area Radar & active driver breakdown SOS signals'
+                : 'Locating closest certified workshops & mobile mechanics'}
+            </p>
+          </div>
+        </div>
+
+        {/* Active Dispatch Badge & Coordinates */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono font-medium border transition-colors ${
+            isDark ? 'border-slate-800 bg-slate-900/60 text-slate-400' : 'border-slate-200 bg-white/70 text-slate-600'
+          }`}>
+            <MapPin className="w-3.5 h-3.5 text-cyan-500" />
+            <span>GPS: {userCoordinates.lat.toFixed(4)}°, {userCoordinates.lng.toFixed(4)}°</span>
           </div>
 
-          {/* Active Dispatch Badge */}
-          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-bold shadow-xs transition-colors ${
+          <div className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold shadow-xs transition-colors ${
             isDark 
               ? 'bg-cyan-500/15 border border-cyan-400/30 text-cyan-300' 
               : 'bg-blue-50 border border-blue-200 text-blue-700'
@@ -160,13 +165,14 @@ export const MechanicBikeDispatchLoader = ({
             <span>{portalType === 'mechanic' ? 'RADAR ACTIVE' : 'DISPATCH ACTIVE'}</span>
           </div>
         </div>
+      </header>
 
-        {/* 100% UNIFIED SVG CINEMATIC SCENE (Light vs Dark Adaptive) */}
-        {/* Road surface is at Y = 240. Tires of both the car and bike roll directly on Y = 240 with zero floating! */}
-        <div className={`relative w-full aspect-[2/1] sm:aspect-[2.2/1] rounded-2xl overflow-hidden border shadow-inner transition-colors duration-300 ${
+      {/* 2. Main Full-Screen Cinematic Scene Canvas */}
+      <main className="relative z-10 flex-1 min-h-0 w-full flex items-center justify-center p-3 sm:p-6 lg:p-8 overflow-hidden">
+        <div className={`relative w-full max-w-6xl xl:max-w-7xl 2xl:max-w-[1500px] aspect-[2.3/1] sm:aspect-[2.65/1] max-h-full rounded-2xl sm:rounded-3xl overflow-hidden border shadow-2xl transition-all duration-300 flex items-center justify-center ${
           isDark 
-            ? 'border-slate-700/70 bg-[#070D1E]' 
-            : 'border-slate-300/80 bg-[#EBF5FF]'
+            ? 'border-slate-700/80 bg-[#070D1E] shadow-[0_25px_80px_rgba(0,0,0,0.85)] ring-1 ring-white/5' 
+            : 'border-slate-300/80 bg-[#EBF5FF] shadow-[0_20px_60px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5'
         }`}>
           <svg 
             className="w-full h-full"
@@ -587,57 +593,79 @@ export const MechanicBikeDispatchLoader = ({
             </g>
           </svg>
         </div>
+      </main>
 
-        {/* Dynamic Status & Distance Counter (Adaptive Theme) */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 px-1">
-          <div className="flex items-center gap-2">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                isDark ? 'bg-cyan-400' : 'bg-blue-600'
-              }`} />
-              <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
-                isDark ? 'bg-cyan-500' : 'bg-blue-600'
-              }`} />
-            </span>
-            <span className={`text-xs sm:text-sm font-bold ${
-              isDark ? 'text-slate-200' : 'text-slate-800'
+      {/* 3. Bottom Telemetry & Progress Control Dock (Full Width) */}
+      <footer className={`relative z-10 w-full px-4 sm:px-8 lg:px-12 py-4 sm:py-6 border-t backdrop-blur-xl shrink-0 transition-colors duration-300 ${
+        isDark 
+          ? 'border-slate-800/80 bg-slate-950/60' 
+          : 'border-slate-200/80 bg-white/70 shadow-xs'
+      }`}>
+        <div className="max-w-6xl xl:max-w-7xl 2xl:max-w-[1500px] mx-auto space-y-3 sm:space-y-4">
+          
+          {/* Status Message & Distance Counter */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <span className="relative flex h-3 w-3">
+                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                  isDark ? 'bg-cyan-400' : 'bg-blue-600'
+                }`} />
+                <span className={`relative inline-flex rounded-full h-3 w-3 ${
+                  isDark ? 'bg-cyan-500' : 'bg-blue-600'
+                }`} />
+              </span>
+              <span className={`text-sm sm:text-base font-bold tracking-tight ${
+                isDark ? 'text-slate-100' : 'text-slate-800'
+              }`}>
+                {getStatusMessage()}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className={`flex items-center gap-2 text-xs sm:text-sm font-mono font-bold px-3.5 py-1.5 rounded-full border transition-colors ${
+                isDark 
+                  ? 'text-cyan-300 bg-slate-900/80 border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.15)]' 
+                  : 'text-blue-700 bg-blue-50 border-blue-200 shadow-xs'
+              }`}>
+                <Clock className={`w-4 h-4 ${isDark ? 'text-cyan-400' : 'text-blue-600'}`} />
+                <span>DISTANCE: {remainingDistance} KM</span>
+              </div>
+
+              <div className={`hidden sm:flex items-center gap-2 text-xs font-mono font-semibold px-3 py-1.5 rounded-full border transition-colors ${
+                isDark 
+                  ? 'text-emerald-400 bg-emerald-950/30 border-emerald-500/30' 
+                  : 'text-emerald-700 bg-emerald-50 border-emerald-200'
+              }`}>
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>ETA: &lt; 4 MINS</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Glowing Progress Bar */}
+          <div className="space-y-2">
+            <div className={`w-full h-3 sm:h-3.5 rounded-full border overflow-hidden relative p-0.5 transition-colors ${
+              isDark ? 'bg-slate-900/90 border-slate-700/80' : 'bg-slate-200/90 border-slate-300'
             }`}>
-              {getStatusMessage()}
-            </span>
+              <div 
+                className="h-full rounded-full bg-gradient-to-r from-blue-600 via-cyan-400 to-emerald-400 transition-all duration-75 relative shadow-[0_0_16px_rgba(6,182,212,0.9)]"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+
+            <div className="flex items-center justify-between text-xs font-mono px-1">
+              <span className={`flex items-center gap-2 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+                <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                <span>{portalType === 'mechanic' ? 'Live Area Radar Telemetry' : 'Fast-Response Mobile Workshop Dispatched'}</span>
+              </span>
+              <span className={`font-black text-sm ${isDark ? 'text-cyan-400' : 'text-blue-600'}`}>
+                {progress}%
+              </span>
+            </div>
           </div>
 
-          <div className={`flex items-center gap-2 text-xs font-mono font-bold px-3 py-1 rounded-full border transition-colors ${
-            isDark 
-              ? 'text-cyan-300 bg-slate-800/80 border-slate-700' 
-              : 'text-blue-700 bg-slate-100 border-slate-200 shadow-xs'
-          }`}>
-            <Clock className={`w-3.5 h-3.5 ${isDark ? 'text-cyan-400' : 'text-blue-600'}`} />
-            <span>DISTANCE: {remainingDistance} KM</span>
-          </div>
         </div>
-
-        {/* Glowing Progress Bar (Adaptive Theme) */}
-        <div className="space-y-1.5 pt-1">
-          <div className={`w-full h-2.5 rounded-full border overflow-hidden relative p-0.5 transition-colors ${
-            isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-200 border-slate-300'
-          }`}>
-            <div 
-              className="h-full rounded-full bg-gradient-to-r from-blue-600 via-cyan-400 to-emerald-400 transition-all duration-75 relative shadow-[0_0_12px_rgba(6,182,212,0.8)]"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-
-          <div className="flex items-center justify-between text-[11px] font-mono px-1">
-            <span className={isDark ? 'text-slate-400' : 'text-slate-500 font-semibold'}>
-              {portalType === 'mechanic' ? 'Live Area Radar Telemetry' : 'Fast-Response Mobile Workshop'}
-            </span>
-            <span className={`font-black ${isDark ? 'text-cyan-400' : 'text-blue-600'}`}>
-              {progress}%
-            </span>
-          </div>
-        </div>
-
-      </div>
+      </footer>
     </div>
   );
 };
