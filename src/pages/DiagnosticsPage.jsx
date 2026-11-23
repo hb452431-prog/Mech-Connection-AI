@@ -186,7 +186,7 @@ export const DiagnosticsPage = () => {
       <div className="mesh-aurora-bg" />
       <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
-      <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">
+      <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">
         {/* Page Top Header */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
           <div>
@@ -194,22 +194,22 @@ export const DiagnosticsPage = () => {
               <Cpu className="w-3.5 h-3.5" />
               AI Triage Station v3.8
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight font-heading">
+            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight font-heading">
               AI Vehicle Diagnostic Center
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
               Multi-modal engine acoustics, computer vision warning light scanner, and OBD-II trouble code decoder.
             </p>
           </div>
 
           {/* Connected Vehicle Banner */}
-          <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-900 border border-slate-800">
+          <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/80 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
             <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
               <Car className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-[11px] text-slate-400 uppercase font-mono">Active Target Vehicle</p>
-              <p className="text-sm font-bold text-white">2023 Tesla Model Y AWD</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 uppercase font-mono">Active Target Vehicle</p>
+              <p className="text-sm font-bold text-slate-900 dark:text-white">2023 Tesla Model Y AWD</p>
             </div>
           </div>
         </div>
@@ -230,7 +230,7 @@ export const DiagnosticsPage = () => {
                 className={`flex items-center gap-2.5 px-5 py-3 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all ${
                   activeTab === tab.id
                     ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/30 border border-cyan-400'
-                    : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+                    : 'bg-white/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800 shadow-xs'
                 }`}
               >
                 <Icon className="w-4 h-4" />

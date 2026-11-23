@@ -159,7 +159,7 @@ export const MechanicRequestsPage = () => {
       {showSkeleton ? (
         <MechanicRequestsSkeleton />
       ) : (
-        <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">
+        <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <h1 className="text-2xl sm:text-4xl font-black text-gradient-hero font-heading tracking-tight">

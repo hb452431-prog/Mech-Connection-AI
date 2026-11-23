@@ -156,7 +156,7 @@ export const BrandLogo = ({ size = 'md', clickable = true, className = '', showS
   };
 
   const currentSize = sizeMap[size] || sizeMap.md;
-  const isLarge = size === 'lg' || size === 'xl' || layout === 'stacked';
+  const isLarge = layout === 'horizontal' ? false : layout === 'stacked' ? true : (size === 'lg' || size === 'xl');
 
   // Precision Vector SVG Emblem based on official design
   const EmblemSVG = ({ iconSize }) => (

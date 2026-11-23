@@ -1,29 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { BrandLogo } from './BrandLogo';
-import { 
-  PhoneCall, 
-  Mail, 
-  MapPin, 
-  ShieldCheck, 
-  Cpu, 
-  Wrench, 
-  ArrowRight, 
-  CheckCircle2, 
+import {
+  PhoneCall,
+  Mail,
+  MapPin,
+  ShieldCheck,
+  Cpu,
+  Wrench,
+  ArrowRight,
+  CheckCircle2,
   Sparkles,
   Award
 } from 'lucide-react';
 
 export const Footer = () => {
   return (
-    <footer className="border-t border-slate-800/80 bg-navy-950 w-full self-stretch relative overflow-hidden">
+    <footer className="border-t border-slate-800/80 bg-navy-950 w-full self-stretch relative overflow-hidden pb-16 md:pb-0">
       {/* Glow background accent */}
       <div className="absolute top-0 left-1/4 w-96 h-48 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-96 h-48 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Emergency Hotline Banner */}
       <div className="border-b border-slate-800 bg-gradient-to-r from-navy-900 via-slate-900 to-navy-900 py-6 sm:py-8 w-full">
-        <div className="container-custom mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-4 text-center md:text-left">
             <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 flex-shrink-0 animate-pulse">
               <PhoneCall className="w-6 h-6" />
@@ -49,11 +49,11 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="container-custom mx-auto py-10 sm:py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Col 1: Brand Info */}
           <div className="lg:col-span-2 space-y-4">
-            <BrandLogo size="lg" showTagline={true} />
+            <BrandLogo size="md" showSubtitle={true} layout="horizontal" />
             <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
               The next-generation AI vehicle diagnostics & real-time emergency mechanic dispatch ecosystem. Bridging the gap between smart vehicle telemetry and trusted certified technicians.
             </p>
@@ -126,24 +126,24 @@ export const Footer = () => {
             </h5>
             <ul className="space-y-2.5 text-sm text-slate-400">
               <li>
-                <Link to="/partner-portal" className="hover:text-amber-400 transition-colors">
-                  Partner Radar Portal
+                <Link to="/mechanic" className="hover:text-amber-400 transition-colors">
+                  Mechanic Dispatch Center
                 </Link>
               </li>
               <li>
-                <Link to="/partner-portal" className="hover:text-amber-400 transition-colors">
+                <Link to="/mechanic/requests" className="hover:text-amber-400 transition-colors">
                   Incoming SOS Live Dispatch
                 </Link>
               </li>
               <li>
-                <Link to="/partner-portal" className="hover:text-amber-400 transition-colors">
-                  Shop Management & Invoicing
+                <Link to="/mechanic/completed" className="hover:text-amber-400 transition-colors">
+                  Completed Jobs & Invoicing
                 </Link>
               </li>
               <li>
-                <span className="text-slate-500 cursor-not-allowed">
-                  Fleet Diagnostics API (Coming Soon)
-                </span>
+                <Link to="/partner-portal" className="hover:text-amber-400 transition-colors">
+                  Partner Radar Portal
+                </Link>
               </li>
               <li>
                 <span className="text-slate-500 cursor-not-allowed">
@@ -180,12 +180,12 @@ export const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-slate-800/80 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div className="flex items-center gap-2">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-500"></span>
+          <div className="flex items-center gap-2 text-center md:text-left">
+            <span className="flex h-2 w-2 rounded-full bg-emerald-500 flex-shrink-0"></span>
             <span>All AI Diagnostic & GPS Telemetry Systems Operational</span>
           </div>
-          <p>© {new Date().getFullYear()} MECH CONNECT AI Technologies Inc. All rights reserved.</p>
-          <div className="flex gap-4">
+          <p className="text-center md:text-left">© {new Date().getFullYear()} MECH CONNECT AI Technologies Inc. All rights reserved.</p>
+          <div className="flex gap-4 items-center justify-center">
             <a href="#privacy" className="hover:text-slate-400 transition-colors">Privacy Policy</a>
             <span>•</span>
             <a href="#terms" className="hover:text-slate-400 transition-colors">Terms of Service</a>

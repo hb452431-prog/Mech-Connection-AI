@@ -144,7 +144,7 @@ export const FindGaragePage = () => {
       ) : showSkeleton ? (
         <FindGarageSkeleton />
       ) : (
-        <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">
+        <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
           <div className="space-y-2">

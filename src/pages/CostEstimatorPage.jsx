@@ -14,7 +14,7 @@ export const CostEstimatorPage = () => {
       <div className="mesh-aurora-bg" />
       <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
-      <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-8 py-8 sm:py-12 space-y-12 animate-in fade-in duration-300 relative z-10">
+      <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12 animate-in fade-in duration-300 relative z-10">
         {/* Navigation Breadcrumb */}
         <div className="flex items-center justify-between">
           <Link

@@ -103,7 +103,7 @@ export const AiHelpPage = () => {
       {showSkeleton ? (
         <AiHelpSkeleton />
       ) : (
-        <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">
+        <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">
         {/* Header */}
         <div className="space-y-2">
           <Link

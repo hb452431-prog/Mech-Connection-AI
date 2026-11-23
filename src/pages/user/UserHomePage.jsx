@@ -103,7 +103,7 @@ export const UserHomePage = () => {
       {showSkeleton ? (
         <UserHomeSkeleton />
       ) : (
-        <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">
+        <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10 animate-in fade-in duration-300 relative z-10">
         {/* Top Driver Telemetry Status Banner */}
         <div className="clean-card p-4 sm:p-6 md:p-8 bg-gradient-to-r from-white via-blue-50/40 to-cyan-50/40 dark:from-[#0B1222] dark:via-blue-950/40 dark:to-cyan-950/40 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-2 border-slate-200/90 dark:border-slate-800/90 shadow-glass-card dark:shadow-glass-dark rounded-3xl relative overflow-hidden">
           <div className="flex items-center gap-5 relative z-10">

@@ -587,33 +587,33 @@ export const SosPage = () => {
             </div>
           </div>
         )}
-      </div>
 
-      {/* Location Setup & Permissions Modal */}
-      {showLocationModal && (
-        <LocationPermissionModal
-          isOpen={showLocationModal}
-          onClose={() => setShowLocationModal(false)}
-          onEnable={async () => {
-            try {
-              await turnOnLocation();
+        {/* Location Setup & Permissions Modal */}
+        {showLocationModal && (
+          <LocationPermissionModal
+            isOpen={showLocationModal}
+            onClose={() => setShowLocationModal(false)}
+            onEnable={async () => {
+              try {
+                await turnOnLocation();
+                setShowLocationModal(false);
+              } catch (e) {}
+            }}
+            onUseIPLocation={async () => {
+              await fetchIPLocation();
               setShowLocationModal(false);
-            } catch (e) {}
-          }}
-          onUseIPLocation={async () => {
-            await fetchIPLocation();
-            setShowLocationModal(false);
-          }}
-          onManualSelect={(lat, lng, name) => {
-            setManualLocation(lat, lng, name);
-            setUserLocation({ lat, lng, address: name });
-            setShowLocationModal(false);
-          }}
-          error={locError}
-          permission={locPermission}
-          deviceInfo={deviceInfo}
-          loading={isLocHookLoading}
-        />
+            }}
+            onManualSelect={(lat, lng, name) => {
+              setManualLocation(lat, lng, name);
+              setUserLocation({ lat, lng, address: name });
+              setShowLocationModal(false);
+            }}
+            error={locError}
+            permission={locPermission}
+            deviceInfo={deviceInfo}
+            loading={isLocHookLoading}
+          />
+        )}
       </main>
       <Footer />
     </div>

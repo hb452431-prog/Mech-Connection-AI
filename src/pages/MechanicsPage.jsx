@@ -125,7 +125,7 @@ export const MechanicsPage = () => {
       <div className="mesh-aurora-bg" />
       <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40 dark:opacity-20" />
 
-      <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">
+      <main className="max-w-7xl mx-auto w-full self-center px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 animate-in fade-in duration-300 relative z-10">
         {/* Top Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
@@ -133,33 +133,33 @@ export const MechanicsPage = () => {
               <MapPin className="w-3.5 h-3.5" />
               Verified Workshop & Mobile Network
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight font-heading">
+            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight font-heading">
               Certified Mechanics Directory
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
               Search vetted master technicians, view certifications, and book appointments with fair pricing guarantee.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-slate-400">
-              Showing <strong className="text-cyan-400">{mechanicsList.length}</strong> certified centers
+            <span className="text-xs font-mono text-slate-600 dark:text-slate-400">
+              Showing <strong className="text-cyan-500 dark:text-cyan-400">{mechanicsList.length}</strong> certified centers
             </span>
           </div>
         </div>
 
         {/* Filter & Search Bar */}
-        <div className="glass-panel p-4 rounded-2xl mb-8 space-y-4 border-slate-800">
+        <div className="clean-card p-4 rounded-2xl mb-8 space-y-4 border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
             {/* Search Input */}
             <div className="md:col-span-5 relative">
-              <Search className="w-4 h-4 text-cyan-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-cyan-500 dark:text-cyan-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by shop name, address, or service (e.g. Brakes, EV, Transmission)..."
-                className="w-full glass-input pl-10 pr-4 py-2.5 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500"
+                className="w-full clean-input pl-10 pr-4 py-2.5 rounded-xl text-xs sm:text-sm"
               />
             </div>
 
@@ -168,14 +168,14 @@ export const MechanicsPage = () => {
               <select
                 value={selectedSpecialty}
                 onChange={(e) => setSelectedSpecialty(e.target.value)}
-                className="w-full glass-input px-3 py-2.5 rounded-xl text-xs sm:text-sm text-white"
+                className="w-full clean-input px-3 py-2.5 rounded-xl text-xs sm:text-sm"
               >
-                <option value="all" className="bg-slate-900">All Specialties</option>
-                <option value="ev" className="bg-slate-900">EV & Hybrid Specialists</option>
-                <option value="engine" className="bg-slate-900">Engine & Diagnostics</option>
-                <option value="brake" className="bg-slate-900">Brakes & Suspension</option>
-                <option value="transmission" className="bg-slate-900">Transmissions</option>
-                <option value="german" className="bg-slate-900">German / European Imports</option>
+                <option value="all" className="bg-white dark:bg-slate-900">All Specialties</option>
+                <option value="ev" className="bg-white dark:bg-slate-900">EV & Hybrid Specialists</option>
+                <option value="engine" className="bg-white dark:bg-slate-900">Engine & Diagnostics</option>
+                <option value="brake" className="bg-white dark:bg-slate-900">Brakes & Suspension</option>
+                <option value="transmission" className="bg-white dark:bg-slate-900">Transmissions</option>
+                <option value="german" className="bg-white dark:bg-slate-900">German / European Imports</option>
               </select>
             </div>
 
@@ -184,11 +184,11 @@ export const MechanicsPage = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="w-full glass-input px-3 py-2.5 rounded-xl text-xs sm:text-sm text-white"
+                className="w-full clean-input px-3 py-2.5 rounded-xl text-xs sm:text-sm"
               >
-                <option value="rating" className="bg-slate-900">Sort: Highest Rated</option>
-                <option value="distance" className="bg-slate-900">Sort: Closest Distance</option>
-                <option value="price" className="bg-slate-900">Sort: Lowest Hourly Rate</option>
+                <option value="rating" className="bg-white dark:bg-slate-900">Sort: Highest Rated</option>
+                <option value="distance" className="bg-white dark:bg-slate-900">Sort: Closest Distance</option>
+                <option value="price" className="bg-white dark:bg-slate-900">Sort: Lowest Hourly Rate</option>
               </select>
             </div>
 
@@ -199,8 +199,8 @@ export const MechanicsPage = () => {
                 onClick={() => setIs247Only(!is247Only)}
                 className={`w-1/2 py-2.5 px-2 rounded-xl text-xs font-bold border transition-all ${
                   is247Only
-                    ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
-                    : 'bg-slate-900 border-slate-800 text-slate-400'
+                    ? 'bg-emerald-500/20 border-emerald-400 text-emerald-700 dark:text-emerald-300'
+                    : 'bg-slate-100 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400'
                 }`}
               >
                 24/7 Only
@@ -211,8 +211,8 @@ export const MechanicsPage = () => {
                 onClick={() => setIsMobileOnly(!isMobileOnly)}
                 className={`w-1/2 py-2.5 px-2 rounded-xl text-xs font-bold border transition-all ${
                   isMobileOnly
-                    ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300'
-                    : 'bg-slate-900 border-slate-800 text-slate-400'
+                    ? 'bg-cyan-500/20 border-cyan-400 text-cyan-700 dark:text-cyan-300'
+                    : 'bg-slate-100 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400'
                 }`}
               >
                 Mobile Only

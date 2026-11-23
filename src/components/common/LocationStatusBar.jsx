@@ -105,7 +105,7 @@ export const LocationStatusBar = ({
       </div>
 
       {/* Right: Quick Location Actions */}
-      <div className="flex items-center gap-2 ml-auto sm:ml-0 flex-shrink-0">
+      <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-end flex-shrink-0">
         {/* If location is not active or in error, show Turn On button */}
         {triggerEnable && (!location || isDenied || isUnavailable) && (
           <button

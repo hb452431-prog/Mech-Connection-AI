@@ -149,7 +149,7 @@ export const AboutWebsiteVideo = () => {
   const progressPercentage = duration ? (currentTime / duration) * 100 : 0;
 
   return (
-    <section className="w-full max-w-6xl mx-auto my-6 sm:my-10 px-4 sm:px-6" id="about-website-video">
+    <section className="w-full mx-auto my-6 sm:my-10" id="about-website-video">
       {/* Section Header */}
       <div className="text-center mb-6 sm:mb-8 space-y-2">
         <span className="text-xs font-mono font-bold uppercase tracking-widest text-brand-blue dark:text-brand-cyan-light bg-blue-50 dark:bg-blue-950/60 px-3.5 py-1 rounded-full border border-blue-200/80 dark:border-blue-800/80">
